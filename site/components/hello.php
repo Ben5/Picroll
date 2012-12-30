@@ -1,5 +1,5 @@
 <?php
-include(REVERB_ROOT."/system/component.php");
+include(SiteConfig::REVERB_ROOT."/system/component.php");
 
 class Hello extends ComponentBase
 {

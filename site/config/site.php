@@ -1,11 +1,11 @@
 <?php
 
-define("SERVER_ROOT", "/opt/site");
-define("SITE_ROOT",   SERVER_ROOT."/site");
-define("REVERB_ROOT", SERVER_ROOT."/reverb");
-
 class SiteConfig
 {
+    public const SITE_ROOT   = "/opt/site/site";
+    public const REVERB_ROOT = "/opt/site/reverb";
+    public const DEFAULT_HEAD_TITLE = "Terrain Generator";
+
     public const DB_HOST = 'localhost';
     public const DB_USER = 'db_user';
     public const DB_PASS = 'wpe84u9384u5';
