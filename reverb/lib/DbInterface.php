@@ -7,7 +7,7 @@ define("DB_DB",   "wine");
 
 class DbInterface
 {
-    private static $readConn;
+    private static $connection;
 
     public static function
     Connect()
@@ -24,14 +24,14 @@ class DbInterface
    
 
     public static function
-    NewReadOnlyQuery($sql)
+    NewQuery($sql)
     {
-        if(!self::$readConn)
+        if(!self::$connection)
         {
-            self::$readConn = self::Connect();
+            self::$connection = self::Connect();
         }
 
-        return new DbQuery($sql, self::$readConn); 
+        return new DbQuery($sql, self::$connection); 
     }
 }
 
