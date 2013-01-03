@@ -1,19 +1,41 @@
 <?php
 
 include "/opt/site/site/config/site.php";
+include SiteConfig::REVERB_ROOT."/system/error.php";
+
+set_error_handler("Error::ErrorHandler" );
 
 class GatewayBase 
 {
+    private $siteRootArray = array();
+
+    protected $siteRoot;
+    protected $componentName;
+    protected $componentInstance;
+
     public function prepare()
     {
-        $this->componentName = "";
-        $action    = "Index";
-        $params    = array();
+        $this->componentName = '';
+        $projectName = '';
+
+        $action = 'Index';
+        $params = array();
         
         foreach( $_REQUEST as $param=>$val )
         {
             switch( $param )
             {
+                case "_project":
+                {
+                    if (!isset($this->siteRootArray[$val]))
+                    {
+                        trigger_error('unknown project name: '.$val);
+                    }
+
+                    $this->siteRoot = $this->siteRootArray[$val];
+                }
+                break;
+
                 case "_component":
                 {
                     $this->componentName = $val;
@@ -39,12 +61,12 @@ class GatewayBase
         }
 
 
-        if( !is_readable(SiteConfig::SITE_ROOT."/components/$this->componentName.php") )
+        if( !is_readable($this->siteRoot."/components/$this->componentName.php") )
         {
             trigger_error("cannot find specified component: $this->componentName");
         }
 
-        include SiteConfig::SITE_ROOT."/components/$this->componentName.php";
+        include $this->siteRoot."/components/$this->componentName.php";
 
         if( !class_exists($this->componentName) )
         {
@@ -55,7 +77,4 @@ class GatewayBase
 
         $this->componentInstance->Prepare($action, $params);
     }
-
-    public  $componentName;
-    public  $componentInstance;
 }

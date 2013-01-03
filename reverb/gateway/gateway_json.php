@@ -1,5 +1,5 @@
 <?php
-require_once("/opt/site/reverb/gateway/gateway_base.php");
+require_once(__DIR__."/gateway_base.php");
 
 class GatewayHtml extends GatewayBase
 {
