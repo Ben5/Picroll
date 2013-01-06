@@ -16,6 +16,7 @@ class GatewayBase
     public function prepare()
     {
         $this->componentName = '';
+        $this->siteRoot = SiteConfig::SITE_ROOT;
         $projectName = '';
 
         $action = 'Index';
