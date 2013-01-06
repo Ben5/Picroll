@@ -1,6 +1,8 @@
 <?php
 
-include "/opt/site/site/config/site.php";
+use Reverb\SiteConfig;
+
+include "/opt/git/Reverb/site/config/site.php";
 include SiteConfig::REVERB_ROOT."/system/error.php";
 
 set_error_handler("Error::ErrorHandler" );
@@ -34,6 +36,13 @@ class GatewayBase
                     }
 
                     $this->siteRoot = $this->siteRootArray[$val];
+
+                    if( !is_readable($this->siteRoot."/config/site.php") )
+                    {
+                        trigger_error("cannot find site config file:".$this->siteRoot."/config/site.php");
+                    }
+
+                    include $this->siteRoot."/config/site.php";
                 }
                 break;
 

@@ -1,5 +1,7 @@
 <?php
 
+use Reverb\SiteConfig;
+
 class ComponentBase
 {
     private $headVars   = array();

@@ -1,9 +1,10 @@
 <?php
+namespace Reverb;
 
 class SiteConfig
 {
-    const SITE_ROOT   = "/opt/site/site";
-    const REVERB_ROOT = "/opt/site/reverb";
+    const SITE_ROOT   = "/opt/git/Reverb/site";
+    const REVERB_ROOT = "/opt/git/Reverb/reverb";
     const DEFAULT_HEAD_TITLE = "Terrain Generator";
 
     const DB_HOST = 'localhost';
