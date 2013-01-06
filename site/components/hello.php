@@ -1,4 +1,7 @@
 <?php
+
+use Reverb\SiteConfig;
+
 include(SiteConfig::REVERB_ROOT."/system/componentbase.php");
 
 class Hello extends ComponentBase
