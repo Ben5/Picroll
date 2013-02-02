@@ -14,6 +14,12 @@ Requires the following lines in httpd.conf:
     RewriteRule /?html/(.*) reverb/gateway/gateway_html.php?_component=$1&_action=Index [NC,QSA]
     </Directory>
 
+You can also add the following lines to the above Directory section if you want to be able to return JSON-encoded representations of pages instead of HTML:
+
+    RewriteRule /?json/(.*)/(.*)/(.*) reverb/gateway/gateway_json.php?_project=$1&_component=$2&_action=$3 [NC,QSA]
+    RewriteRule /?json/(.*)/(.*) reverb/gateway/gateway_json.php?_component=$1&_action=$2 [NC,QSA]
+    RewriteRule /?json/(.*) reverb/gateway/gateway_json.php?_component=$1&_action=Index [NC,QSA]
+
 Overview:
 At the top level, there are two directories. 'reverb' is where the workings live, and 'site' is for any site/project-specific code (models/views/controllers, configuration, etc).
 
