@@ -23,4 +23,4 @@ This is also where the database layer is located. reverb/lib/DbInterface.php is 
 
 
 site Directory:
-There is a very simple config file here, as well as a hellow world page.
+There is a very simple config file here, as well as a hello world page.
