@@ -58,7 +58,7 @@ class ComponentBase
 
         foreach($this->headVars as $name => $value)
         {
-            $headVarString .= '<'.$name.'>'.$value.'</'.$name.'>';
+            $headVarString .= '<'.$name.'>'.$value.'</'.$name.">\n";
         }
 
         return $headVarString;
