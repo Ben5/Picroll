@@ -12,6 +12,19 @@ class ComponentBase
     public function
     Prepare($action, $params)
     {
+        session_start();
+
+        if ((method_exists($this, 'RequiresAuthentication')) && ($this->RequiresAuthentication()))
+        {
+            // we want authentication for this action. Are we logged in?
+            if (!isset($_SESSION['logged_in']))
+            {
+                // not logged in, redirect to login page.
+                header('Location: /html/eseye/login/index');
+            }
+        }
+
+
         if (!method_exists($this, $action))
         {
             trigger_error("unknown action: $action");
@@ -94,5 +107,19 @@ class ComponentBase
     GetOnlyTemplate()
     {
         return $this->onlyTemplate;
+    }
+
+    protected function
+    ValidateParams(
+        $params,
+        array $expectedKeys)
+    {
+        foreach($expectedKeys as $key => $type)
+        {
+            if (!isset($params[$key]))
+            {
+                throw new Exception('Key "'.$key.'" not found in parameters array.');
+            }
+        }
     }
 }

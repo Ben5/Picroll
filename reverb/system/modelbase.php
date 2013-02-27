@@ -2,30 +2,30 @@
 
 abstract class ModelBase
 {
-    protected static $modelName = "bum";
+    protected $modelName = "";
 
-    public final static function
+    public final function
     GetAll()
     {
-        $sql = "SELECT * FROM " . static::$modelName;
+        $sql = "SELECT * FROM " . $this->modelName;
         $query = DbInterface::NewQuery($sql);
 
         return $query->TryReadRowArray();
     }
 
-    public final static function
+    public final function
     GetOneById($id)
     {
         $sql = "SELECT * FROM ? WHERE id = ?";
         $query = DbInterface::NewQuery($sql);
 
-        $query->AddStringParam(self::$modelName);
+        $query->AddStringParam($this->modelName);
         $query->AddIntegerParam($id);
 
         return $query->TryReadSingleRow();
     }
 
-    public final static function
+    public final function
     GetEnumValues($columnName)
     {
         $sql = "SELECT COLUMN_TYPE
@@ -33,7 +33,7 @@ abstract class ModelBase
                 WHERE TABLE_NAME = ?
                 AND COLUMN_NAME = ?";
         $query = DbInterface::NewQuery($sql);
-        $query->AddStringParam(static::$modelName);
+        $query->AddStringParam($this->modelName);
         $query->AddStringParam($columnName);
 
         $result = $query->TryReadSingleValue();
@@ -41,26 +41,6 @@ abstract class ModelBase
         $trimmedResult = str_replace(array('enum(', '\'', ')'), '', $result);
         $resultArray = explode(',', $trimmedResult);
         return $resultArray;
-    }
-
-    private static function
-    ParamOrDefault($params, $index, $default)
-    {
-        if( isset( $params[$index] ) )
-        { 
-            return $params[$index]; 
-        }
-        else
-        {
-            if( $default == "error" )
-            {
-                trigger_error("Param value $index not found!");
-            }
-            else
-            {
-                return $default;
-            }
-        }
     }
 
 }
