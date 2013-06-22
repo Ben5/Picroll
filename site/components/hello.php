@@ -1,6 +1,6 @@
 <?php
 
-use Reverb\SiteConfig;
+use Picroll\SiteConfig;
 
 include(SiteConfig::REVERB_ROOT."/system/componentbase.php");
 

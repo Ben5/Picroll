@@ -1,10 +1,10 @@
 <?php
-namespace Reverb;
+namespace Picroll;
 
 class SiteConfig
 {
-    const SITE_ROOT   = "/opt/git/Reverb/site";
-    const REVERB_ROOT = "/opt/git/Reverb/reverb";
+    const SITE_ROOT   = "/opt/git/Picroll/site";
+    const REVERB_ROOT = "/opt/git/Picroll/reverb";
     const DEFAULT_HEAD_TITLE = "Terrain Generator";
 
     const DB_HOST = 'localhost';

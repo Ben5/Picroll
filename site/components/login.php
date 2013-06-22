@@ -1,6 +1,6 @@
 <?php
 
-use Reverb\SiteConfig;
+use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
 require_once SiteConfig::SITE_ROOT."/models/user.php";

@@ -1,8 +1,8 @@
 <?php
 
-use Reverb\SiteConfig;
+use Picroll\SiteConfig;
 
-include "/opt/git/Reverb/site/config/site.php";
+include "/opt/git/Picroll/site/config/site.php";
 include SiteConfig::REVERB_ROOT."/system/error.php";
 
 set_error_handler("Error::ErrorHandler" );
