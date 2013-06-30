@@ -4,7 +4,7 @@ use Picroll\SiteConfig;
 
 include(SiteConfig::REVERB_ROOT."/system/componentbase.php");
 
-class Hello extends ComponentBase
+class Upload extends ComponentBase
 {
     protected function
     RequiresAuthentication()

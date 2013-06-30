@@ -1,4 +1,4 @@
-<h1>Eseye Device Locator</h1>
+<h1>Login</h1>
 
 <div class='section left'>
     <h3>Sign In</h3>
