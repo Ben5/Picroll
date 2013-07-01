@@ -5,7 +5,7 @@ class SiteConfig
 {
     const SITE_ROOT   = "/opt/git/Picroll/site";
     const REVERB_ROOT = "/opt/git/Picroll/reverb";
-    const DEFAULT_HEAD_TITLE = "Terrain Generator";
+    const DEFAULT_HEAD_TITLE = "PicRoll";
 
     const DB_HOST = 'localhost';
     const DB_USER = 'db_user';
