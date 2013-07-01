@@ -18,4 +18,9 @@ class Upload extends ComponentBase
         $this->ExposeVariable("msg", "Hello everybody!"); 
     }
 
+    protected function
+    UploadFile($params)
+    {
+        $this->ExposeVariable('uploaded', true);
+    }
 }
