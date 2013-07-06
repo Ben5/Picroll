@@ -64,7 +64,7 @@ class Login extends ComponentBase
 
         // user created, redirect to home page
         $_SESSION['logged_in'] = true;
-        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['user_id']   = $user['id'];
         $_SESSION['user_name'] = $username;
         header('Location: '.SiteConfig::DEFAULT_PAGE_AFTER_LOGIN);
     }
@@ -101,6 +101,7 @@ class Login extends ComponentBase
         {
             $errorMessage = 'Your passwords didn\'t match, please try again.';
             $this->ExposeVariable('errorMessage', $errorMessage);
+            die($errorMessage);
             return;
         }
 
@@ -112,6 +113,7 @@ class Login extends ComponentBase
         {
             $errorMessage = 'Username "'.$username.'" is already taken.';
             $this->ExposeVariable('errorMessage', $errorMessage);
+            die($errorMessage);
             return;
         }
 
@@ -128,6 +130,7 @@ class Login extends ComponentBase
         {
             $errorMessage = 'Failed to add user';
             $this->ExposeVariable('errorMessage', $errorMessage);
+            die($errorMessage);
             return;
         }
 
@@ -135,14 +138,14 @@ class Login extends ComponentBase
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $userId;
         $_SESSION['user_name'] = $username;
-        header('Location: /html/eseye/home/index');
+        header('Location: /picroll/html/upload/index');
     }
 
     protected function
     LogOut($params)
     {
         session_destroy();
-        header('/html/eseye/login/index');
+        header('/picroll/html/login/createaccount');
     }
 }
 

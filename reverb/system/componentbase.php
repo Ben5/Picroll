@@ -20,7 +20,7 @@ class ComponentBase
             if (!isset($_SESSION['logged_in']))
             {
                 // not logged in, redirect to login page.
-                header('Location: /html/eseye/login/index');
+                header('Location: /picroll/html/login/index');
             }
         }
 

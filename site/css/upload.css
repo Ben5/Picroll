@@ -1,3 +1,33 @@
 body {
     font-family: sans-serif;
 }
+
+div.previewWrapper {
+    float: left;
+}
+
+div.uploadProgress {
+    margin-top: 5px;
+}
+
+div.uploadProgressText {
+    height: 25px;
+    line-height: 25px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    top : -25px;
+}
+
+div.uploadProgressBar {
+    height: 25px;
+    width: 0%;
+    border-radius: 10px;
+    background: #187CE9;
+}
+
+img.uploadPreview {
+    width: 300px;
+}
+
+
