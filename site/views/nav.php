@@ -1,5 +1,5 @@
 <div style='float:left;'>
-    <h1>Picroll</h1>
+    <h1><?php echo 'Picroll'; ?></h1>
 </div>
 
 <div style='float: right; text-align: right;'>

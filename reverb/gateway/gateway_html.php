@@ -57,7 +57,9 @@ class GatewayHtml extends GatewayBase
             $navbar = '';
             if ( is_readable($this->siteRoot.'/views/nav.php') )
             {
-                $navbar = file_get_contents($this->siteRoot.'/views/nav.php');
+                ob_start(); // use output buffering so that we can require the file and have embedded php executed
+                require $this->siteRoot.'/views/nav.php';
+                $navbar = ob_get_clean();
             }
 
             // read in the view template
@@ -65,7 +67,7 @@ class GatewayHtml extends GatewayBase
             {
                 trigger_error('cannot find specified view: '.$viewName);
             }
-            ob_start();
+            ob_start(); // use output buffering so that we can require the file and have embedded php executed
             require $this->siteRoot.'/views/'.$viewName.'.php';
             $content = ob_get_clean();
 
