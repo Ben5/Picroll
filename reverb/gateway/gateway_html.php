@@ -59,7 +59,7 @@ class GatewayHtml extends GatewayBase
             $headVarString .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
 
             $content = file_get_contents($this->siteRoot.'/views/'.$viewName.'.php');
-            include $this->siteRoot.'/views/default_header.php';
+            include $this->siteRoot.'/views/layout.php';
         }
     }
 }
