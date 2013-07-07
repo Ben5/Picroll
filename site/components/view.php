@@ -22,7 +22,7 @@ class View extends ComponentBase
     ViewAllImages($params)
     {
         // read everything in /opt/git/Picroll/site/images/uploads/...
-        $images = array_values(array_diff(scandir('/opt/git/Picroll/site/images/uploads'), array('.', '..')));
+        $images = array_values(array_diff(scandir('/opt/git/Picroll/site/images/uploads'), array('.', '..', '.gitignore')));
 
         $this->ExposeVariable('images', $images);
     }

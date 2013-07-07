@@ -20,11 +20,6 @@ class GatewayHtml extends GatewayBase
         }
         else
         {
-            if( !is_readable($this->siteRoot.'/views/'.$viewName.'.php') )
-            {
-                trigger_error('cannot find specified view: '.$viewName);
-            }
-
             // get any variables that the Component exposed for use in the View
             $outputVars = $this->componentInstance->GetExposedVariables();
             foreach($outputVars as $name => $value)
@@ -58,7 +53,22 @@ class GatewayHtml extends GatewayBase
             }
             $headVarString .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
 
-            $content = file_get_contents($this->siteRoot.'/views/'.$viewName.'.php');
+            // read in the navbar template
+            $navbar = '';
+            if ( is_readable($this->siteRoot.'/views/nav.php') )
+            {
+                $navbar = file_get_contents($this->siteRoot.'/views/nav.php');
+            }
+
+            // read in the view template
+            if( !is_readable($this->siteRoot.'/views/'.$viewName.'.php') )
+            {
+                trigger_error('cannot find specified view: '.$viewName);
+            }
+            ob_start();
+            require $this->siteRoot.'/views/'.$viewName.'.php';
+            $content = ob_get_clean();
+
             include $this->siteRoot.'/views/layout.php';
         }
     }

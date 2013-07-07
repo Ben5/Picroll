@@ -7,8 +7,12 @@
 
 <body>
 
+<div id='navContent'>
+    <?php echo $navbar;?>
+</div>
+
 <div id='bodyContent'>
-<?php echo $content;?>
+    <?php echo $content;?>
 </div>
 
 </body>

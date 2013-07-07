@@ -1,4 +1,4 @@
-<h1>Login</h1>
+<h3>Login</h3>
 
 <div class='section left'>
     <h3>Sign In</h3>
