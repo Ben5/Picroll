@@ -3,6 +3,14 @@ require_once(__DIR__."/gateway_base.php");
 
 class GatewayHtml extends GatewayBase
 {
+    private $scripts = array();
+
+    private function
+    AddScript($scriptname) 
+    {
+        $this->scripts[] = $scriptname;
+    }
+
     public function
     ConstructOutput()
     {      
@@ -27,6 +35,24 @@ class GatewayHtml extends GatewayBase
                 $$name = $value;
             }
 
+            // read in the navbar template
+            $navbar = '';
+            if ( is_readable($this->siteRoot.'/views/nav.php') )
+            {
+                ob_start(); // use output buffering so that we can require the file and have embedded php executed
+                require $this->siteRoot.'/views/nav.php';
+                $navbar = ob_get_clean();
+            }
+
+            // read in the view template
+            if( !is_readable($this->siteRoot.'/views/'.$viewName.'.php') )
+            {
+                trigger_error('cannot find specified view: '.$viewName);
+            }
+            ob_start(); // use output buffering so that we can require the file and have embedded php executed
+            require $this->siteRoot.'/views/'.$viewName.'.php';
+            $content = ob_get_clean();
+
             $headVarString = $this->componentInstance->GetHeadVariables();
 
             // include any page-specific stylesheets
@@ -47,29 +73,12 @@ class GatewayHtml extends GatewayBase
             }
 
             // include any page-specific javascript
-            $jsSrc = '/js/'.$this->componentName.'.js';
-            if ($this->projectName != '') {
-                $jsSrc = '/'.$this->projectName.$jsSrc;
-            }
-            $headVarString .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
-
-            // read in the navbar template
-            $navbar = '';
-            if ( is_readable($this->siteRoot.'/views/nav.php') )
+            $this->AddScript($this->componentName.'.js');
+            foreach($this->scripts as $scriptname)
             {
-                ob_start(); // use output buffering so that we can require the file and have embedded php executed
-                require $this->siteRoot.'/views/nav.php';
-                $navbar = ob_get_clean();
+                $jsSrc = '/'.$this->projectName.'/js/'.$scriptname;
+                $headVarString .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
             }
-
-            // read in the view template
-            if( !is_readable($this->siteRoot.'/views/'.$viewName.'.php') )
-            {
-                trigger_error('cannot find specified view: '.$viewName);
-            }
-            ob_start(); // use output buffering so that we can require the file and have embedded php executed
-            require $this->siteRoot.'/views/'.$viewName.'.php';
-            $content = ob_get_clean();
 
             include $this->siteRoot.'/views/layout.php';
         }

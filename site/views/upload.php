@@ -1,3 +1,5 @@
+<?php $this->AddScript('exif.js'); ?>
+<?php $this->AddScript('binaryajax.js'); ?>
 <h3>Upload Pictures</h3>
 
 <form id='frmUploadPhoto'>
