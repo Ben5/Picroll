@@ -18,43 +18,31 @@ class Upload extends ComponentBase
         $this->ExposeVariable("msg", "Hello everybody!"); 
     }
 
+    private function
+    ConvertDataUrl($dataUrl)
+    {
+        // Assumes the data URL represents a jpeg image
+        $image = base64_decode( str_replace('data:image/jpeg;base64,', '', $dataUrl) );
+        return $image;
+    }
+
     protected function
     UploadFile($params)
     {
         $allowedExts  = array('png', 'jpg', 'jpeg');
         $allowedTypes = array('image/png', 'image/jpeg', 'image/gif', 'image/jpg', 'image/pjpeg', 'image/x-png');
         
-        $uploadedImage = $_FILES['uploadImage'];
+        $uploadedEXIF  = $_POST['exif'];
+        // process exif data and get name and stuff
 
-        $temp = explode(".", $uploadedImage["name"]);
-        $extension = end($temp);
 
-        if ( in_array(strtolower($extension), $allowedExts) )
-        {
-            if( in_array($uploadedImage['type'], $allowedTypes) )
-            {
-                if (file_exists('/opt/git/Picroll/site/images/uploads/' . $uploadedImage['name'] ))
-                {
-                    die('filename exists ('.$uploadedImage['name'].')');
-                }
-                else
-                {
-                    $success = move_uploaded_file($uploadedImage['tmp_name'], '/opt/git/Picroll/site/images/uploads/' . $uploadedImage['name']);
-                    if (!$success)
-                    {
-                        die('Couldn\'t move file');
-                    }
-                }
-            }
-            else
-            {
-                die('Invalid Type: '.$uploadedImage['type']);
-            }
-        }
-        else
-        {
-            die('Invalid Extension: '.$extension);
-        }
+        $uploadedImage = $_POST['uploadImage'];
+        $image = $this->ConvertDataUrl($uploadedImage);
+        $path = '/opt/git/Picroll/site/images/uploads/';
+        $filename = 'test.jpeg';
+        $file = fopen($path.$filename, 'w');
+        fwrite($file, $image);
+        fclose($file);
 
 
        // $this->ExposeVariable('data', $params['name']);
