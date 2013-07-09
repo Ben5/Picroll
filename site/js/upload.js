@@ -47,6 +47,7 @@ $(document).ready(function() {
 
     });
 
+    // OnLoad handler for resized image - prepare and upload image once loaded.
     var ImageOnLoad = function() {
         console.log('loaded');
 
@@ -78,10 +79,8 @@ $(document).ready(function() {
         }
 
         canvas.getContext('2d').drawImage(this, 0, 0, canvas.width, canvas.height);
-        $('body').append(canvas);
         
         formData.append('uploadImage', canvas.toDataURL('image/jpeg'));
-
 
         var postUrl    = '/picroll/json/upload/uploadFile';
 
@@ -110,35 +109,32 @@ $(document).ready(function() {
         var photoFiles = photoInput[0].files;
 
         $.each(photoFiles, function(i, obj) {
-            formData = new FormData();
+            // Clear the (global) formdata object
+            formData      = new FormData();
             uploadWrapper = $('div.previewWrapper[data-photonum="'+i+'"]');
 
-            // Resize the image
-            // TODO: SPLIT THIS UP INTO TWO FILE READERS - ONE FOR EXIF, ONE FOR UPLOAD
-            var reader = new FileReader();
+            // Get EXIF data and add it to formdata
+            var reader    = new FileReader();
             reader.onload = function(readerEvent) {
-
-                // get EXIF data
-                var binFile = new BinaryFile(readerEvent.target.result,0,0);
+                var binFile  = new BinaryFile(readerEvent.target.result,0,0);
                 var exifData = EXIF.readFromBinaryFile(binFile)
                 formData.append('exif', JSON.stringify(exifData));
-
-
             };
             reader.readAsBinaryString(obj);
 
-            var goodReader = new FileReader();
-            goodReader.onload = function(readerEvent) {
-                var image = new Image();
-                //image.src = '/picroll/images/uploads/DSCN2745.JPG';
-                $('body').append(image);
-                image.src = readerEvent.target.result;
+            // Resize the image then do the upload with the formdata
+            var resizeReader    = new FileReader();
+            resizeReader.onload = function(readerEvent) {
+                // Copy the loaded image file into an image object. 
+                // Then, in the onload, we do the resize and upload
+                var image    = new Image();
                 image.onload = ImageOnLoad;
+                image.src    = readerEvent.target.result;
             };
-            goodReader.readAsDataURL(obj);
+            resizeReader.readAsDataURL(obj);
         });
 
-
+        // Return false to stop the form actually submitting
         return false;
     });
 });
