@@ -159,6 +159,25 @@ class DbQuery
     } 
 
     public function
+    TryReadSingleColumn()
+    {
+        if( $this->TryQuery() )
+        {
+            $this->result = $this->stmt->get_result();
+
+            $colArray = array();
+            while($row = $this->result->fetch_array())
+            {
+                $colArray[] = $row[0];
+            }
+
+            return $colArray;
+        }
+
+        return FALSE;
+    } 
+
+    public function
     TryReadRowArray()
     {
         if( $this->TryQuery() )
