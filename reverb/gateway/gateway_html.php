@@ -4,11 +4,18 @@ require_once(__DIR__."/gateway_base.php");
 class GatewayHtml extends GatewayBase
 {
     private $scripts = array();
+    private $stylesheets = array();
 
     private function
     AddScript($scriptname) 
     {
         $this->scripts[] = $scriptname;
+    }
+
+    private function
+    AddStylesheet($cssname) 
+    {
+        $this->stylesheets[] = $cssname;
     }
 
     public function
@@ -41,6 +48,7 @@ class GatewayHtml extends GatewayBase
             {
                 ob_start(); // use output buffering so that we can require the file and have embedded php executed
                 require $this->siteRoot.'/views/nav.php';
+                // $navbar is available to be echoed in the layout file.
                 $navbar = ob_get_clean();
             }
 
@@ -51,16 +59,29 @@ class GatewayHtml extends GatewayBase
             }
             ob_start(); // use output buffering so that we can require the file and have embedded php executed
             require $this->siteRoot.'/views/'.$viewName.'.php';
+            // $content is available to be echoed in the layout file.
             $content = ob_get_clean();
 
             $headVarString = $this->componentInstance->GetHeadVariables();
 
             // include any page-specific stylesheets
-            $cssHref = '/css/'.$this->componentName.'.css';
-            if ($this->projectName != '') {
-                $cssHref = '/'.$this->projectName.$cssHref;
+            if($this->projectName == '') 
+            {
+                // this is a weird one, there is no project (which really means it is the top-level project)
+                $headVarString .= '<link rel="stylesheet" type="text/css" href="/css/'.$this->componentName.'.css" />'."\n";
             }
-            $headVarString .= '<link rel="stylesheet" type="text/css" href="'.$cssHref.'" />'."\n";
+            else
+            {
+                // this one isn't weird, just add it to the list
+                $this->AddStylesheet($this->componentName.'.css');
+            }
+
+            // include any page-specific css files
+            $this->AddStylesheet('nav.css');
+            foreach($this->stylesheets as $cssFilename)
+            {
+                $headVarString .= '<link rel="stylesheet" type="text/css" href="/'.$this->projectName.'/css/'.$cssFilename.'" />'."\n";
+            }
 
             // Include the jquery code
             $jqueryFiles = array('jquery-1.9.0.min.js',
