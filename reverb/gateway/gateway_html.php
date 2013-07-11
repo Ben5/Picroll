@@ -78,6 +78,7 @@ class GatewayHtml extends GatewayBase
 
             // include any page-specific css files
             $this->AddStylesheet('nav.css');
+            $this->AddStylesheet('style.css');
             foreach($this->stylesheets as $cssFilename)
             {
                 $headVarString .= '<link rel="stylesheet" type="text/css" href="/'.$this->projectName.'/css/'.$cssFilename.'" />'."\n";
