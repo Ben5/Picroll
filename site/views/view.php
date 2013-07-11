@@ -1,10 +1,10 @@
 <h3>View Pictures</h3>
 
 <?php
-    foreach($images as $image)
+    foreach($images as $imageName)
     {
 ?>
-        <img src='<?php echo $imageBase.$image['filename'].$imageExt;?>'/>
+        <img src='<?php echo $imageBase.$imageName.$imageExt;?>'/>
 <?php
     }
 ?>

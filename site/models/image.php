@@ -24,7 +24,7 @@ class ImageModel extends ModelBase
 
         $query->AddStringParam($userId);
 
-        return $query->TryReadRowArray();
+        return $query->TryReadSingleColumn();
     }
 
     public function
