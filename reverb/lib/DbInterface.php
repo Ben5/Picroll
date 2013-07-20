@@ -11,7 +11,7 @@ class DbInterface
     {
         $conn = new mysqli( SiteConfig::DB_HOST, SiteConfig::DB_USER, SiteConfig::DB_PASS, SiteConfig::DB_DB);
     
-        if($conn === FALSE)
+        if($conn === false)
         {
             trigger_error("no db connection!");
         }
@@ -42,7 +42,7 @@ class DbQuery
     __construct($sql, $conn)
     {
        $this->stmt = $conn->Prepare($sql); 
-       if($this->stmt === FALSE)
+       if($this->stmt === false)
        {
            trigger_error("failed to prepare stmt for sql: $sql, error was: ".$conn->error);
        }
@@ -127,7 +127,22 @@ class DbQuery
         {
             return $this->stmt->insert_id;
         }
-        return FALSE;
+        return false;
+    }
+
+    public function
+    ExecuteDelete($errorMsg)
+    {
+        if(!$this->TryExecuteDelete())
+        {
+            trigger_error($errorMsg . " - mysql error: " .$this->GetLastError());
+        }
+    }
+
+    public function
+    TryExecuteDelete()
+    {
+        return $this->TryQuery();
     }
 
     public function
@@ -141,7 +156,7 @@ class DbQuery
             return $row[0];
         }
 
-        return FALSE;
+        return false;
     } 
 
     public function
@@ -155,7 +170,7 @@ class DbQuery
             return $row;
         }
 
-        return FALSE;
+        return false;
     } 
 
     public function
@@ -174,7 +189,32 @@ class DbQuery
             return $colArray;
         }
 
-        return FALSE;
+        return false;
+    } 
+
+    public function
+    TryReadDictionary()
+    {
+        if( $this->TryQuery() )
+        {
+            $this->result = $this->stmt->get_result();
+
+            $dictionary = array();
+
+            while($row = $this->result->fetch_array(MYSQLI_NUM))
+            {
+                if(count($row) !== 2)
+                {
+                    return false;
+                }
+
+                $dictionary[$row[0]] = $row[1];
+            }
+
+            return $dictionary;
+        }
+
+        return false;
     } 
 
     public function
@@ -189,6 +229,6 @@ class DbQuery
             return $rowArray;
         }
 
-        return FALSE;
+        return false;
     } 
 }
