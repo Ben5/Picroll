@@ -3,6 +3,12 @@
     color: #0066ff;
 }
 
+#navContent div.navTitle {
+    float: left;
+    margin-left: 20px;
+    font-size: 24px;
+}
+
 #navContent div.navbarWrapper{
     background: #ffC200;
     height: 40px;

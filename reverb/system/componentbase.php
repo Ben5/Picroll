@@ -62,6 +62,22 @@ class ComponentBase
     }
 
     public function
+    SetPageTitle($title)
+    {
+        $this->headVars['title'] = $title;
+    }
+
+    public function
+    GetPageTitle()
+    {
+        if (!isset($this->headVars['title']))
+        {
+            return SiteConfig::DEFAULT_HEAD_TITLE;
+        }
+        return $this->headVars['title'];
+    }
+
+    public function
     GetHeadVariables()
     {
         $headVarString = '';

@@ -42,6 +42,9 @@ class GatewayHtml extends GatewayBase
                 $$name = $value;
             }
 
+            // get the page title, for use in the navbar template
+            $navbarTitle = $this->componentInstance->GetPageTitle();
+
             // read in the navbar template
             $navbar = '';
             if ( is_readable($this->siteRoot.'/views/nav.php') )
