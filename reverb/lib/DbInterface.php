@@ -114,7 +114,7 @@ class DbQuery
     public function
     ExecuteInsert($errorMsg)
     {
-        if(!$this->TryExecuteInsert())
+        if($this->TryExecuteInsert() === false)
         {
             trigger_error($errorMsg . " - mysql error: " .$this->GetLastError());
         }
