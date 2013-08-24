@@ -1,0 +1,70 @@
+div.section {
+    height: 50%;
+    width: 35%;
+    position: relative;
+    border: 2px solid #333333;
+    border-radius: 5px;
+}
+
+div.left {
+    float: left;
+    left: 10%;
+}
+
+div.right {
+    float: right;
+    right: 10%;
+}
+
+div.friendResult {
+    background: #99ddff;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 10px;
+    width: 80%;
+    left: 10%;
+    position: relative;
+}
+
+#friendList li {
+    background: #dd99ff;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 10px;
+    width: 83%;
+    display: inline-block;
+}
+
+#friendRequestList li {
+    background: #ddff99;
+    padding: 10px;
+    border-radius: 10px;
+    width: 83%;
+    display: inline-block;
+}
+
+div.friendResult button {
+    float: right;
+}
+
+#friendRequestList {
+    list-style: none;
+}
+
+#friendRequestList div.right {
+    position: relative;
+}
+
+.confirmation {
+    display: none;
+    background: #75FC6F;
+    padding: 10px;
+    border-radius: 10px;
+    width: 80%;
+    position: relative;
+    left: 10%;
+}
+
+.sectionInner {
+    margin: 20px;
+}

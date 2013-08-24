@@ -28,6 +28,27 @@ class UserModel extends ModelBase
     }
 
     public function
+    SearchUsersByNameOrEmail($name)
+    {
+        $localUserId = $_SESSION['user_id'];
+
+        // TODO: this still isnt perfect - it doesnt filter out pending requests. 
+        // TODO: replace with 3 seperate queries to get friends, requests, and name matches.
+        $sql = 'SELECT user.id, user.username
+                FROM   user 
+                WHERE user.id != ? 
+                AND   (username LIKE ?  OR email LIKE ?)';
+
+        $query = DbInterface::NewQuery($sql);
+
+        $query->AddIntegerParam($localUserId); // don't return the local user.
+        $query->AddStringParam('%'.$name.'%'); // username gets fully wildcarded
+        $query->AddStringParam(    $name.'%'); // email only gets semi-wildcarded, to stop people searching for everone with a certain domain (or '.com')
+
+        return $query->TryReadDictionary();
+    }
+
+    public function
     AddNewUser(
        $username, 
        $salt,
