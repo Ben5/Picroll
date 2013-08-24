@@ -25,9 +25,11 @@ class Friends extends ComponentBase
 
         $allFriends        = $friendModel->GetAllFriendsByUserId($userId);
         $allFriendRequests = $friendModel->GetAllFriendRequestsByUserId($userId);
+        $allPendingFriends = $friendModel->GetAllRequestedFriendsByUserId($userId);
 
-        $this->ExposeVariable('friends', $allFriends); 
+        $this->ExposeVariable('friends',  $allFriends); 
         $this->ExposeVariable('requests', $allFriendRequests); 
+        $this->ExposeVariable('pending',  $allPendingFriends); 
     }
 
     protected function

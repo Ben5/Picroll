@@ -52,6 +52,29 @@
         <?php
             }
         ?>
+
+        <?php
+            if($pending && count($pending) > 0)
+            {
+        ?>
+                <h3>You are waiting for these people to accept your Friend Request</h3>
+                <ul id="pendingFriendList">
+                <?php
+                    foreach($pending as $friendId => $friendName)
+                    {
+                ?>
+                        <li data-friendid="<?php echo $friendId;?>" data-friendname="<?php echo $friendName;?>">
+                            <div class="left">
+                                <?php echo $friendName;?>
+                            </div>
+                        </li>
+                <?php
+                    }
+                ?>
+                </ul>
+        <?php
+            }
+        ?>
     </div>
 </div>
 
