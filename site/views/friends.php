@@ -32,11 +32,17 @@
             {
         ?>
                 <h3>These people want to be your friend</h3>
-                <ul id="friendRequestList">
-                <?php
+        <?php
+            }
+        ?>
+
+        <ul id="friendRequestList">
+            <?php
+                if($requests && count($requests) > 0)
+                {
                     foreach($requests as $friendId => $friendName)
                     {
-                ?>
+            ?>
                         <li data-friendid="<?php echo $friendId;?>" data-friendname="<?php echo $friendName;?>">
                             <div class="left">
                                 <?php echo $friendName;?>
@@ -45,36 +51,38 @@
                                 <button class="btn" data-friendid="<?php echo $friendId;?>">Add</button>
                             </div>
                         </li>
-                <?php
+            <?php
                     }
-                ?>
-                </ul>
-        <?php
-            }
-        ?>
+                }
+            ?>
+        </ul>
 
         <?php
             if($pending && count($pending) > 0)
             {
         ?>
                 <h3>You are waiting for these people to accept your Friend Request</h3>
-                <ul id="pendingFriendList">
-                <?php
+        <?php
+            }
+        ?>
+
+        <ul id="pendingFriendList">
+            <?php
+                if($pending && count($pending) > 0)
+                {
                     foreach($pending as $friendId => $friendName)
                     {
-                ?>
+            ?>
                         <li data-friendid="<?php echo $friendId;?>" data-friendname="<?php echo $friendName;?>">
                             <div class="left">
                                 <?php echo $friendName;?>
                             </div>
                         </li>
-                <?php
+            <?php
                     }
-                ?>
-                </ul>
-        <?php
-            }
-        ?>
+                }
+            ?>
+        </ul>
     </div>
 </div>
 
