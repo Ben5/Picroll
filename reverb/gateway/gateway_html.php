@@ -79,6 +79,15 @@ class GatewayHtml extends GatewayBase
                 $this->AddStylesheet($this->componentName.'.css');
             }
 
+            // include global css files
+            $globalCssFiles = array(
+                                 'bootstrap.min.css', 
+                                 );
+            foreach($globalCssFiles as $filename)
+            {
+                $headVarString .= '<link rel="stylesheet" type="text/css" href="/css/'.$filename.'" />'."\n";
+            }
+
             // include any page-specific css files
             $this->AddStylesheet('nav.css');
             $this->AddStylesheet('style.css');
@@ -87,12 +96,13 @@ class GatewayHtml extends GatewayBase
                 $headVarString .= '<link rel="stylesheet" type="text/css" href="/'.$this->projectName.'/css/'.$cssFilename.'" />'."\n";
             }
 
-            // Include the jquery code
-            $jqueryFiles = array('jquery-1.9.0.min.js',
+            // Include global js files 
+            $globalJsFiles = array('jquery-1.9.0.min.js',
                                  'jquery-ui.min.js', 
                                  'jquery.ui.accordion.min.js', 
+                                 'bootstrap.min.js', 
                                  );
-            foreach($jqueryFiles as $filename)
+            foreach($globalJsFiles as $filename)
             {
                 $headVarString .= '<script type="text/javascript" src="/js/'.$filename.'">'."</script>\n";
             }
