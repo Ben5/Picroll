@@ -65,13 +65,16 @@ div.friendResult button {
 }
 
 .confirmation {
-    display: none;
     background: #75FC6F;
     padding: 10px;
     border-radius: 10px;
     width: 80%;
     position: relative;
     left: 10%;
+}
+
+.hidden {
+    display: none;
 }
 
 .sectionInner {

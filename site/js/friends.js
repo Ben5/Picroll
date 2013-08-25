@@ -110,10 +110,22 @@ $(document).ready(function() {
         var friendName    = $(this).data('friendname');
 
         $searchResult.find('div.friendResult[data-friendid="'+friendId+'"]').fadeOut(400, function() {
-            var message = $('<div class="confirmation">Friend Request sent to '+friendName+'</div>')
+            var message = $('<div>', {'class' : 'confirmation hidden'}).html('Friend Request sent to '+friendName);
             $searchResult.prepend(message);
             message.fadeIn(400);
         });
+
+        // todo: add this person to the list of pending friends.
+        var pendingFriendList        = $('#pendingFriendList');
+        var newPendingFriendListItem = $('<li>', {
+                                        'data-friendid'   : friendId,
+                                        'data-friendname' : friendName});
+        var newPendingFriendInner    = $('<div>', {'class' : 'left'}).html(friendName);
+
+        newPendingFriendListItem.append(newPendingFriendInner)
+                                .hide();
+        pendingFriendList.append(newPendingFriendListItem);
+        newPendingFriendListItem.fadeIn(400);
     }
 
     // Handle the results of accepting a friend request
