@@ -67,6 +67,9 @@ class GatewayHtml extends GatewayBase
 
             $headVarString = $this->componentInstance->GetHeadVariables();
 
+            // add meta tags
+            $headVarString .= '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+
             // include any page-specific stylesheets
             if($this->projectName == '') 
             {
@@ -97,6 +100,7 @@ class GatewayHtml extends GatewayBase
             }
 
             // Include global js files 
+            $endOfBodyJavascript = '<!-- Placed at the end of the document so the pages load faster -->'."\n";
             $globalJsFiles = array('jquery-1.9.0.min.js',
                                  'jquery-ui.min.js', 
                                  'jquery.ui.accordion.min.js', 
@@ -104,7 +108,7 @@ class GatewayHtml extends GatewayBase
                                  );
             foreach($globalJsFiles as $filename)
             {
-                $headVarString .= '<script type="text/javascript" src="/js/'.$filename.'">'."</script>\n";
+                $endOfBodyJavascript .= '<script type="text/javascript" src="/js/'.$filename.'">'."</script>\n";
             }
 
             // include any page-specific javascript
@@ -112,7 +116,7 @@ class GatewayHtml extends GatewayBase
             foreach($this->scripts as $scriptname)
             {
                 $jsSrc = '/'.$this->projectName.'/js/'.$scriptname;
-                $headVarString .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
+                $endOfBodyJavascript .= '<script type="text/javascript" src="'.$jsSrc.'"></script>'."\n";
             }
 
             include $this->siteRoot.'/views/layout.php';
