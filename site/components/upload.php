@@ -16,9 +16,6 @@ class Upload extends ComponentBase
     protected function 
     Index($params)
     {
-        $this->SetPageTitle('Upload Pictures');
-
-        $this->ExposeVariable("msg", "Hello everybody!"); 
     }
 
     protected function
