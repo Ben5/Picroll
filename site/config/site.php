@@ -12,5 +12,5 @@ class SiteConfig
     const DB_PASS = 'wpe84u9384u5';
     const DB_DB   = 'picroll';
 
-    const DEFAULT_PAGE_AFTER_LOGIN = '/picroll/html/upload/index';
+    const DEFAULT_PAGE_AFTER_LOGIN = '/picroll/html/view/viewallimages';
 }
