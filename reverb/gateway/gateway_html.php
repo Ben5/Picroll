@@ -101,7 +101,7 @@ class GatewayHtml extends GatewayBase
 
             // Include global js files 
             $endOfBodyJavascript = '<!-- Placed at the end of the document so the pages load faster -->'."\n";
-            $globalJsFiles = array('jquery-1.9.0.min.js',
+            $globalJsFiles = array('jquery-1.10.2.min.js',
                                  'jquery-ui.min.js', 
                                  'jquery.ui.accordion.min.js', 
                                  'bootstrap.min.js', 
