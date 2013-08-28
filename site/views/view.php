@@ -1,16 +1,18 @@
-<h3>View Pictures</h3>
+<div class="container">
+    <div class="col-xs-12">
+        <h3>View Pictures</h3>
+    </div>
+</div>
 
 <div class="container">
-    <ul class="list-unstyled list-inline">
     <?php
         foreach($images as $imageName)
         {
     ?>
-            <li>
+            <div class="col-xs-12 col-sm-6 col-md-3">
                 <img src='<?php echo $imageBase.$imageName.$imageExt;?>' class="thumbnail img-thumbnail"/>
-            </li>
+            </div>
     <?php
         }
     ?>
-    </ul>
 </div>

@@ -3,6 +3,5 @@ img {
 }
 
 img.thumbnail {
-    max-height: 300px;
-    max-width: 300px;
+    margin-bottom: 20px;
 }
