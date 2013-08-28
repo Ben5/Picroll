@@ -6,11 +6,11 @@ $(document).ready(function() {
 
     // OnLoad handler for preview filereader. Create a Preview image and attach it to page.
     var PreviewReaderOnLoad = function(e) {
-        var wrapper         = $('<div class="previewWrapper"></div>');
-        var progressWrapper = $('<div class="uploadProgress"></div>');
-        var progressText    = $('<div class="uploadProgressText"></div>');
-        var progressBar     = $('<div class="uploadProgressBar"></div>');
-        var img             = $('<img class="uploadPreview"/>');
+        var wrapper         = $('<div>').addClass('previewWrapper col-md-3 col-sm-4 col-xs-6');
+        var progressWrapper = $('<div>').addClass('uploadProgress');
+        var progressText    = $('<div>').addClass('uploadProgressText');
+        var progressBar     = $('<div>').addClass('uploadProgressBar');
+        var img             = $('<img/>').addClass('uploadPreview img-thumbnail');
 
         img.attr('src', e.target.result);
         wrapper.attr('data-photonum', numPhotosAdded);
