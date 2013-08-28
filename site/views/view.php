@@ -9,7 +9,7 @@
         foreach($images as $imageName)
         {
     ?>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div class="col-xs-12 col-sm-6 col-md-3 col-lg-2">
                 <img src='<?php echo $imageBase.$imageName.$imageExt;?>' class="thumbnail img-thumbnail"/>
             </div>
     <?php
