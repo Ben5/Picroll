@@ -1,7 +1,6 @@
 $(document).ready(function() {
 
     var numPhotosAdded = 0;
-    var uploadWrapper; 
     var formData;
 
     // OnLoad handler for preview filereader. Create a Preview image and attach it to page.
@@ -24,9 +23,10 @@ $(document).ready(function() {
     };
 
     // Progress handler for xhr upload. 
-    var XhrProgressListener = function(evt) {
+    var XhrProgressListener = function(evt, requestId) {
         if (evt.lengthComputable) {
             var percentComplete = (Math.floor(evt.loaded / evt.total * 1000) / 10);
+            var uploadWrapper = $('div.previewWrapper[data-photonum="'+requestId+'"]');
             uploadWrapper.find('div.uploadProgressText').html(percentComplete + '%');
             uploadWrapper.find('div.uploadProgressBar').css('width', percentComplete + '%');
         }
@@ -48,13 +48,12 @@ $(document).ready(function() {
     });
 
     // OnLoad handler for resized image - prepare and upload image once loaded.
-    var ImageOnLoad = function() {
-        console.log('loaded');
+    var ImageOnLoad = function(thisImage, requestId) {
 
         var canvas  = document.createElement('canvas');
         var maxsize = 1200;
-        var width   = this.width;
-        var height  = this.height;
+        var width   = thisImage.width;
+        var height  = thisImage.height;
         
         // resize canvas to appropriate dimensions
         if(height > width)
@@ -78,7 +77,7 @@ $(document).ready(function() {
             }
         }
 
-        canvas.getContext('2d').drawImage(this, 0, 0, canvas.width, canvas.height);
+        canvas.getContext('2d').drawImage(thisImage, 0, 0, canvas.width, canvas.height);
         
         formData.append('uploadImage', canvas.toDataURL('image/jpeg'));
 
@@ -93,7 +92,14 @@ $(document).ready(function() {
             xhr: function() {  // custom xhr
                     myXhr = $.ajaxSettings.xhr();
                     if(myXhr.upload){ // check if upload property exists
-                        myXhr.upload.addEventListener('progress', XhrProgressListener, false); // for handling the progress of the upload
+                        // for handling the progress of the upload
+                        myXhr.upload.addEventListener(
+                            'progress', 
+                            function(evt) {
+                                XhrProgressListener(evt, requestId);
+                            }, 
+                            false
+                        );
                     }
                     return myXhr;
                 },
@@ -111,7 +117,6 @@ $(document).ready(function() {
         $.each(photoFiles, function(i, obj) {
             // Clear the (global) formdata object
             formData      = new FormData();
-            uploadWrapper = $('div.previewWrapper[data-photonum="'+i+'"]');
 
             // Get EXIF data and add it to formdata
             var reader    = new FileReader();
@@ -128,7 +133,9 @@ $(document).ready(function() {
                 // Copy the loaded image file into an image object. 
                 // Then, in the onload, we do the resize and upload
                 var image    = new Image();
-                image.onload = ImageOnLoad;
+                image.onload = function() {
+                    ImageOnLoad(image, i);
+                };
                 image.src    = readerEvent.target.result;
             };
             resizeReader.readAsDataURL(obj);
