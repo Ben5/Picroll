@@ -1,6 +1,6 @@
 $(document).ready(function() {
     //
-    // global vars
+    // Global vars
     //
     var minSearchLength = 2;
 
@@ -16,7 +16,7 @@ $(document).ready(function() {
 
 
     //
-    // Handler declarations
+    // Handler Declarations
     //
 
     // click handler for all buttons that end up in the search result container.
