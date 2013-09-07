@@ -121,7 +121,7 @@ var EXIF = {};
          0x0131 : "Software",
          0x013B : "Artist",
          0x8298 : "Copyright"
- }
+ };
 
  EXIF.GPSTags = {
 0x0000 : "GPSVersionID",
@@ -155,7 +155,7 @@ var EXIF = {};
          0x001C : "GPSAreaInformation",
          0x001D : "GPSDateStamp",
          0x001E : "GPSDifferential"
- }
+ };
 
  EXIF.StringValues = {
 ExposureProgram : {
@@ -293,7 +293,7 @@ Components : {
     5 : "G",
     6 : "B"
              }
- }
+ };
 
  function addEvent(oElement, strEvent, fncHandler) 
  {
@@ -319,7 +319,7 @@ Components : {
              oImg.exifdata = oEXIF || {};
              if (fncCallback) fncCallback();
              }
-             )
+             );
  }
 
  function findEXIFinJPEG(oFile) {
@@ -345,7 +345,6 @@ Components : {
          if (iMarker == 22400) {
              if (bDebug) console.log("Found 0xFFE1 marker");
              return readEXIFData(oFile, iOffset + 4, oFile.getShortAt(iOffset+2, true)-2);
-             iOffset += 2 + oFile.getShortAt(iOffset+2, true);
 
          } else if (iMarker == 225) {
              // 0xE1 = Application-specific 1 (for EXIF)
@@ -399,7 +398,6 @@ Components : {
          case 2: // ascii, 8-bit byte
              var iStringOffset = iNumValues > 4 ? iValueOffset : (iEntryOffset + 8);
              return oFile.getStringAt(iStringOffset, iNumValues-1);
-             break;
 
          case 3: // short, 16 bit int
              if (iNumValues == 1) {
@@ -524,10 +522,10 @@ Components : {
 
                  case "ComponentsConfiguration" : 
                      oEXIFTags[strTag] = 
-                     EXIF.StringValues.Components[oEXIFTags[strTag][0]]
-                     + EXIF.StringValues.Components[oEXIFTags[strTag][1]]
-                     + EXIF.StringValues.Components[oEXIFTags[strTag][2]]
-                     + EXIF.StringValues.Components[oEXIFTags[strTag][3]];
+                     EXIF.StringValues.Components[oEXIFTags[strTag][0]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][1]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][2]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][3]];
                  break;
              }
              oTags[strTag] = oEXIFTags[strTag];
@@ -539,10 +537,10 @@ Components : {
          for (var strTag in oGPSTags) {
              switch (strTag) {
                  case "GPSVersionID" : 
-                     oGPSTags[strTag] = oGPSTags[strTag][0] 
-                     + "." + oGPSTags[strTag][1] 
-                     + "." + oGPSTags[strTag][2] 
-                     + "." + oGPSTags[strTag][3];
+                     oGPSTags[strTag] = oGPSTags[strTag][0]  +
+                     "." + oGPSTags[strTag][1] +
+                     "." + oGPSTags[strTag][2] +
+                     "." + oGPSTags[strTag][3];
                  break;
              }
              oTags[strTag] = oGPSTags[strTag];
@@ -562,13 +560,13 @@ Components : {
          if (fncCallback) fncCallback();
      }
      return true;
- }
+ };
 
  EXIF.getTag = function(oImg, strTag) 
  {
      if (!imageHasData(oImg)) return;
      return oImg.exifdata[strTag];
- }
+ };
 
  EXIF.getAllTags = function(oImg) 
  {
@@ -581,7 +579,7 @@ Components : {
          }
      }
      return oAllTags;
- }
+ };
 
 
  EXIF.pretty = function(oImg) 
@@ -599,11 +597,11 @@ Components : {
          }
      }
      return strPretty;
- }
+ };
 
  EXIF.readFromBinaryFile = function(oFile) {
      return findEXIFinJPEG(oFile);
- }
+ };
 
  function loadAllImages() 
  {

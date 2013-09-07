@@ -30,7 +30,7 @@ $(document).ready(function() {
             uploadWrapper.find('div.uploadProgressText').html(percentComplete + '%');
             uploadWrapper.find('div.uploadProgressBar').css('width', percentComplete + '%');
         }
-    }
+    };
 
     // Create a preview of images when the selected image changes.
     $('#photoUpload').on('change', function() {
@@ -122,7 +122,7 @@ $(document).ready(function() {
             var reader    = new FileReader();
             reader.onload = function(readerEvent) {
                 var binFile  = new BinaryFile(readerEvent.target.result,0,0);
-                var exifData = EXIF.readFromBinaryFile(binFile)
+                var exifData = EXIF.readFromBinaryFile(binFile);
                 formData.append('exif', JSON.stringify(exifData));
             };
             reader.readAsBinaryString(obj);

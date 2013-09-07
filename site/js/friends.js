@@ -139,7 +139,7 @@ $(document).ready(function() {
         listItem.fadeOut(400, function() {
             var list = listItem.parents('ul');
             listItem.remove();
-            if(list.find('li').length == 0)
+            if(list.find('li').length === 0)
             {
                 list.siblings('h3').remove();
                 list.remove();
