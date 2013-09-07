@@ -14,8 +14,7 @@
         $perRowMed   = 4;
         $perRowLarge = 6;
 
-        foreach($images as $imageName)
-        {
+        foreach ($images as $imageName) {
             $countSmall++;
             $countMed++;
             $countLarge++;
@@ -25,21 +24,18 @@
             </div>
     <?php
 
-                if ($countSmall === $perRowSmall)
-                {
-                    echo '<div class="clearfix visible-sm"></div>';
-                    $countSmall = 0;
-                }
-                if ($countMed === $perRowMed)
-                {
-                    echo '<div class="clearfix visible-md"></div>';
-                    $countMed = 0;
-                }
-                if ($countLarge === $perRowLarge)
-                {
-                    echo '<div class="clearfix visible-lg"></div>';
-                    $countLarge = 0;
-                }
+            if ($countSmall === $perRowSmall) {
+                echo '<div class="clearfix visible-sm"></div>';
+                $countSmall = 0;
+            }
+            if ($countMed === $perRowMed) {
+                echo '<div class="clearfix visible-md"></div>';
+                $countMed = 0;
+            }
+            if ($countLarge === $perRowLarge) {
+                echo '<div class="clearfix visible-lg"></div>';
+                $countLarge = 0;
+            }
         }
     ?>
 </div>
