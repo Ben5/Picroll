@@ -36,8 +36,7 @@ class Login extends ComponentBase
             return;
         }
 
-        foreach(array_keys($expectedKeys) as $key)
-        {
+        foreach (array_keys($expectedKeys) as $key) {
             $$key = $params[$key];
         }
 
@@ -46,8 +45,7 @@ class Login extends ComponentBase
 
         // get the salt and salted hashed password for the requested user
         $user = $userModel->TryGetUserByName($username);
-        if ($user === false)
-        {
+        if ($user === false) {
             $errorMessage = 'User not found with username "'.$username.'".';
             $this->ExposeVariable('errorMessage', $errorMessage);
             return;
@@ -55,8 +53,7 @@ class Login extends ComponentBase
 
         // salt the provided password then hash it and compare to the value from the DB.
         $enteredPassword = hash('sha256', $user['generated_salt'].$password);
-        if ($enteredPassword !== $user['password_hash'])
-        {
+        if ($enteredPassword !== $user['password_hash']) {
             $errorMessage = 'Incorrect password entered.';
             $this->ExposeVariable('errorMessage', $errorMessage);
             return;
@@ -92,13 +89,11 @@ class Login extends ComponentBase
             return;
         }
 
-        foreach(array_keys($expectedKeys) as $key)
-        {
+        foreach (array_keys($expectedKeys) as $key) {
             $$key = $params[$key];
         }
 
-        if ($password !== $repassword)
-        {
+        if ($password !== $repassword) {
             $errorMessage = 'Your passwords didn\'t match, please try again.';
             $this->ExposeVariable('errorMessage', $errorMessage);
             die($errorMessage);
@@ -109,8 +104,7 @@ class Login extends ComponentBase
         $userModel = new UserModel();
         $user = $userModel->TryGetUserByName($username);
 
-        if ($user != false)
-        {
+        if ($user != false) {
             $errorMessage = 'Username "'.$username.'" is already taken.';
             $this->ExposeVariable('errorMessage', $errorMessage);
             die($errorMessage);
@@ -126,8 +120,7 @@ class Login extends ComponentBase
 
         // create a new row in the user table
         $userId = $userModel->AddNewUser($username, $saltHex, $hashedPassword, $email);
-        if ($userId === false)
-        {
+        if ($userId === false) {
             $errorMessage = 'Failed to add user';
             $this->ExposeVariable('errorMessage', $errorMessage);
             die($errorMessage);

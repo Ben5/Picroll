@@ -10,7 +10,7 @@ class FriendRequestModel extends ModelBase
     public function
     __construct()
     {
-       $this->modelName = 'friend_request';
+        $this->modelName = 'friend_request';
     }
 
     public function

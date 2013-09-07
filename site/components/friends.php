@@ -2,10 +2,10 @@
 
 use Picroll\SiteConfig;
 
-include(SiteConfig::REVERB_ROOT."/system/componentbase.php");
-include(SiteConfig::SITE_ROOT."/models/friend.php");
-include(SiteConfig::SITE_ROOT."/models/friend_request.php");
-include(SiteConfig::SITE_ROOT."/models/user.php");
+require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
+require_once SiteConfig::SITE_ROOT."/models/friend.php";
+require_once SiteConfig::SITE_ROOT."/models/friend_request.php";
+require_once SiteConfig::SITE_ROOT."/models/user.php";
 
 class Friends extends ComponentBase
 {
@@ -17,7 +17,7 @@ class Friends extends ComponentBase
         return true;
     }
 
-    protected function 
+    protected function
     Index($params)
     {
         $friendModel = new FriendModel();
@@ -38,8 +38,7 @@ class Friends extends ComponentBase
         $searchTerm = $params['searchTerm'];
 
         $searchResult = array();
-        if(strlen($searchTerm) >= $this->minimumSearchTermLength)
-        {
+        if (strlen($searchTerm) >= $this->minimumSearchTermLength) {
             $userModel    = new UserModel();
             $friendModel  = new FriendModel();
             $userId       = $_SESSION['user_id'];
@@ -82,8 +81,7 @@ class Friends extends ComponentBase
         $friendModel = new FriendModel();
         $success = $friendModel->AddNewFriend($userId, $friendId);
 
-        if($success !== false)
-        {
+        if ($success !== false) {
             $friendRequestModel = new FriendRequestModel();
             $success = $friendRequestModel->DeleteRequest($userId, $friendId);
         }

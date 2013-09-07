@@ -10,7 +10,7 @@ class ImageModel extends ModelBase
     public function
     __construct()
     {
-       $this->modelName = "image";
+        $this->modelName = "image";
     }
 
     public function

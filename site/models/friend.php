@@ -10,7 +10,7 @@ class FriendModel extends ModelBase
     public function
     __construct()
     {
-       $this->modelName = "friendship";
+        $this->modelName = "friendship";
     }
 
     public function
@@ -62,8 +62,8 @@ class FriendModel extends ModelBase
 
     public function
     AddNewFriend(
-       $userId, 
-       $friendUserId)
+        $userId, 
+        $friendUserId) 
     {
         // we add 2 friendships, so that we can simplfy searching for a user's friends.
         $sql = "INSERT INTO friendship (user_id, friend_user_id)

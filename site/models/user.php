@@ -10,7 +10,7 @@ class UserModel extends ModelBase
     public function
     __construct()
     {
-       $this->modelName = "user";
+        $this->modelName = "user";
     }
 
     public function
@@ -43,17 +43,17 @@ class UserModel extends ModelBase
 
         $query->AddIntegerParam($localUserId); // don't return the local user.
         $query->AddStringParam('%'.$name.'%'); // username gets fully wildcarded
-        $query->AddStringParam(    $name.'%'); // email only gets semi-wildcarded, to stop people searching for everone with a certain domain (or '.com')
+        $query->AddStringParam($name.'%'); // email only gets semi-wildcarded, to stop people searching for everone with a certain domain (or '.com')
 
         return $query->TryReadDictionary();
     }
 
     public function
     AddNewUser(
-       $username, 
-       $salt,
-       $hashedPassword, 
-       $email)
+        $username, 
+        $salt,
+        $hashedPassword, 
+        $email)
     {
         $sql = "INSERT INTO user (username, email, generated_salt, password_hash)
                 VALUES (?, ?, ?, ?)";

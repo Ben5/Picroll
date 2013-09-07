@@ -2,8 +2,8 @@
 
 use Picroll\SiteConfig;
 
-include(SiteConfig::REVERB_ROOT."/system/componentbase.php");
-include(SiteConfig::SITE_ROOT."/models/image.php");
+require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
+require_once SiteConfig::SITE_ROOT."/models/image.php";
 
 class Upload extends ComponentBase
 {
@@ -13,7 +13,7 @@ class Upload extends ComponentBase
         return true;
     }
 
-    protected function 
+    protected function
     Index($params)
     {
     }
@@ -32,8 +32,7 @@ class Upload extends ComponentBase
 
         $path = '/opt/git/Picroll/site/images/uploads/';
     
-        if(!is_dir($path))
-        {
+        if (!is_dir($path)) {
             mkdir($path);
         }
         $filename = md5($userId.time());
@@ -46,7 +45,7 @@ class Upload extends ComponentBase
         $imageModel = new ImageModel();
         $imageModel->AddNewImage($userId, $filename);
 
-       // $this->ExposeVariable('data', $params['name']);
+        // $this->ExposeVariable('data', $params['name']);
         $this->ExposeVariable('uploaded', true);
     }
 
@@ -54,7 +53,7 @@ class Upload extends ComponentBase
     ConvertDataUrl($dataUrl)
     {
         // Assumes the data URL represents a jpeg image
-        $image = base64_decode( str_replace('data:image/jpeg;base64,', '', $dataUrl) );
+        $image = base64_decode(str_replace('data:image/jpeg;base64,', '', $dataUrl));
         return $image;
     }
 }
