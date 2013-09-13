@@ -85,6 +85,7 @@ class GatewayHtml extends GatewayBase
             // include global css files
             $globalCssFiles = array(
                                  'bootstrap.min.css', 
+                                 'bootstrap-theme.min.css', 
                                  );
             foreach($globalCssFiles as $filename)
             {
