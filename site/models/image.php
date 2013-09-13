@@ -41,4 +41,19 @@ class ImageModel extends ModelBase
 
         return $query->TryExecuteInsert();
     }
+
+    public function DeleteImage(
+        $userId, 
+        $imageId)
+    {
+        $sql = 'DELETE FROM image 
+                WHERE user_id = ?
+                AND   id = ?';
+        $query = DbInterface::NewQuery($sql);
+        $query->AddIntegerParam($userId);
+        $query->AddIntegerParam($imageId);
+
+        $query->ExecuteDelete('Unable to delete image');
+    }
+    
 }

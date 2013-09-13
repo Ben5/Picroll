@@ -31,4 +31,17 @@ class View extends ComponentBase
         $this->ExposeVariable('imageExt', '.jpeg');
         $this->ExposeVariable('images', $imagesForUser);
     }
+
+    protected function
+    DeleteImages($params)
+    {
+        $userId   = $_SESSION['user_id'];
+        $imageIds = $_REQUEST['imageIDs'];
+
+        $imageModel = new ImageModel();
+
+        foreach ($imageIds as $imageId) {
+            $imageModel->DeleteImage($userId, $imageId);
+        }
+    }
 }
