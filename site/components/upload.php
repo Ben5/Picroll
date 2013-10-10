@@ -41,7 +41,15 @@ class Upload extends ComponentBase
         fwrite($file, $image);
         fclose($file);
 
-        // Add the file to the db
+        // Create a thumbnail version
+        $thumbnail = new Imagick($path.$filename.'.jpeg');
+        $thumbnail->thumbnailImage(100, 0);
+
+        $file = fopen($path.$filename.'-thumb.jpeg', 'w');
+        fwrite($file, $thumbnail);
+        fclose($file);
+
+        // Add the new files to the db
         $imageModel = new ImageModel();
         $imageModel->AddNewImage($userId, $filename);
 
