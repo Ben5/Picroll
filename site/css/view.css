@@ -1,7 +1,45 @@
-img {
-    width: 1000px;
+div.modal-backdrop {
+    opacity: 0.5;
 }
 
 img.thumbnail {
     margin-bottom: 20px;
 }
+
+div.overlay {
+    width: auto;
+    height: auto;
+    padding: 7px 14px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    z-index: 2;
+    font-size: 18px;
+    color: #0399fd;
+    border-bottom-right-radius: 9px;
+    display: none;
+}
+
+div.modal-backdrop {
+    display: none;
+}
+
+#fullscreenImageWrapper {
+    display: none;
+    z-index: 1040;
+    position: fixed;
+    top: 5%;
+    height: 100%;
+    width: 100%;
+}
+
+#fullscreenImage {
+    text-align: center;
+    height: 100%;
+}
+
+#fullscreenImageWrapper img {
+    max-height: 90%;
+    max-width: 90%;
+}
+
