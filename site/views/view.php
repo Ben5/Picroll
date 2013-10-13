@@ -11,7 +11,7 @@
             <button id="btnSelectPictures" class="btn btn-default">Select Pictures</button>
         </div>
         <div class="btn-group">
-            <button class="btn btn-default" disabled="disabled">Delete <span class="glyphicon glyphicon-trash"></span></button>
+            <button class="btn btn-danger" disabled="disabled">Delete <span class="glyphicon glyphicon-trash"></span></button>
             <button class="btn btn-default" disabled="disabled">Add To Album <span class="glyphicon glyphicon-book"></span></button>
         </div>
     </div>

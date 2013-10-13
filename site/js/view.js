@@ -35,6 +35,12 @@ $(document).ready(function() {
         $overlays.toggle(200);
         $overlays.find('span.glyphicon-check').hide();
         $overlays.find('span.glyphicon-unchecked').show();
+
+        if ($(this).hasClass('btn-default')) {
+            $(this).addClass('btn-primary').removeClass('btn-default');
+        } else {
+            $(this).addClass('btn-default').removeClass('btn-primary');
+        }
     }
 
     // Handle clicks on thumbnails
