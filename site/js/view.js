@@ -39,7 +39,7 @@ $(document).ready(function() {
 
     // Handle clicks on thumbnails
     function ImageClickHandler() {
-        if ($('div.overlay').is(':visible')) {
+        if ($(this).siblings('div.overlay').is(':visible')) {
             ToggleSelectState($(this));
         } else {
             // Show the full screen image!
