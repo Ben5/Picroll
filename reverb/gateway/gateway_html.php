@@ -106,6 +106,7 @@ class GatewayHtml extends GatewayBase
                                  'jquery-ui.min.js', 
                                  'jquery.ui.accordion.min.js', 
                                  'bootstrap.min.js', 
+                                 'bootbox.min.js', 
                                  );
             foreach($globalJsFiles as $filename)
             {
