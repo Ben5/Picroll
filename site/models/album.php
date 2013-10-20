@@ -14,15 +14,17 @@ class AlbumModel extends ModelBase
 
     public function GetAllAlbumsByUserId($userId)
     {
-        $sql = 'SELECT id, name, date_created
+        $sql = 'SELECT id, name, date_created, COUNT(image_id) AS size
                 FROM   album
-                WHERE  user_id = ?';
+                JOIN album_content ON album.id = album_content.album_id
+                WHERE  user_id = ?
+                GROUP BY album_content.album_id';
 
         $query = DbInterface::NewQuery($sql);
 
         $query->AddStringParam($userId);
 
-        return $query->TryReadAllRows();
+        return $query->TryReadRowArray();
     }
 
     public function AddNewAlbum(
@@ -41,15 +43,19 @@ class AlbumModel extends ModelBase
 
     public function AddContentToAlbum(
         $albumId,
-        $imageId)
+        array $imageIdArray)
     {
-        $sql = 'INSERT INTO album_content
+        $sql = 'INSERT IGNORE INTO album_content
                 (album_id, image_id)
-                VALUES
-                (?, ?)';
+                VALUES ';
+
+        $sql .= rtrim(str_repeat('(?, ?),', count($imageIdArray)), ',');
+
         $query = DbInterface::NewQuery($sql);
-        $query->AddIntegerParam($albumId);
-        $query->AddIntegerParam($imageId);
+        foreach ($imageIdArray as $imageId) {
+            $query->AddIntegerParam($albumId);
+            $query->AddIntegerParam($imageId);
+        }
 
         return $query->TryExecuteInsert();
     }

@@ -14,8 +14,14 @@ $(document).ready(function() {
     // Select Images button click
     $('#btnSelectPictures').on('click', ToggleSelectMode);
 
-    // Select Images button click
+    // Delete Images button click
     $('#btnDeleteSelected').on('click', DeleteSelectedPictures);
+
+    // Add Images to New Album button click
+    $('#createNewAlbum').on('click', AddSelectedImagesToNewAlbum);
+
+    // Add Images to New Album button click
+    $('#btnAddSelectedToAlbum a.existingAlbum').on('click', AddSelectedImagesToExistingAlbum);
 
     // Toggle Picture Select State
     $('img.thumbnail').on('click', ImageClickHandler);
@@ -48,20 +54,10 @@ $(document).ready(function() {
 
     // Toggle the Select Pictures mode
     function DeleteSelectedPictures() {
-        var selectedPictures = $('#allThumbnailsContainer')
-                                   .find('span.glyphicon-check')
-                                   .filter(':visible')
-                                   .parents('div.overlay')
-                                   .siblings('img');
-
-        if (selectedPictures.length === 0) {
+        var pictureIds = GetAllSelectedPictureIds();
+        if (pictureIds.length === 0) {
             return;
         }
-
-        var pictureIds = [];
-        selectedPictures.each(function() {
-            pictureIds.push($(this).data('imageid'));
-        });
 
         bootbox.confirm(
             'Do you want to delete ' + pictureIds.length + ' pictures?',
@@ -82,6 +78,58 @@ $(document).ready(function() {
                 }
             }
         );
+    }
+
+    // Create a new album, and add the selected images to it
+    function AddSelectedImagesToNewAlbum() {
+        var pictureIds = GetAllSelectedPictureIds();
+        if (pictureIds.length === 0) {
+            return;
+        }
+
+        bootbox.prompt(
+            'Name your new Album',
+            function(result) {
+                if (result.length > 0) {
+                    var url = '/picroll/json/view/newalbum';
+                    var dataObj = {
+                        albumName : result,
+                        pictureIds : pictureIds
+                    };
+
+                    $.ajax({
+                        url:    url,
+                        data:   dataObj,
+                        type:   'POST',
+                        success: function(data) {console.log(data);}
+                    });
+                }
+            }
+        );
+
+    }
+
+    // Create a new album, and add the selected images to it
+    function AddSelectedImagesToExistingAlbum() {
+        var pictureIds = GetAllSelectedPictureIds();
+        if (pictureIds.length === 0) {
+            return;
+        }
+
+        var albumId = $(this).data('albumid');
+
+        var url = '/picroll/json/view/addtoalbum';
+        var dataObj = {
+            albumId :    albumId,
+            pictureIds : pictureIds
+        };
+
+        $.ajax({
+            url:    url,
+            data:   dataObj,
+            type:   'POST',
+            success: function(data) {console.log(data);}
+        });
     }
 
     // Handle clicks on thumbnails
@@ -209,5 +257,21 @@ $(document).ready(function() {
                            .insertAfter($(this));
             }
         });
+    }
+
+    // Get a list of all selected picture ids
+    function GetAllSelectedPictureIds() {
+        var selectedPictures = $('#allThumbnailsContainer')
+                                   .find('span.glyphicon-check')
+                                   .filter(':visible')
+                                   .parents('div.overlay')
+                                   .siblings('img');
+
+        var pictureIds = [];
+        selectedPictures.each(function() {
+            pictureIds.push($(this).data('imageid'));
+        });
+
+        return pictureIds;
     }
 });

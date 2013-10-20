@@ -11,7 +11,22 @@
         </div>
         <div class="btn-group">
             <button id="btnDeleteSelected" class="btn btn-danger">Delete <span class="glyphicon glyphicon-trash"></span></button>
-            <button class="btn btn-default" disabled="disabled">Add To Album <span class="glyphicon glyphicon-book"></span></button>
+            <div id="btnAddSelectedToAlbum" class="btn-group">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    Add To Album <span class="glyphicon glyphicon-book"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <?php foreach ($albums as $album): ?>
+                        <li>
+                            <a href='#' class="existingAlbum" data-albumid="<?php echo $album['id']; ?>">
+                                <?php echo $album['name']; ?> (<?php echo $album['size'];?>)
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                    <li class="divider"></li>
+                    <li><a href='#' id="createNewAlbum">Create New Album</a></li>
+                </ul>
+            </div>
         </div>
         <div id="notificationArea" class="pull-right">
         </div>

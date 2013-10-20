@@ -7,12 +7,14 @@ require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
 
 class ImageModel extends ModelBase
 {
-    public function __construct()
+    public function
+    __construct()
     {
         $this->modelName = "image";
     }
 
-    public function GetAllImagesByUserId($userId)
+    public function 
+    GetAllImagesByUserId($userId)
     {
         $sql = 'SELECT id, filename
                 FROM   image
@@ -25,7 +27,8 @@ class ImageModel extends ModelBase
         return $query->TryReadDictionary();
     }
 
-    public function AddNewImage(
+    public function 
+    AddNewImage(
        $userId, 
        $filename)
     {
@@ -39,7 +42,8 @@ class ImageModel extends ModelBase
         return $query->TryExecuteInsert();
     }
 
-    public function DeleteImage(
+    public function 
+    DeleteImage(
         $userId, 
         $imageId)
     {
