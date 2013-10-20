@@ -1,5 +1,5 @@
 div.modal-backdrop {
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 img.thumbnail {
@@ -43,3 +43,11 @@ div.modal-backdrop {
     max-width: 90%;
 }
 
+#notificationTemplate {
+    display: none;
+}
+
+#notificationArea div.alert {
+   margin: 0px;
+   padding: 6px 15px; 
+}

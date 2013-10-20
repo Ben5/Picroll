@@ -14,11 +14,14 @@ $(document).ready(function() {
     // Select Images button click
     $('#btnSelectPictures').on('click', ToggleSelectMode);
 
+    // Select Images button click
+    $('#btnDeleteSelected').on('click', DeleteSelectedPictures);
+
     // Toggle Picture Select State
     $('img.thumbnail').on('click', ImageClickHandler);
 
     // Toggle the select state of images if the user clicks the overlay directly, not the image
-    $('div.overlay').on('click', function() {ToggleSelectState($(this).siblings('img'));})
+    $('div.overlay').on('click', function() {ToggleSelectState($(this).siblings('img'));});
 
     // Click on the full size image overlay backdrop
     $('#fullscreenImage').on('click', HideFullscreenImage);
@@ -43,6 +46,44 @@ $(document).ready(function() {
         }
     }
 
+    // Toggle the Select Pictures mode
+    function DeleteSelectedPictures() {
+        var selectedPictures = $('#allThumbnailsContainer')
+                                   .find('span.glyphicon-check')
+                                   .filter(':visible')
+                                   .parents('div.overlay')
+                                   .siblings('img');
+
+        if (selectedPictures.length === 0) {
+            return;
+        }
+
+        var pictureIds = [];
+        selectedPictures.each(function() {
+            pictureIds.push($(this).data('imageid'));
+        });
+
+        bootbox.confirm(
+            'Do you want to delete ' + pictureIds.length + ' pictures?',
+            function(result) {
+                if (result) {
+                    // Finally, fire off the ajax request to do the upload
+                    var url = '/picroll/json/view/deleteimages';
+                    var dataObj = {
+                        imageIds: pictureIds
+                    };
+
+                    $.ajax({
+                        url:         url,
+                        type:        'POST',
+                        data:        dataObj, 
+                        success:     function(data) { DeletePicturesCB(data, pictureIds); }
+                    });
+                }
+            }
+        );
+    }
+
     // Handle clicks on thumbnails
     function ImageClickHandler() {
         if ($(this).siblings('div.overlay').is(':visible')) {
@@ -56,7 +97,7 @@ $(document).ready(function() {
             $('#fullscreenImage').empty().append(fullImage);
 
             // add a faded background
-            $('div.modal-backdrop').fadeIn(400)
+            $('div.modal-backdrop').fadeIn(400);
         }
     }
 
@@ -73,6 +114,19 @@ $(document).ready(function() {
     // Callbacks
     //
 
+    function DeletePicturesCB(data, pictureIds) {
+        // We have deleted the images from the server, now delete the from the page
+        for (var index in pictureIds) {
+            $('#allThumbnailsContainer').find('img[data-imageid="'+pictureIds[index]+'"]').parents('div.thumbnailContainer').remove();
+        }
+
+        // now show a notification
+        ShowThenHideMessage('success', 'Pictures Deleted Successfully!', $('#notificationArea').empty());
+
+        // now redo the clearfixes, so we dont have gaps at the end of rows
+        RedoClearfixDivs();
+    }
+
     //
     // Helpers
     //
@@ -80,5 +134,80 @@ $(document).ready(function() {
     // Toggle the Select State of pictures
     function ToggleSelectState(thisImg) {
         thisImg.siblings('div.overlay').find('span').each(function() { $(this).toggle(); });
+    }
+
+    // Show a confirmation message then hide it again
+    function ShowThenHideMessage(type, message, parentDiv) {
+        // which class to add
+        var typeClass;
+        switch (type) {
+            case 'success':
+                typeClass = 'alert-success';
+                break;
+            case 'warning':
+                typeClass = 'alert-warning';
+                break;
+            case 'error':
+            case 'danger':
+                typeClass = 'alert-danger';
+                break;
+            default: 
+                typeClass = 'alert-info';
+        }
+        
+        var notification = $('#notificationTemplate').clone();
+
+        notification.addClass(typeClass)
+                    .text(message)
+                    .removeAttr('id')
+                    .hide();
+
+        parentDiv.append(notification);
+
+        // Show the message
+        notification.show(400, function() {
+            // Now, wait 2 seconds
+            var intervalHandle = setInterval(function() {
+                    // Then hide the message again
+                    notification.hide(400, function() {
+                        // Clear the interval
+                        clearInterval(intervalHandle);
+                        // Finally remove the hidden message entirely
+                        notification.remove();
+                    });
+                }, 
+                2000
+            );
+        });
+    }
+
+    // Re-position the responsive clearfix divs throughout the list of pictures.
+    function RedoClearfixDivs() {
+        var allThumbnailsContainer = $('#allThumbnailsContainer');
+
+        allThumbnailsContainer.find('div.clearfix').remove();
+
+        var thumbnailIndex = 0;
+        var clearfixDiv = $('<div>').addClass('clearfix');
+
+        allThumbnailsContainer.find('div.thumbnailContainer').each(function() {
+            thumbnailIndex++;
+
+            if (thumbnailIndex % 2 === 0) {
+                clearfixDiv.clone()
+                           .addClass('visible-sm')
+                           .insertAfter($(this));
+            }
+            if (thumbnailIndex % 4 === 0) {
+                clearfixDiv.clone()
+                           .addClass('visible-md')
+                           .insertAfter($(this));
+            }
+            if (thumbnailIndex % 6 === 0) {
+                clearfixDiv.clone()
+                           .addClass('visible-lg')
+                           .insertAfter($(this));
+            }
+        });
     }
 });

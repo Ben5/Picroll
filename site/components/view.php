@@ -36,7 +36,7 @@ class View extends ComponentBase
     DeleteImages($params)
     {
         $userId   = $_SESSION['user_id'];
-        $imageIds = $_REQUEST['imageIDs'];
+        $imageIds = $_REQUEST['imageIds'];
 
         $imageModel = new ImageModel();
 
