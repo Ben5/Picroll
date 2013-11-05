@@ -8,11 +8,26 @@ class ComponentBase
     private $outputVars = array();
     private $viewName   = null;
     private $onlyTemplate = false;
+    private $memcachedManager = null;
+
+    public function 
+    SetMemcachedManager(MemcachedManager $memcachedManager)
+    {
+        $this->memcachedManager = $memcachedManager;
+    }
+
+    protected function
+    GetMemcachedManager()
+    {
+        return $this->memcachedManager;
+    }
 
     public function
     Prepare($action, $params)
     {
-        session_start();
+        if (!session_id()) {
+            session_start();
+        }
 
         if ((method_exists($this, 'RequiresAuthentication')) && ($this->RequiresAuthentication()))
         {

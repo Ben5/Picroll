@@ -4,6 +4,8 @@ use Picroll\SiteConfig;
 
 include "/opt/git/Picroll/site/config/site.php";
 include SiteConfig::REVERB_ROOT."/system/error.php";
+require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
+require_once SiteConfig::REVERB_ROOT."/lib/MemcachedManager.php";
 
 set_error_handler("Error::ErrorHandler" );
 
@@ -72,6 +74,7 @@ class GatewayBase
 
         $this->componentInstance = new $this->componentName;
 
+        $this->componentInstance->SetMemcachedManager(new MemcachedManager());
         $this->componentInstance->Prepare($action, $params);
     }
 }

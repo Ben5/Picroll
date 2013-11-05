@@ -2,6 +2,7 @@ $(document).ready(function() {
     //
     // Global Vars
     //
+    var currentAlbum = 0;
 
     //
     // Page Initialisation
@@ -11,11 +12,17 @@ $(document).ready(function() {
     // Event Handler Registration
     //
 
-    // Select Images button click
-    $('#btnSelectPictures').on('click', ToggleSelectMode);
+    // Select Images (or Albums) button click
+    $('#btnSelectPictures, #btnSelectAlbums').on('click', ToggleSelectMode);
+
+    // Delete Images button click
+    $('#btnRemoveSelected').on('click', RemoveSelectedPictures);
 
     // Delete Images button click
     $('#btnDeleteSelected').on('click', DeleteSelectedPictures);
+
+    // Delete Images button click
+    $('#btnDeleteSelectedAlbums').on('click', DeleteSelectedAlbums);
 
     // Add Images to New Album button click
     $('#createNewAlbum').on('click', AddSelectedImagesToNewAlbum);
@@ -24,7 +31,10 @@ $(document).ready(function() {
     $('#btnAddSelectedToAlbum a.existingAlbum').on('click', AddSelectedImagesToExistingAlbum);
 
     // Toggle Picture Select State
-    $('img.thumbnail').on('click', ImageClickHandler);
+    $('#allThumbnailsContainer').on('click', 'img.thumbnail', ImageClickHandler);
+
+    // Toggle Picture Select State
+    $('#allAlbumsContainer').find('img.thumbnail').on('click', AlbumClickHandler);
 
     // Toggle the select state of images if the user clicks the overlay directly, not the image
     $('div.overlay').on('click', function() {ToggleSelectState($(this).siblings('img'));});
@@ -52,15 +62,48 @@ $(document).ready(function() {
         }
     }
 
-    // Toggle the Select Pictures mode
-    function DeleteSelectedPictures() {
-        var pictureIds = GetAllSelectedPictureIds();
+    // Delete the selected pictures
+    function RemoveSelectedPictures() {
+        var pictureIds = GetAllSelectedItemIds('allThumbnailsContainer', 'imageid');
         if (pictureIds.length === 0) {
             return;
         }
 
         bootbox.confirm(
-            'Do you want to delete ' + pictureIds.length + ' pictures?',
+            'Do you want to remove ' + pictureIds.length + ' picture' + (pictureIds.length > 1 ? 's' : '') + ' from this Album?',
+            function(result) {
+                if (result) {
+                    // Finally, fire off the ajax request to do the upload
+                    var url = '/picroll/json/view/removeimagesfromalbum';
+                    var dataObj = {
+                        imageIds: pictureIds,
+                        albumId: currentAlbum
+                    };
+
+                    $.ajax({
+                        url:         url,
+                        data:        dataObj, 
+                        type:        'POST',
+                        dataType:    'JSON',
+                        success:     function(data) { 
+                            // Remove the image from display, show success feedback, etc 
+                            DeletePicturesCB(data, pictureIds); 
+                        }
+                    });
+                }
+            }
+        );
+    }
+
+    // Delete the selected pictures
+    function DeleteSelectedPictures() {
+        var pictureIds = GetAllSelectedItemIds('allThumbnailsContainer', 'imageid');
+        if (pictureIds.length === 0) {
+            return;
+        }
+
+        bootbox.confirm(
+            'Do you want to delete ' + pictureIds.length + ' picture' + (pictureIds.length > 1 ? 's' : '') + '?',
             function(result) {
                 if (result) {
                     // Finally, fire off the ajax request to do the upload
@@ -71,9 +114,46 @@ $(document).ready(function() {
 
                     $.ajax({
                         url:         url,
-                        type:        'POST',
                         data:        dataObj, 
-                        success:     function(data) { DeletePicturesCB(data, pictureIds); }
+                        type:        'POST',
+                        dataType:    'JSON',
+                        success:     function(data) { 
+                            // Remove the image from display, show success feedback, etc 
+                            DeletePicturesCB(data, pictureIds); 
+
+                            // Now we need to re-generate the album thumbnail (if we deleted the first image!)
+                        }
+                    });
+                }
+            }
+        );
+    }
+
+    // Delete the selected albums
+    function DeleteSelectedAlbums() {
+        var albumIds = GetAllSelectedItemIds('allAlbumsContainer', 'albumid');
+        if (albumIds.length === 0) {
+            return;
+        }
+
+        bootbox.confirm(
+            'Do you want to delete ' + albumIds.length + ' album' + (albumIds.length > 1 ? 's' : '') + '?<br>'
+            +'(You won\'t lose any pictures)',
+            function(result) {
+                if (result) {
+                    // Finally, fire off the ajax request to do the upload
+                    var url = '/picroll/json/view/deletealbums';
+                    var dataObj = {
+                        albumIds: albumIds
+                    };
+console.log(dataObj);
+
+                    $.ajax({
+                        url:         url,
+                        data:        dataObj, 
+                        type:        'POST',
+                        dataType:    'JSON',
+                        success:     function(data) { DeleteAlbumsCB(data, albumIds); }
                     });
                 }
             }
@@ -82,7 +162,7 @@ $(document).ready(function() {
 
     // Create a new album, and add the selected images to it
     function AddSelectedImagesToNewAlbum() {
-        var pictureIds = GetAllSelectedPictureIds();
+        var pictureIds = GetAllSelectedItemIds('allThumbnailsContainer', 'imageid');
         if (pictureIds.length === 0) {
             return;
         }
@@ -98,10 +178,16 @@ $(document).ready(function() {
                     };
 
                     $.ajax({
-                        url:    url,
-                        data:   dataObj,
-                        type:   'POST',
-                        success: function(data) {console.log(data);}
+                        url:      url,
+                        data:     dataObj,
+                        type:     'POST',
+                        dataType: 'JSON',
+                        success: function(data) {
+                            // Add new album to the list
+                            var newA = $('<a>', {href: '#'}).addClass('existingAlbum');
+                            var newLi = $('<li>').append(newA);
+                            newLi.insertBefore($('#btnAddSelectedToAlbum').find('ul').find('li.divider'));
+                        }
                     });
                 }
             }
@@ -111,7 +197,7 @@ $(document).ready(function() {
 
     // Create a new album, and add the selected images to it
     function AddSelectedImagesToExistingAlbum() {
-        var pictureIds = GetAllSelectedPictureIds();
+        var pictureIds = GetAllSelectedItemIds('allThumbnailsContainer', 'imageid');
         if (pictureIds.length === 0) {
             return;
         }
@@ -125,15 +211,20 @@ $(document).ready(function() {
         };
 
         $.ajax({
-            url:    url,
-            data:   dataObj,
-            type:   'POST',
-            success: function(data) {console.log(data);}
+            url:      url,
+            data:     dataObj,
+            type:     'POST',
+            dataType: 'JSON',
+            success:  function(data) {
+                // TODO: show feedback
+                console.log(data);
+            }
         });
     }
 
     // Handle clicks on thumbnails
     function ImageClickHandler() {
+        console.log('click');
         if ($(this).siblings('div.overlay').is(':visible')) {
             ToggleSelectState($(this));
         } else {
@@ -146,6 +237,35 @@ $(document).ready(function() {
 
             // add a faded background
             $('div.modal-backdrop').fadeIn(400);
+        }
+    }
+
+    // Handle clicks on Albums
+    function AlbumClickHandler() {
+        if ($(this).siblings('div.overlay').is(':visible')) {
+            ToggleSelectState($(this));
+        } else {
+            // Load in all the album pictures (unless already loaded!)
+            var albumId = $(this).data('albumid');
+            if (currentAlbum == albumId) {
+                return;
+            }
+            
+            currentAlbum = albumId;
+
+            var url = '/picroll/json/view/getalbumcontents';
+            var dataObj = {
+                albumId : albumId
+            };
+
+            $.ajax({
+                url:      url,
+                data:     dataObj,
+                type:     'POST',
+                dataType: 'JSON',
+                success:  ShowAlbumImages
+            });
+
         }
     }
 
@@ -169,9 +289,57 @@ $(document).ready(function() {
         }
 
         // now show a notification
-        ShowThenHideMessage('success', 'Pictures Deleted Successfully!', $('#notificationArea').empty());
+        var successMessage = 'Pictures Deleted Successfully!';
+        if (pictureIds.length <= 1) {
+            successMessage = 'Picture Deleted Successfully!';
+        }
+
+        ShowThenHideMessage('success', successMessage, $('#pictureNotificationArea').empty());
 
         // now redo the clearfixes, so we dont have gaps at the end of rows
+        RedoClearfixDivs();
+    }
+
+    function DeleteAlbumsCB(data, albumIds) {
+        // We have deleted the albums from the server, now delete the from the page
+        for (var index in albumIds) {
+            $('#allAlbumsContainer').find('img[data-albumid="'+albumIds[index]+'"]').parents('div.thumbnailContainer').remove();
+        }
+
+        // now show a notification
+        var successMessage = 'Albums Deleted Successfully!';
+        if (albumIds.length <= 1) {
+            successMessage = 'Album Deleted Successfully!';
+        }
+
+        ShowThenHideMessage('success', successMessage, $('#albumNotificationArea').empty());
+
+        // now redo the clearfixes, so we dont have gaps at the end of rows
+        RedoClearfixDivs();
+    }
+
+    function ShowAlbumImages(data) {
+
+        var images = data.images;
+        $('#allThumbnailsContainer').empty();
+
+            //$thumbImg = $imageBase.$imageName.'-thumb'.$imageExt;
+
+        $.each(images, function(key, value) {
+            var imageId         = key;
+            var imageFullImgSrc = '/picroll/images/uploads/' + value + '.jpeg'            
+            var imageSrc        = '/picroll/images/uploads/' + value + '-thumb.jpeg';
+
+            var newThumbnail = $('#thumbnailTemplate').find('div.thumbnailContainer').clone();
+
+            newThumbnail.find('img')
+                        .attr('data-imageid', imageId)
+                        .attr('data-fullimgsrc', imageFullImgSrc)
+                        .attr('src', imageSrc);
+
+            $('#allThumbnailsContainer').append(newThumbnail);
+        });
+
         RedoClearfixDivs();
     }
 
@@ -230,7 +398,7 @@ $(document).ready(function() {
     }
 
     // Re-position the responsive clearfix divs throughout the list of pictures.
-    function RedoClearfixDivs() {
+    function RedoClearfixDivs() { // TODO: make this work for both thumbnails AND albums
         var allThumbnailsContainer = $('#allThumbnailsContainer');
 
         allThumbnailsContainer.find('div.clearfix').remove();
@@ -260,8 +428,8 @@ $(document).ready(function() {
     }
 
     // Get a list of all selected picture ids
-    function GetAllSelectedPictureIds() {
-        var selectedPictures = $('#allThumbnailsContainer')
+    function GetAllSelectedItemIds(parentId, dataName) {
+        var selectedPictures = $('#'+parentId)
                                    .find('span.glyphicon-check')
                                    .filter(':visible')
                                    .parents('div.overlay')
@@ -269,7 +437,7 @@ $(document).ready(function() {
 
         var pictureIds = [];
         selectedPictures.each(function() {
-            pictureIds.push($(this).data('imageid'));
+            pictureIds.push($(this).data(dataName));
         });
 
         return pictureIds;

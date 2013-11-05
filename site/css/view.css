@@ -3,7 +3,7 @@ div.modal-backdrop {
 }
 
 img.thumbnail {
-    margin-bottom: 20px;
+    margin: auto;
 }
 
 div.overlay {
@@ -50,4 +50,11 @@ div.modal-backdrop {
 #notificationArea div.alert {
    margin: 0px;
    padding: 6px 15px; 
+}
+
+span.albumTitle {
+    display: block;
+    margin: auto;
+    margin-bottom: 20px;
+    max-width: 210px;
 }

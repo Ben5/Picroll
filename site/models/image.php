@@ -3,7 +3,6 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
-require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
 
 class ImageModel extends ModelBase
 {
@@ -23,6 +22,21 @@ class ImageModel extends ModelBase
         $query = DbInterface::NewQuery($sql);
 
         $query->AddStringParam($userId);
+
+        return $query->TryReadDictionary();
+    }
+
+    public function 
+    GetAllImagesByAlbumId($albumId)
+    {
+        $sql = 'SELECT image.id, filename
+                FROM   image
+                JOIN   album_content ON album_content.image_id = image.id
+                WHERE  album_content.album_id = ?';
+
+        $query = DbInterface::NewQuery($sql);
+
+        $query->AddIntegerParam($albumId);
 
         return $query->TryReadDictionary();
     }

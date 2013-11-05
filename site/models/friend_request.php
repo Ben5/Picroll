@@ -3,7 +3,6 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
-require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
 
 class FriendRequestModel extends ModelBase
 {
