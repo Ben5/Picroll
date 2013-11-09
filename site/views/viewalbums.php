@@ -114,7 +114,7 @@
 <!-- template for image thumbnails -->
 <div id="thumbnailTemplate">
     <div class="thumbnailContainer col-xs-12 col-sm-6 col-md-3 col-lg-2">
-        <img src="###" class="thumbnail img-thumbnail" data-imageid="###" data-fullimgsrc="###"/>
+        <img class="thumbnail img-thumbnail" data-imageid="###" data-fullimgsrc="###"/>
         <div class="overlay">
             <span class="glyphicon glyphicon-check" style="display:none"></span>
             <span class="glyphicon glyphicon-unchecked"></span>
