@@ -3,9 +3,9 @@
 use Picroll\SiteConfig;
 
 include "/opt/git/Picroll/site/config/site.php";
-include SiteConfig::REVERB_ROOT."/system/error.php";
 require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
-require_once SiteConfig::REVERB_ROOT."/lib/MemcachedManager.php";
+include SiteConfig::REVERB_ROOT."/system/error.php";
+include SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
 
 set_error_handler("Error::ErrorHandler" );
 
@@ -15,6 +15,7 @@ class GatewayBase
     protected $projectName;
     protected $componentName;
     protected $componentInstance;
+    protected $siteConfig;
 
     public function prepare()
     {
@@ -72,9 +73,10 @@ class GatewayBase
             trigger_error("cannot find specified class: $this->componentName");
         }
 
-        $this->componentInstance = new $this->componentName;
+        $siteConfig = new SiteConfig();
+        $dependencyContainer = new DependencyContainer($siteConfig);
+        $this->componentInstance = new $this->componentName($dependencyContainer);
 
-        $this->componentInstance->SetMemcachedManager(new MemcachedManager());
         $this->componentInstance->Prepare($action, $params);
     }
 }

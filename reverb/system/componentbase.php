@@ -4,16 +4,25 @@ use Picroll\SiteConfig;
 
 class ComponentBase
 {
-    private $headVars   = array();
-    private $outputVars = array();
-    private $viewName   = null;
+    private $headVars     = array();
+    private $outputVars   = array();
+    private $viewName     = null;
     private $onlyTemplate = false;
-    private $memcachedManager = null;
 
-    public function 
-    SetMemcachedManager(MemcachedManager $memcachedManager)
+    private $memcachedManager    = null;
+    private $dependencyContainer = null;
+
+    public function
+    __construct(DependencyContainer $dependencyContainer)
     {
-        $this->memcachedManager = $memcachedManager;
+        $this->dependencyContainer = $dependencyContainer;
+        $this->memcachedManager    = $dependencyContainer->GetInstance('MemcachedManager');
+    }
+
+    protected function
+    GetDependencyContainer()
+    {
+        return $this->dependencyContainer;
     }
 
     protected function
