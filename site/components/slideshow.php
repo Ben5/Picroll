@@ -3,7 +3,6 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
-require_once SiteConfig::SITE_ROOT."/models/image.php";
 
 class Slideshow extends ComponentBase
 {
@@ -19,7 +18,7 @@ class Slideshow extends ComponentBase
         $userId = $_SESSION['user_id'];
 
         // Get all images for the local user (TODO: make this a specific set of related images!)
-        $imageModel = new ImageModel();
+        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
         $allImages = $imageModel->GetAllImagesByUserId($userId);
 
         // trim it to 10 images for now

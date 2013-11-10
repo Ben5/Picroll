@@ -3,7 +3,6 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
-require_once SiteConfig::SITE_ROOT."/models/user.php";
 
 class Login extends ComponentBase
 {
@@ -41,7 +40,7 @@ class Login extends ComponentBase
         }
 
         // get a user model
-        $userModel = new UserModel();
+        $userModel = $this->GetDependencyContainer()->GetInstance('UserModel');
 
         // get the salt and salted hashed password for the requested user
         $user = $userModel->TryGetUserByName($username);
@@ -101,7 +100,7 @@ class Login extends ComponentBase
         }
 
         // check the username isn't already taken
-        $userModel = new UserModel();
+        $userModel = $this->GetDependencyContainer()->GetInstance('UserModel');
         $user = $userModel->TryGetUserByName($username);
 
         if ($user != false) {

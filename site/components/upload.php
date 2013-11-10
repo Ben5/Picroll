@@ -50,7 +50,7 @@ class Upload extends ComponentBase
         fclose($file);
 
         // Add the new files to the db
-        $imageModel = new ImageModel();
+        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
         $imageModel->AddNewImage($userId, $filename);
 
         // $this->ExposeVariable('data', $params['name']);

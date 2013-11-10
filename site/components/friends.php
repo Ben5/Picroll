@@ -3,9 +3,6 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
-require_once SiteConfig::SITE_ROOT."/models/friend.php";
-require_once SiteConfig::SITE_ROOT."/models/friend_request.php";
-require_once SiteConfig::SITE_ROOT."/models/user.php";
 
 class Friends extends ComponentBase
 {
@@ -20,7 +17,7 @@ class Friends extends ComponentBase
     protected function
     Index($params)
     {
-        $friendModel = new FriendModel();
+        $friendModel = $this->GetDependencyContainer()->GetInstance('FriendModel');
         $userId      = $_SESSION['user_id'];
 
         $allFriends        = $friendModel->GetAllFriendsByUserId($userId);
@@ -39,17 +36,13 @@ class Friends extends ComponentBase
 
         $searchResult = array();
         if (strlen($searchTerm) >= $this->minimumSearchTermLength) {
-            $userModel    = new UserModel();
-            $friendModel  = new FriendModel();
+            $userModel    = $this->GetDependencyContainer()->GetInstance('UserModel');
+            $friendModel  = $this->GetDependencyContainer()->GetInstance('FriendModel');
             $userId       = $_SESSION['user_id'];
 
             $searchResult    = $userModel->SearchUsersByNameOrEmail($params['searchTerm']);
             $existingFriends = $friendModel->GetAllFriendsByUserId($userId);
             $friendRequests  = $friendModel->GetAllRequestedFriendsByUserId($userId);
-
-            //var_dump($searchResult);
-            //var_dump($existingFriends);
-            //var_dump($friendRequests);
 
             // remove the existing friends and requests from the search result
             $searchResult = array_diff($searchResult, $existingFriends);
@@ -66,7 +59,7 @@ class Friends extends ComponentBase
     {
         $userId = $_SESSION['user_id'];
 
-        $friendRequestModel = new FriendRequestModel();        
+        $friendRequestModel = $this->GetDependencyContainer()->GetInstance('FriendRequestModel');
         $success = $friendRequestModel->CreateNewFriendRequest($userId, $params['friendId']);
 
         $this->ExposeVariable('result', $success);
@@ -78,11 +71,11 @@ class Friends extends ComponentBase
         $userId   = $_SESSION['user_id'];
         $friendId = $params['friendId'];
 
-        $friendModel = new FriendModel();
+        $friendModel = $this->GetDependencyContainer()->GetInstance('FriendModel');
         $success = $friendModel->AddNewFriend($userId, $friendId);
 
         if ($success !== false) {
-            $friendRequestModel = new FriendRequestModel();
+            $friendRequestModel = $this->GetDependencyContainer()->GetInstance('FriendRequestModel');
             $success = $friendRequestModel->DeleteRequest($userId, $friendId);
         }
 

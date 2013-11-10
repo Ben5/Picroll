@@ -21,23 +21,38 @@ class SiteConfig
         $this->classes = array(
             // Libs
             'MemcachedManager' => array(
-                'path' => SiteConfig::REVERB_ROOT . "/lib/MemcachedManager.php",
+                'path' => self::REVERB_ROOT . "/lib/MemcachedManager.php",
                 'dependencies' => array(
-                    ),
                 ),
+            ),
             // Models
             'AlbumModel' => array(
-                'path' => SiteConfig::SITE_ROOT . "/models/album.php",
+                'path' => self::SITE_ROOT . "/models/album.php",
                 'dependencies' => array(
                     'MemcachedManager',
-                    ),
                 ),
-            'ImageModel' => array(
-                'path' => SiteConfig::SITE_ROOT . "/models/image.php",
+            ),
+            'FriendModel' => array(
+                'path' => self::SITE_ROOT . "/models/friend.php",
                 'dependencies' => array(
-                    ),
                 ),
-            );
+            ),
+            'FriendRequestModel' => array(
+                'path' => self::SITE_ROOT . "/models/friend_request.php",
+                'dependencies' => array(
+                ),
+            ),
+            'ImageModel' => array(
+                'path' => self::SITE_ROOT . "/models/image.php",
+                'dependencies' => array(
+                ),
+            ),
+            'UserModel' => array(
+                'path' => self::SITE_ROOT . "/models/user.php",
+                'dependencies' => array(
+                ),
+            ),
+        );
     }
 
     public function GetClass($className)
