@@ -63,7 +63,8 @@ class AlbumModel extends ModelBase
 
     public function AddContentToAlbum(
         $albumId,
-        array $imageIdArray)
+        array $imageIdArray,
+        $userId)
     {
         $sql = 'INSERT IGNORE INTO album_content
                 (album_id, image_id)
@@ -77,12 +78,20 @@ class AlbumModel extends ModelBase
             $query->AddIntegerParam($imageId);
         }
 
-        return $query->TryExecuteInsert();
+        $newId = $query->TryExecuteInsert();
+
+        if ($newId !== false) {
+            // altered an album, clear the old cached albums list
+            $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+        }
+        
+        return $newId;
     }
 
     public function RemoveImages(
         $albumId,
-        $imageIds)
+        $imageIds,
+        $userId)
     {
         $sql = 'DELETE FROM album_content
                 WHERE album_id = ?
@@ -93,7 +102,10 @@ class AlbumModel extends ModelBase
         $query->AddIntegerParam($albumId);
 
         $query->ExecuteDelete('Unable to remove images from album');
-    }
+
+        // deleted from an album, clear the old cached albums list
+        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+}
 
     public function DeleteAlbum(
         $userId, 
@@ -114,8 +126,9 @@ class AlbumModel extends ModelBase
         $query = DbInterface::NewQuery($sql);
         $query->AddIntegerParam($userId);
         $query->AddIntegerParam($albumId);
-
         $query->ExecuteDelete('Unable to delete album');
+
+        // deleted from an album, clear the old cached albums list
+        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
     }
-    
 }

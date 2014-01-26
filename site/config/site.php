@@ -45,6 +45,7 @@ class SiteConfig
             'ImageModel' => array(
                 'path' => self::SITE_ROOT . "/models/image.php",
                 'dependencies' => array(
+                    'MemcachedManager',
                 ),
             ),
             'UserModel' => array(

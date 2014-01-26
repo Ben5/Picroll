@@ -24,7 +24,7 @@ class View extends ComponentBase
 
         if ($userAlbums !== false) {
             foreach ($userAlbums as &$album) {
-                $album['images'] = $imageModel->GetAllImagesByAlbumId($album['id']);
+                $album['images'] = $imageModel->GetAllImagesByAlbumId($album['id'], $userId);
             }
         }
 
@@ -78,12 +78,13 @@ class View extends ComponentBase
     protected function
     RemoveImagesFromAlbum($params)
     {
+        $userId     = $_SESSION['user_id'];
         $imageIds   = $params['imageIds'];
         $albumId    = $params['albumId'];
 
         $albumModel = $this->GetDependencyContainer()->GetInstance('AlbumModel');
 
-        $albumModel->RemoveImages($albumId, $imageIds);
+        $albumModel->RemoveImages($albumId, $imageIds, $userId);
     }
 
     protected function
@@ -110,7 +111,7 @@ class View extends ComponentBase
         $newAlbumId     = $albumModel->AddNewAlbum($userId, $albumName);
 
         if ($newAlbumId !== false) {
-            $albumModel->AddContentToAlbum($newAlbumId, $pictureIdArray);
+            $albumModel->AddContentToAlbum($newAlbumId, $pictureIdArray, $userId);
         }
 
         $this->ExposeVariable('newAlbumId', $newAlbumId);
@@ -125,7 +126,7 @@ class View extends ComponentBase
 
         $albumModel     = $this->GetDependencyContainer()->GetInstance('AlbumModel');
         
-        $albumModel->AddContentToAlbum($albumId, $pictureIdArray);
+        $albumModel->AddContentToAlbum($albumId, $pictureIdArray, $userId);
     }
 
     protected function
@@ -139,7 +140,7 @@ class View extends ComponentBase
         if ($albumId == -1) {
             $imagesInAlbum = $imageModel->GetAllImagesByUserId($userId);
         } else {
-            $imagesInAlbum = $imageModel->GetAllImagesByAlbumId($albumId);
+            $imagesInAlbum = $imageModel->GetAllImagesByAlbumId($albumId, $userId);
         }
 
         $this->ExposeVariable('images', $imagesInAlbum);

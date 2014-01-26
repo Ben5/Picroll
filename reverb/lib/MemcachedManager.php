@@ -32,9 +32,13 @@ class MemcachedManager
     }
 
     public function
-    Delete($key, $time=0)
+    Delete($key, $time = 0)
     {
-        return $this->memcached->delete($key, $time);
+        if (is_array($key)) {
+            return $this->memcached->deleteMulti($key, $time);
+        } else {
+            return $this->memcached->delete($key, $time);
+        }
     }
 
     // Warning, this function blindly deletes all cached data!
