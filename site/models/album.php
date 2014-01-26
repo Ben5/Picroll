@@ -50,7 +50,15 @@ class AlbumModel extends ModelBase
         $query->AddStringParam($userId);
         $query->AddStringParam($name);
 
-        return $query->TryExecuteInsert();
+        $newId = $query->TryExecuteInsert();
+        if ($newId === false) {
+            var_dump($query->GetLastError());exit;
+        }
+
+        // added a new album, clear the old cached albums list
+        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+
+        return $newId;
     }
 
     public function AddContentToAlbum(

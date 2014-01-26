@@ -16,10 +16,6 @@ class MemcachedManager
             $instance->addServer('localhost', 11211);
         }
 
-        //$instance->set('foo', 'bar');
-        //$foo = $instance->get('foo');
-        //var_dump($foo); die('cached!');
-
         $this->memcached = $instance;
     }
 
@@ -33,6 +29,12 @@ class MemcachedManager
     Set($key, $value, $expiration)
     {
         return $this->memcached->set($key, $value, $expiration);
+    }
+
+    public function
+    Delete($key, $time=0)
+    {
+        return $this->memcached->delete($key, $time);
     }
 
     // Warning, this function blindly deletes all cached data!
