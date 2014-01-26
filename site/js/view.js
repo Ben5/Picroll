@@ -30,6 +30,9 @@ $(document).ready(function() {
     // Add Images to New Album button click
     $('#btnAddSelectedToAlbum a.existingAlbum').on('click', AddSelectedImagesToExistingAlbum);
 
+    // Show slideshow of current album
+    $('#btnViewAsSlideshow').on('click', ShowAlbumSlideshow);
+
     // Toggle Picture Select State
     $('#allThumbnailsContainer').on('click', 'img.thumbnail', ImageClickHandler);
 
@@ -220,6 +223,12 @@ console.log(dataObj);
                 console.log(data);
             }
         });
+    }
+
+    // Show the selected album as a slideshow
+    function ShowAlbumSlideshow() {
+        var albumId = currentAlbum;
+        window.location.href = '/picroll/html/slideshow/index?albumId=' + albumId;
     }
 
     // Handle clicks on thumbnails

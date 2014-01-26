@@ -101,6 +101,14 @@ class ImageModel extends ModelBase
         $userId, 
         $imageId)
     {
+        // First remove the image from all albums
+        $sql = 'DELETE FROM album_content
+                WHERE image_id = ?';
+        $query = DbInterface::NewQuery($sql);
+        $query->AddIntegerParam($imageId);
+        $query->ExecuteDelete('Unable to remove image from albums');
+
+        // Now delete the image
         $sql = 'DELETE FROM image 
                 WHERE user_id = ?
                 AND   id = ?';
@@ -115,6 +123,8 @@ class ImageModel extends ModelBase
         // get the keys of albums that have been stored
         $albumKeys = $this->memcachedManager->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
         $this->memcachedManager->Delete($albumKeys);
+
+        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
     }
     
 }

@@ -16,13 +16,15 @@ class Slideshow extends ComponentBase
     Index($params)
     {
         $userId = $_SESSION['user_id'];
+        $albumId = isset($params['albumId']) ? $params['albumId'] : null;
 
-        // Get all images for the local user (TODO: make this a specific set of related images!)
         $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
-        $allImages = $imageModel->GetAllImagesByUserId($userId);
-
-        // trim it to 10 images for now
-        //$allImages = array_slice($allImages, 0, 10);
+        if (is_null($albumId)) {
+            $allImages = $imageModel->GetAllImagesByUserId($userId);
+        } else {
+            $allImages = $imageModel->GetAllImagesByAlbumId($albumId, $userId);
+        }
+    
 
         $this->ExposeVariable('imageBase', '/picroll/images/uploads/');
         $this->ExposeVariable('imageExt', '.jpeg');

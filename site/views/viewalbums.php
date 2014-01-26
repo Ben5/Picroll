@@ -91,6 +91,10 @@
         </div>
         <div id="pictureNotificationArea" class="pull-right">
         </div>
+        <div class="btn-group">
+            <button id="btnViewAsSlideshow" class="btn btn-default">View Album As Slideshow</button>
+        </div>
+
         <div class="clearfix">
         </div>
     </div>
