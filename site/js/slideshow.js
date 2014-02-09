@@ -8,7 +8,10 @@ $(document).ready(function() {
     var maxImageIndex      = allSourceImages.length + 1;
     var currentlyPlaying   = false;
     var intervalHandle     = null;
+    var minImageTime       = 50;
+    var maxImageTime       = 500;
     var imageTime          = 200;
+    var imageTimeSpeedStep = 50;
     var loopForwards       = true;
 
     //
@@ -27,6 +30,10 @@ $(document).ready(function() {
     $('#nextBtn').on('click', NextImage);
 
     $('#prevBtn').on('click', PrevImage);
+
+    $('#fastBtn').on('click', SpeedUp);
+
+    $('#slowBtn').on('click', SlowDown);
 
     //
     // Event Handlers
@@ -58,6 +65,40 @@ $(document).ready(function() {
     {
         loopForwards = false;
         LoopImages();
+    }
+
+    function SpeedUp()
+    {
+        if (imageTime > minImageTime) {
+            imageTime -= imageTimeSpeedStep;
+
+            RestartIfPlaying();
+
+            $('#slowBtn').prop('disabled', false);
+        } else {
+            $(this).prop('disabled', true);
+        }
+    }
+
+    function SlowDown()
+    {
+        if (imageTime < maxImageTime) {
+            imageTime += imageTimeSpeedStep;
+            
+            RestartIfPlaying();
+
+            $('#fastBtn').prop('disabled', false);
+        } else {
+            $(this).prop('disabled', true);
+        }
+    }
+
+    function RestartIfPlaying()
+    {
+        if (currentlyPlaying) {
+            clearInterval(intervalHandle);
+            intervalHandle = setInterval(LoopImages, imageTime);
+        }
     }
 
     //

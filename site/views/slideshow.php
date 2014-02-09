@@ -35,6 +35,10 @@
             <button id="prevBtn"    class="btn btn-sm btn-default">Prev</button>
             <button id="nextBtn"    class="btn btn-sm btn-default">Next</button>
         </div>
+        <div class="btn-group">
+            <button id="slowBtn"    class="btn btn-sm btn-default">Slower</button>
+            <button id="fastBtn"    class="btn btn-sm btn-default">Faster</button>
+        </div>
     </div>
 </div>
 
