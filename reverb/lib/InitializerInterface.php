@@ -2,5 +2,5 @@
 
 interface InitializerInterface
 {
-    public function Initialize($instance, $dependencyContainer);
+    public function Initialize($instance, DependencyContainer $dependencyContainer);
 }

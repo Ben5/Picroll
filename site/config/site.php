@@ -24,6 +24,9 @@ class SiteConfig
             'MemcachedManager' => array(
                 'path' => self::REVERB_ROOT . "/lib/MemcachedManager.php",
             ),
+            'DbConnection' => array(
+                'path' => self::REVERB_ROOT . "/lib/DbConnection.php",
+            ),
             // Models
             'AlbumModel' => array(
                 'path' => self::SITE_ROOT . "/models/album.php",
@@ -44,6 +47,7 @@ class SiteConfig
 
         $this->initializers = array(
             'MemcachedManagerAwareInitializer' => self::REVERB_ROOT.'/lib/MemcachedManagerAwareInitializer.php',
+            'DbConnectionAwareInitializer' => self::REVERB_ROOT.'/lib/DbConnectionAwareInitializer.php',
         );
     }
 
