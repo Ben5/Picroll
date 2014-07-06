@@ -20,7 +20,7 @@ class AlbumModel extends ModelBase
 
     public function GetMemcachedManager()
     {
-        return $this->memcacherManager;
+        return $this->memcachedManager;
     }
 
     public function SetMemcachedManager(MemcachedManager $instance)
@@ -30,7 +30,9 @@ class AlbumModel extends ModelBase
 
     public function GetAllAlbumsByUserId($userId)
     {
-        $allAlbums = $this->memcachedManager->get(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $memcached = $this->GetMemcachedManager();
+
+        $allAlbums = $memcached->get(MKEY_ALBUMS_BY_USER_ID.$userId);
 
         if ($allAlbums === false) {
             $sql = 'SELECT id, name, date_created, COUNT(image_id) AS size
@@ -44,7 +46,7 @@ class AlbumModel extends ModelBase
             $query->AddStringParam($userId);
 
             $allAlbums = $query->TryReadRowArray();
-            $this->memcachedManager->set(MKEY_ALBUMS_BY_USER_ID.$userId, $allAlbums, CACHE_TIME_DAY);
+            $memcached->set(MKEY_ALBUMS_BY_USER_ID.$userId, $allAlbums, CACHE_TIME_DAY);
         }
         
         return $allAlbums;
@@ -67,7 +69,7 @@ class AlbumModel extends ModelBase
         }
 
         // added a new album, clear the old cached albums list
-        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $this->GetMemcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
 
         return $newId;
     }
@@ -93,7 +95,7 @@ class AlbumModel extends ModelBase
 
         if ($newId !== false) {
             // altered an album, clear the old cached albums list
-            $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+            $this->GetMemcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
         }
         
         return $newId;
@@ -115,7 +117,7 @@ class AlbumModel extends ModelBase
         $query->ExecuteDelete('Unable to remove images from album');
 
         // deleted from an album, clear the old cached albums list
-        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $this->GetMemcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
 }
 
     public function DeleteAlbum(
@@ -140,6 +142,6 @@ class AlbumModel extends ModelBase
         $query->ExecuteDelete('Unable to delete album');
 
         // deleted from an album, clear the old cached albums list
-        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $this->GetMemcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
     }
 }

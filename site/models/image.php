@@ -23,7 +23,7 @@ class ImageModel extends ModelBase
 
     public function GetMemcachedManager()
     {
-        return $this->memcacherManager;
+        return $this->memcachedManager;
     }
 
     public function SetMemcachedManager(MemcachedManager $instance)
@@ -34,7 +34,8 @@ class ImageModel extends ModelBase
     public function 
     GetAllImagesByUserId($userId)
     {
-        $allImages = $this->memcachedManager->Get(MKEY_IMAGES_BY_USER_ID.$userId);
+        $memcached = $this->GetMemcachedManager;
+        $allImages = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
 
         if ($allImages === false) {
             $sql = 'SELECT id, filename
@@ -46,7 +47,7 @@ class ImageModel extends ModelBase
             $query->AddStringParam($userId);
 
             $allImages = $query->TryReadDictionary();
-            $this->memcachedManager->Set(MKEY_IMAGES_BY_USER_ID.$userId, $allImages, CACHE_TIME_DAY);
+            $memcached->Set(MKEY_IMAGES_BY_USER_ID.$userId, $allImages, CACHE_TIME_DAY);
         }
 
         return $allImages;
@@ -57,7 +58,9 @@ class ImageModel extends ModelBase
         $albumId,  
         $userId)
     {
-        $allImages = $this->memcachedManager->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
+        $memcached = $this->GetMemcachedManager;
+
+        $allImages = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
 
         if ($allImages === false) {
             $sql = 'SELECT image.id, filename
@@ -72,13 +75,13 @@ class ImageModel extends ModelBase
             $allImages = $query->TryReadDictionary();
 
             // update caches
-            $this->memcachedManager->Set(MKEY_IMAGES_BY_ALBUM_ID.$albumId, $allImages, CACHE_TIME_DAY);
-            $cachedAlbumKeys = $this->memcachedManager->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
+            $memcached->Set(MKEY_IMAGES_BY_ALBUM_ID.$albumId, $allImages, CACHE_TIME_DAY);
+            $cachedAlbumKeys = $memcached->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
             if ($cachedAlbumKeys === false) {
                 $cachedAlbumKeys = array();
             }
             $cachedAlbumKeys[] = MKEY_IMAGES_BY_ALBUM_ID.$albumId;
-            $this->memcachedManager->Set(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId, $cachedAlbumKeys, CACHE_TIME_DAY);
+            $memcached->Set(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId, $cachedAlbumKeys, CACHE_TIME_DAY);
         }
 
         return $allImages;
@@ -100,10 +103,11 @@ class ImageModel extends ModelBase
 
         if ($newId !== false) {
             // new image added, clear caches
-            $this->memcachedManager->Delete(MKEY_IMAGES_BY_USER_ID.$userId);
+            $memcached = $this->GetMemcachedManager();
+            $memcached->Delete(MKEY_IMAGES_BY_USER_ID.$userId);
             // get the keys of albums that have been stored
-            $albumKeys = $this->memcachedManager->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
-            $this->memcachedManager->Delete($albumKeys);
+            $albumKeys = $memcached->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
+            $memcached->Delete($albumKeys);
         }
 
         return $newId;
@@ -132,12 +136,13 @@ class ImageModel extends ModelBase
         $query->ExecuteDelete('Unable to delete image');
 
         // image deleted, clear caches
-        $this->memcachedManager->Delete(MKEY_IMAGES_BY_USER_ID.$userId);
+        $memcached = $this->GetMemcachedManager();
+        $memcached->Delete(MKEY_IMAGES_BY_USER_ID.$userId);
         // get the keys of albums that have been stored
-        $albumKeys = $this->memcachedManager->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
-        $this->memcachedManager->Delete($albumKeys);
+        $albumKeys = $memcached->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
+        $memcached->Delete($albumKeys);
 
-        $this->memcachedManager->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $memcached->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
     }
     
 }
