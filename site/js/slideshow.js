@@ -21,6 +21,8 @@ $(document).ready(function() {
 
     $('#zoomInBtn, #zoomOutBtn').attr('disabled', true);
 
+    $('#slideshow').zoomify();
+
 
     //
     // Event Handler Registration
@@ -46,7 +48,7 @@ $(document).ready(function() {
 
             $('#prevBtn, #nextBtn').removeAttr('disabled');
         } else {
-            intervalHandle = setInterval(LoopImages, imageTime)
+            intervalHandle = setInterval(LoopImages, imageTime);
             $(this).text('Pause');
 
             $('#prevBtn, #nextBtn').attr('disabled', true);
@@ -125,10 +127,5 @@ $(document).ready(function() {
         var imageToUse = allSourceImages.filter(':nth-child('+currentImageIndex+')');
 
         slideshowHostImage.attr('src', imageToUse.attr('src'));
-        console.log(allSourceImages);
-        console.log(allSourceImages.filter(':nth-child(1)'));
-        console.log(currentImageIndex, maxImageIndex);
-        console.log(imageToUse.attr('src'));
-        
     }
 });

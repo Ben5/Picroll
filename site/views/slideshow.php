@@ -1,18 +1,19 @@
+<?php $this->AddScript('zoom.js'); ?>
 <div class="container">
     <div class="col-xs-12">
         <h3>Slideshow</h3>
     </div>
 </div>
 
-    <?php
-        // Load in all the images, but hidden
-        foreach ($allImages as $imageName) {
-    ?>
-            <img class="hide" src="<?php echo $imageBase.$imageName.$imageExt;?>">
-    <?php
-        }
-        
-    ?>
+<?php
+    // Load in all the images, but hidden
+    foreach ($allImages as $imageName) {
+?>
+        <img class="hide" src="<?php echo $imageBase.$imageName.$imageExt;?>">
+<?php
+    }
+    
+?>
 
 <div class="container">
     <div class="col-xs-12">
