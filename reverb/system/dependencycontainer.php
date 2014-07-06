@@ -23,12 +23,25 @@ class DependencyContainer
             $dependency = $this->siteConfig->GetClass($instanceName);
 
             require_once $dependency['path'];
-            $params = array();
-            foreach ($dependency['dependencies'] as $param) {
-                $params[] = $this->GetInstance($param);
+
+            $instance = new $instanceName;
+            
+            // foreach initializer, call initialize
+            // this will look to see if $instance implements an AwareInterface and either inject something or ignore it
+            $initializers = $this->siteConfig->GetInitializers();
+
+            require_once SiteConfig::REVERB_ROOT."/lib/InitializerInterface.php";
+            foreach ($initializers as $initializerClass => $path) {
+                require_once $path;
+                $initializerInstance = new $initializerClass;
+
+                if (!$initializerInstance instanceof InitializerInterface) {
+                    die('Invalid Initializer');
+                }
+
+                $initializerInstance->Initialize($instance, $this);
             }
-            $class = new ReflectionClass($instanceName);
-            $instance = $class->newInstanceArgs($params);
+            
             $this->instances[$instanceName] = $instance;
         }
 

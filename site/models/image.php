@@ -3,6 +3,7 @@
 use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
+require_once SiteConfig::REVERB_ROOT."/lib/MemcachedManagerAwareInterface.php";
 
 // Memcached Keys
 define('MKEY_IMAGES_BY_USER_ID', 'GetAllImagesByUserId_');
@@ -10,12 +11,24 @@ define('MKEY_IMAGES_BY_ALBUM_ID', 'GetAllImagesByAlbumId_');
 define('MKEY_ALBUM_CACHE_KEYS_BY_USER', 'CacheKEysForAlbumsByUserId_');
 
 class ImageModel extends ModelBase
+    implements MemcachedManagerAwareInterface
 {
+    private $memcachedManager;
+
     public function
-    __construct($memcachedManager)
+    __construct()
     {
         $this->modelName = "image";
-        $this->memcachedManager = $memcachedManager;
+    }
+
+    public function GetMemcachedManager()
+    {
+        return $this->memcacherManager;
+    }
+
+    public function SetMemcachedManager(MemcachedManager $instance)
+    {
+        $this->memcachedManager = $instance;
     }
 
     public function 
