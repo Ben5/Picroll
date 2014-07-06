@@ -4,6 +4,7 @@ use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
 require_once SiteConfig::REVERB_ROOT."/lib/MemcachedManagerAwareInterface.php";
+require_once SiteConfig::REVERB_ROOT."/lib/DbConnectionAwareInterface.php";
 
 // Memcached Keys
 define('MKEY_IMAGES_BY_USER_ID', 'GetAllImagesByUserId_');
@@ -11,9 +12,11 @@ define('MKEY_IMAGES_BY_ALBUM_ID', 'GetAllImagesByAlbumId_');
 define('MKEY_ALBUM_CACHE_KEYS_BY_USER', 'CacheKEysForAlbumsByUserId_');
 
 class ImageModel extends ModelBase
-    implements MemcachedManagerAwareInterface
+    implements MemcachedManagerAwareInterface,
+               DbConnectionAwareInterface 
 {
     private $memcachedManager;
+    private $dbConnection;
 
     public function
     __construct()
@@ -31,6 +34,16 @@ class ImageModel extends ModelBase
         $this->memcachedManager = $instance;
     }
 
+    public function GetDbConnection() 
+    {
+        return $this->dbConnection;
+    }
+
+    public function SetDbConnection(DbConnection $instance)
+    {
+        $this->dbConnection = $instance;
+    }
+
     public function 
     GetAllImagesByUserId($userId)
     {
@@ -42,7 +55,7 @@ class ImageModel extends ModelBase
                     FROM   image
                     WHERE  user_id = ?';
 
-            $query = DbInterface::NewQuery($sql);
+            $query = $this->GetDbConnection()->NewQuery($sql);
 
             $query->AddStringParam($userId);
 
@@ -68,7 +81,7 @@ class ImageModel extends ModelBase
                     JOIN   album_content ON album_content.image_id = image.id
                     WHERE  album_content.album_id = ?';
 
-            $query = DbInterface::NewQuery($sql);
+            $query = $this->GetDbConnection()->NewQuery($sql);
 
             $query->AddIntegerParam($albumId);
 
@@ -95,7 +108,7 @@ class ImageModel extends ModelBase
         $sql = "INSERT INTO image (user_id, filename)
                 VALUES (?, ?)";
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddStringParam($userId);
         $query->AddStringParam($filename);
 
@@ -121,7 +134,7 @@ class ImageModel extends ModelBase
         // First remove the image from all albums
         $sql = 'DELETE FROM album_content
                 WHERE image_id = ?';
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddIntegerParam($imageId);
         $query->ExecuteDelete('Unable to remove image from albums');
 
@@ -129,7 +142,7 @@ class ImageModel extends ModelBase
         $sql = 'DELETE FROM image 
                 WHERE user_id = ?
                 AND   id = ?';
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddIntegerParam($userId);
         $query->AddIntegerParam($imageId);
 
