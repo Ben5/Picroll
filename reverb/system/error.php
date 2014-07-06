@@ -21,7 +21,7 @@ class Error
         echo "CallStack:<br>";
         $callstack = debug_backtrace();
         $outputCallstack = "";
-        for($i = 1; $i < count($callstack); $i++)
+        for($i = 0; $i < count($callstack); $i++)
         {
             $level = $callstack[$i];
             $outputCallstack .=
