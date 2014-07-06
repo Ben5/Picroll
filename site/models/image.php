@@ -34,7 +34,7 @@ class ImageModel extends ModelBase
     public function 
     GetAllImagesByUserId($userId)
     {
-        $memcached = $this->GetMemcachedManager;
+        $memcached = $this->GetMemcachedManager();
         $allImages = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
 
         if ($allImages === false) {
@@ -58,7 +58,7 @@ class ImageModel extends ModelBase
         $albumId,  
         $userId)
     {
-        $memcached = $this->GetMemcachedManager;
+        $memcached = $this->GetMemcachedManager();
 
         $allImages = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
 
