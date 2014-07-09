@@ -4,7 +4,8 @@ use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
 
-class FriendModel extends ModelBase
+class FriendModel 
+    extends ModelBase
 {
     public function
     __construct()
@@ -20,7 +21,7 @@ class FriendModel extends ModelBase
                 JOIN user ON user.id = friend_user_id
                 WHERE  user_id = ?';
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddStringParam($userId);
 
@@ -36,7 +37,7 @@ class FriendModel extends ModelBase
                 JOIN   user ON user.id = friend_request.user_id
                 WHERE  friend_user_id = ?';
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddStringParam($userId);
 
@@ -52,7 +53,7 @@ class FriendModel extends ModelBase
                 JOIN   user ON user.id = friend_request.friend_user_id
                 WHERE  friend_request.user_id = ?';
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddStringParam($userId);
 
@@ -68,7 +69,7 @@ class FriendModel extends ModelBase
         $sql = "INSERT INTO friendship (user_id, friend_user_id)
                 VALUES (?, ?), (?, ?)";
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddIntegerParam($userId);
         $query->AddIntegerParam($friendUserId);
         $query->AddIntegerParam($friendUserId);

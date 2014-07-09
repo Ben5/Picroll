@@ -1,23 +1,35 @@
 <?php
+use Picroll\SiteConfig;
 
-abstract class ModelBase
+require_once SiteConfig::REVERB_ROOT."/lib/DbConnectionAwareInterface.php";
+
+abstract class ModelBase implements DbConnectionAwareInterface
 {
     protected $modelName = "";
+    protected $dbConnection;
 
-    public final function
-    GetAll()
+    public final function GetDbConnection()
+    {
+        return $this->dbConnection;
+    }
+
+    public final function SetDbConnection(DbConnection $instance)
+    {
+        $this->dbConnection = $instance;
+    }
+
+    public final function GetAll()
     {
         $sql = "SELECT * FROM " . $this->modelName;
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         return $query->TryReadRowArray();
     }
 
-    public final function
-    GetOneById($id)
+    public final function GetOneById($id)
     {
         $sql = "SELECT * FROM ? WHERE id = ?";
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddStringParam($this->modelName);
         $query->AddIntegerParam($id);
@@ -25,14 +37,13 @@ abstract class ModelBase
         return $query->TryReadSingleRow();
     }
 
-    public final function
-    GetEnumValues($columnName)
+    public final function GetEnumValues($columnName)
     {
         $sql = "SELECT COLUMN_TYPE
                 FROM INFORMATION_SCHEMA.COLUMNS
                 WHERE TABLE_NAME = ?
                 AND COLUMN_NAME = ?";
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddStringParam($this->modelName);
         $query->AddStringParam($columnName);
 
@@ -42,5 +53,4 @@ abstract class ModelBase
         $resultArray = explode(',', $trimmedResult);
         return $resultArray;
     }
-
 }

@@ -2,10 +2,9 @@
 
 use Picroll\SiteConfig;
 
-include "/opt/git/Picroll/site/config/site.php";
-require_once SiteConfig::REVERB_ROOT."/lib/DbInterface.php";
-include SiteConfig::REVERB_ROOT."/system/error.php";
-include SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
+require_once "/opt/git/Picroll/site/config/site.php";
+require_once SiteConfig::REVERB_ROOT."/system/error.php";
+require_once SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
 
 set_error_handler("Error::ErrorHandler" );
 

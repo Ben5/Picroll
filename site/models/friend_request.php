@@ -4,8 +4,10 @@ use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
 
-class FriendRequestModel extends ModelBase
+class FriendRequestModel 
+    extends ModelBase
 {
+
     public function
     __construct()
     {
@@ -19,7 +21,7 @@ class FriendRequestModel extends ModelBase
         $sql = 'INSERT IGNORE INTO friend_request (user_id, friend_user_id)
                 VALUES (?, ?)';
         
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         
         $query->AddIntegerParam($userId);
         $query->AddIntegerParam($friendId);
@@ -35,7 +37,7 @@ class FriendRequestModel extends ModelBase
                 WHERE (user_id = ? AND friend_user_id = ?)
                 OR    (user_id = ? AND friend_user_id = ?)';
         
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddIntegerParam($userId);
         $query->AddIntegerParam($friendId);

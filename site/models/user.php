@@ -4,7 +4,8 @@ use Picroll\SiteConfig;
 
 require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
 
-class UserModel extends ModelBase
+class UserModel 
+    extends ModelBase
 {
     public function
     __construct()
@@ -19,7 +20,7 @@ class UserModel extends ModelBase
                 FROM user
                 WHERE username = ?';
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddStringParam($username);
 
@@ -38,7 +39,7 @@ class UserModel extends ModelBase
                 WHERE user.id != ? 
                 AND   (username LIKE ?  OR email LIKE ?)';
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
 
         $query->AddIntegerParam($localUserId); // don't return the local user.
         $query->AddStringParam('%'.$name.'%'); // username gets fully wildcarded
@@ -57,7 +58,7 @@ class UserModel extends ModelBase
         $sql = "INSERT INTO user (username, email, generated_salt, password_hash)
                 VALUES (?, ?, ?, ?)";
 
-        $query = DbInterface::NewQuery($sql);
+        $query = $this->GetDbConnection()->NewQuery($sql);
         $query->AddStringParam($username);
         $query->AddStringParam($email);
         $query->AddStringParam($salt);
