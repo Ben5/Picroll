@@ -2,7 +2,7 @@
 
 namespace Reverb\System;
 
-use Picroll\SiteConfig;
+use Site\Config\SiteConfig;
 use Reverb\System\DependencyContainer;
 
 class ComponentBase

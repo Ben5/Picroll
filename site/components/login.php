@@ -2,8 +2,8 @@
 
 namespace Site\Components;
 
-use Picroll\SiteConfig;
-use \Reverb\System\ComponentBase;
+use Site\Config\SiteConfig;
+use Reverb\System\ComponentBase;
 
 class Login extends ComponentBase
 {

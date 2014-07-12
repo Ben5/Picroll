@@ -2,7 +2,7 @@
 
 namespace Site\Components;
 
-use Picroll\SiteConfig;
+use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
 
 class View extends ComponentBase

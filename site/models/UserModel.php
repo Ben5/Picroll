@@ -2,7 +2,7 @@
 
 namespace Site\Models;
 
-use Picroll\SiteConfig;
+use Site\Config\SiteConfig;
 use Reverb\System\ModelBase;
 
 class User 

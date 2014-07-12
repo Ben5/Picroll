@@ -2,7 +2,7 @@
 
 namespace Reverb\Lib;
 
-use Picroll\SiteConfig;
+use Site\Config\SiteConfig;
 
 class DbConnection
 {

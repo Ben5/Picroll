@@ -1,5 +1,5 @@
 <?php
-namespace Picroll;
+namespace Site\Config;
 
 class SiteConfig
 {

@@ -2,7 +2,7 @@
 
 namespace Reverb\Lib;
 
-use Picroll\SiteConfig;
+use Site\Config\SiteConfig;
 use Reverb\Lib\InitializerInterface;
 use Reverb\System\DependencyContainer;
 
