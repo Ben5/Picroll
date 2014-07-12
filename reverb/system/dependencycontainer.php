@@ -26,20 +26,17 @@ class DependencyContainer
         if (empty($this->instances[$instanceName])) {
             $dependency = $this->siteConfig->GetClass($instanceName);
 
-            // TODO: delete this line, and fix by renaming all Model classes to be the same as the filename!!
-            require_once $dependency['path'];
-
-            $instance = new $dependency['fqcn'];
+            $instance = new $dependency;
             
             // foreach initializer, call initialize
             // this will look to see if $instance implements an AwareInterface and either inject something or ignore it
             $initializers = $this->siteConfig->GetInitializers();
 
-            foreach ($initializers as $initializerClass => $paths) {
-                $initializerInstance = new $paths['fqcn'];
+            foreach ($initializers as $initializerClass => $path) {
+                $initializerInstance = new $path;
 
                 if (!$initializerInstance instanceof InitializerInterface) {
-                    die('Invalid Initializer: ' . $paths['fqcn']);
+                    die('Invalid Initializer: ' . $path);
                 }
 
                 $initializerInstance->Initialize($instance, $this);
