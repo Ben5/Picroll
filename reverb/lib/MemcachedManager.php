@@ -1,5 +1,7 @@
 <?php
 
+namespace Reverb\Lib;
+
 define('CACHE_TIME_DAY', 60 * 60 * 24);
 define('CACHE_TIME_WEEK', 60 * 60 * 24 * 7);
 
@@ -10,7 +12,7 @@ class MemcachedManager
     public function
     __construct() 
     {
-        $instance = new Memcached();
+        $instance = new \Memcached();
 
         if (count($instance->getServerList()) === 0) {
             $instance->addServer('localhost', 11211);

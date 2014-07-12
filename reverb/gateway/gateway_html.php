@@ -1,5 +1,38 @@
 <?php
-require_once(__DIR__."/gateway_base.php");
+
+namespace Reverb\Gateway;
+
+use Picroll\SiteConfig;
+
+// Autoloader
+function autoload($class)
+{
+    $pathParts = explode("\\", $class);
+    // Firstly we try to find the class with a lower case path, but take the case of the filename as it comes through
+    $dirPath = strtolower(implode(DIRECTORY_SEPARATOR, array_slice($pathParts, 0, count($pathParts) - 1)));
+    $fullPath = SiteConfig::WEB_ROOT . DIRECTORY_SEPARATOR . $dirPath . DIRECTORY_SEPARATOR . $pathParts[count($pathParts) - 1] . ".php";
+
+    if (is_readable($fullPath)) {
+        require_once $fullPath;
+    } else {
+        // try it with a lower case filename
+        $fullPath = SiteConfig::WEB_ROOT . DIRECTORY_SEPARATOR . $dirPath . DIRECTORY_SEPARATOR . strtolower($pathParts[count($pathParts) - 1]) . ".php";
+
+        if (is_readable($fullPath)) {
+            require_once $fullPath;
+        } else {
+            //trigger_error('cannot autoload'); 
+            var_dump($class, $fullPath); 
+            die('not readable');
+        }
+    }
+}
+
+spl_autoload_register('Reverb\Gateway\autoload');
+
+require_once __DIR__."/gateway_base.php";
+
+use Reverb\Gateway\GatewayBase;
 
 class GatewayHtml extends GatewayBase
 {

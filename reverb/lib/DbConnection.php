@@ -1,5 +1,7 @@
 <?php
 
+namespace Reverb\Lib;
+
 use Picroll\SiteConfig;
 
 class DbConnection
@@ -9,7 +11,7 @@ class DbConnection
     public function
     Connect()
     {
-        $conn = new mysqli( SiteConfig::DB_HOST, SiteConfig::DB_USER, SiteConfig::DB_PASS, SiteConfig::DB_DB);
+        $conn = new \mysqli( SiteConfig::DB_HOST, SiteConfig::DB_USER, SiteConfig::DB_PASS, SiteConfig::DB_DB);
     
         if ($conn === false) {
             trigger_error("no db connection!");

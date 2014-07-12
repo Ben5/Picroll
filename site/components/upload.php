@@ -1,9 +1,10 @@
 <?php
 
-use Picroll\SiteConfig;
+namespace Site\Components;
 
-require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
-require_once SiteConfig::SITE_ROOT."/models/image.php";
+use Picroll\SiteConfig;
+use Reverb\System\ComponentBase;
+use Site\Models\Image;
 
 class Upload extends ComponentBase
 {

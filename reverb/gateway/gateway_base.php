@@ -1,18 +1,23 @@
 <?php
 
+namespace Reverb\Gateway;
+
 use Picroll\SiteConfig;
+use Reverb\System\DependencyContainer;
+use Reverb\System\Error;
+use Site\Components;
 
 require_once "/opt/git/Picroll/site/config/site.php";
-require_once SiteConfig::REVERB_ROOT."/system/error.php";
-require_once SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
 
-set_error_handler("Error::ErrorHandler" );
+// Error Handling
+set_error_handler("Reverb\System\Error::ErrorHandler");
 
 class GatewayBase 
 {
     protected $siteRoot;
     protected $projectName;
     protected $componentName;
+    protected $fullyQualifiedComponentName;
     protected $componentInstance;
     protected $siteConfig;
 
@@ -67,14 +72,17 @@ class GatewayBase
 
         include $this->siteRoot."/components/$this->componentName.php";
 
-        if( !class_exists($this->componentName) )
+        $this->fullyQualifiedComponentName = "Site\Components\\" . $this->componentName;
+
+        if( !class_exists($this->fullyQualifiedComponentName) )
         {
-            trigger_error("cannot find specified class: $this->componentName");
+            trigger_error("cannot find specified class: $this->fullyQualifiedComponentName");
         }
 
         $siteConfig = new SiteConfig();
+        require_once SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
         $dependencyContainer = new DependencyContainer($siteConfig);
-        $this->componentInstance = new $this->componentName($dependencyContainer);
+        $this->componentInstance = new $this->fullyQualifiedComponentName($dependencyContainer);
 
         $this->componentInstance->Prepare($action, $params);
     }

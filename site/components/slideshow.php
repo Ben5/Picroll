@@ -1,8 +1,9 @@
 <?php
 
-use Picroll\SiteConfig;
+namespace Site\Components;
 
-require_once SiteConfig::REVERB_ROOT."/system/componentbase.php";
+use Picroll\SiteConfig;
+use Reverb\System\ComponentBase;
 
 class Slideshow extends ComponentBase
 {

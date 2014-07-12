@@ -1,5 +1,7 @@
 <?php
 
+namespace Reverb\System;
+
 class Error
 {
     public static function 

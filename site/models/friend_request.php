@@ -1,13 +1,13 @@
 <?php
 
-use Picroll\SiteConfig;
+namespace Site\Models;
 
-require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
+use Picroll\SiteConfig;
+use Reverb\System\ModelBase;
 
 class FriendRequestModel 
     extends ModelBase
 {
-
     public function
     __construct()
     {

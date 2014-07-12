@@ -1,10 +1,11 @@
 <?php
 
+namespace Site\Models;
+
 use Picroll\SiteConfig;
+use Reverb\System\ModelBase;
 
-require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
-
-class UserModel 
+class User 
     extends ModelBase
 {
     public function

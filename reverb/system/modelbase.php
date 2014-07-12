@@ -1,7 +1,10 @@
 <?php
-use Picroll\SiteConfig;
 
-require_once SiteConfig::REVERB_ROOT."/lib/DbConnectionAwareInterface.php";
+namespace Reverb\System;
+
+use Picroll\SiteConfig;
+use Reverb\Lib\DbConnection;
+use Reverb\Lib\DbConnectionAwareInterface;
 
 abstract class ModelBase implements DbConnectionAwareInterface
 {

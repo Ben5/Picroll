@@ -1,6 +1,9 @@
 <?php
 
+namespace Reverb\System;
+
 use Picroll\SiteConfig;
+use Reverb\System\DependencyContainer;
 
 class ComponentBase
 {

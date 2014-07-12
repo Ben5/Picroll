@@ -3,6 +3,7 @@ namespace Picroll;
 
 class SiteConfig
 {
+    const WEB_ROOT   = "/opt/git/Picroll";
     const SITE_ROOT   = "/opt/git/Picroll/site";
     const REVERB_ROOT = "/opt/git/Picroll/reverb";
     const DEFAULT_HEAD_TITLE = "PicRoll";
@@ -18,36 +19,49 @@ class SiteConfig
     private $initializers = array();
 
     public function __construct() 
-    {
+   {
         $this->classes = array(
             // Libs
             'MemcachedManager' => array(
                 'path' => self::REVERB_ROOT . "/lib/MemcachedManager.php",
+                'fqcn' => 'Reverb\Lib\MemcachedManager',
             ),
             'DbConnection' => array(
                 'path' => self::REVERB_ROOT . "/lib/DbConnection.php",
+                'fqcn' => 'Reverb\Lib\DbConnection',
             ),
             // Models
             'AlbumModel' => array(
                 'path' => self::SITE_ROOT . "/models/album.php",
+                'fqcn' => 'Site\Models\AlbumModel',
             ),
             'FriendModel' => array(
                 'path' => self::SITE_ROOT . "/models/friend.php",
+                'fqcn' => 'Site\Models\FriendModel',
             ),
             'FriendRequestModel' => array(
                 'path' => self::SITE_ROOT . "/models/friend_request.php",
+                'fqcn' => 'Site\Models\FriendRequestModel',
             ),
             'ImageModel' => array(
                 'path' => self::SITE_ROOT . "/models/image.php",
+                'fqcn' => 'Site\Models\ImageModel',
             ),
             'UserModel' => array(
                 'path' => self::SITE_ROOT . "/models/user.php",
+                'fqcn' => 'Site\Models\User',
             ),
         );
 
         $this->initializers = array(
-            'MemcachedManagerAwareInitializer' => self::REVERB_ROOT.'/lib/MemcachedManagerAwareInitializer.php',
-            'DbConnectionAwareInitializer' => self::REVERB_ROOT.'/lib/DbConnectionAwareInitializer.php',
+            'MemcachedManagerAwareInitializer' => array(
+                'path' => self::REVERB_ROOT.'/lib/MemcachedManagerAwareInitializer.php',
+                'fqcn' => 'Reverb\Lib\MemcachedManagerAwareInitializer',
+            ),
+            'DbConnectionAwareInitializer' => array(
+                'path' => self::REVERB_ROOT.'/lib/DbConnectionAwareInitializer.php',
+                'fqcn' => 'Reverb\Lib\DbConnectionAwareInitializer',
+            ),
         );
     }
 

@@ -1,5 +1,9 @@
 <?php
 
+namespace Reverb\Lib;
+
+use Reverb\Lib\MemcachedManager;
+
 interface MemcachedManagerAwareInterface 
 {
     public function GetMemcachedManager();

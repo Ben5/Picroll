@@ -1,8 +1,10 @@
 <?php
 
-use Picroll\SiteConfig;
+namespace Reverb\Lib;
 
-require_once SiteConfig::REVERB_ROOT."/lib/InitializerInterface.php";
+use Picroll\SiteConfig;
+use Reverb\Lib\InitializerInterface;
+use Reverb\System\DependencyContainer;
 
 class MemcachedManagerAwareInitializer implements InitializerInterface
 {

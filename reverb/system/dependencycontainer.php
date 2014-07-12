@@ -1,5 +1,9 @@
 <?php
+
+namespace Reverb\System;
+
 use Picroll\SiteConfig;
+use Reverb\Lib\InitializerInterface;
 
 class DependencyContainer
 {
@@ -22,21 +26,20 @@ class DependencyContainer
         if (empty($this->instances[$instanceName])) {
             $dependency = $this->siteConfig->GetClass($instanceName);
 
+            // TODO: delete this line, and fix by renaming all Model classes to be the same as the filename!!
             require_once $dependency['path'];
 
-            $instance = new $instanceName;
+            $instance = new $dependency['fqcn'];
             
             // foreach initializer, call initialize
             // this will look to see if $instance implements an AwareInterface and either inject something or ignore it
             $initializers = $this->siteConfig->GetInitializers();
 
-            require_once SiteConfig::REVERB_ROOT."/lib/InitializerInterface.php";
-            foreach ($initializers as $initializerClass => $path) {
-                require_once $path;
-                $initializerInstance = new $initializerClass;
+            foreach ($initializers as $initializerClass => $paths) {
+                $initializerInstance = new $paths['fqcn'];
 
                 if (!$initializerInstance instanceof InitializerInterface) {
-                    die('Invalid Initializer');
+                    die('Invalid Initializer: ' . $paths['fqcn']);
                 }
 
                 $initializerInstance->Initialize($instance, $this);

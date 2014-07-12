@@ -1,5 +1,7 @@
 <?php
 
+namespace Reverb\Lib;
+
 interface DbConnectionAwareInterface
 {
     public function GetDbConnection();

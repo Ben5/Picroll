@@ -1,9 +1,11 @@
 <?php
 
-use Picroll\SiteConfig;
+namespace Site\Models;
 
-require_once SiteConfig::REVERB_ROOT."/system/modelbase.php";
-require_once SiteConfig::REVERB_ROOT."/lib/MemcachedManagerAwareInterface.php";
+use Picroll\SiteConfig;
+use Reverb\System\ModelBase;
+use Reverb\Lib\MemcachedManager;
+use Reverb\Lib\MemcachedManagerAwareInterface;
 
 // Memcached Keys
 define('MKEY_ALBUMS_BY_USER_ID', 'GetAllAlbumsByUserId_');
