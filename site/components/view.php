@@ -2,11 +2,43 @@
 
 namespace Site\Components;
 
-use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
+use Site\Config\SiteConfig;
+use Site\Models\AlbumModel;
+use Site\Models\ImageModel;
+use Site\Models\Service\AlbumModelAwareInterface;
+use Site\Models\Service\ImageModelAwareInterface;
 
 class View extends ComponentBase
+    implements AlbumModelAwareInterface, ImageModelAwareInterface
 {
+    private $albumModel;
+    private $imageModel;
+
+    public function GetAlbumModel() 
+    {
+        return $this->albumModel;
+    }
+
+    public function SetAlbumModel(AlbumModel $instance)
+    {
+        $this->albumModel = $instance;
+    }
+
+    public function GetImageModel() 
+    {
+        return $this->imageModel;
+    }
+
+    public function SetImageModel(ImageModel $instance)
+    {
+        $this->imageModel = $instance;
+    }
+
+    public function __construct()
+    {
+    }
+
     protected function
     RequiresAuthentication()
     {
@@ -18,8 +50,8 @@ class View extends ComponentBase
     {
         $userId     = $_SESSION['user_id'];
 
-        $albumModel = $this->GetDependencyContainer()->GetInstance('AlbumModel');
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $albumModel = $this->GetAlbumModel();
+        $imageModel = $this->GetImageModel();
 
         $userAlbums = $albumModel->GetAllAlbumsByUserId($userId);
 
@@ -51,10 +83,10 @@ class View extends ComponentBase
     {
         $userId     = $_SESSION['user_id'];
 
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $imageModel = $this->GetImageModel();
         $userImages = $imageModel->GetAllImagesByUserId($userId);
 
-        $albumModel = $this->GetDependencyContainer()->GetInstance('AlbumModel');
+        $albumModel = $this->GetAlbumModel();
         $userAlbums = $albumModel->GetAllAlbumsByUserId($userId);
 
         $this->ExposeVariable('imageBase', '/picroll/images/uploads/');
@@ -69,7 +101,7 @@ class View extends ComponentBase
         $userId     = $_SESSION['user_id'];
         $imageIds   = $params['imageIds'];
 
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $imageModel = $this->GetImageModel();
 
         foreach ($imageIds as $imageId) {
             $imageModel->DeleteImage($userId, $imageId);
@@ -83,7 +115,7 @@ class View extends ComponentBase
         $imageIds   = $params['imageIds'];
         $albumId    = $params['albumId'];
 
-        $albumModel = $this->GetDependencyContainer()->GetInstance('AlbumModel');
+        $albumModel = $this->GetAlbumModel();
 
         $albumModel->RemoveImages($albumId, $imageIds, $userId);
     }
@@ -94,7 +126,7 @@ class View extends ComponentBase
         $userId     = $_SESSION['user_id'];
         $albumIds   = $params['albumIds'];
 
-        $albumModel = $this->GetDependencyContainer()->GetInstance('AlbumModel');
+        $albumModel = $this->GetAlbumModel();
 
         foreach ($albumIds as $albumId) {
             $albumModel->DeleteAlbum($userId, $albumId);
@@ -108,7 +140,7 @@ class View extends ComponentBase
         $albumName      = $params['albumName'];
         $pictureIdArray = $params['pictureIds'];
 
-        $albumModel     = $this->GetDependencyContainer()->GetInstance('AlbumModel');
+        $albumModel     = $this->GetAlbumModel();
         $newAlbumId     = $albumModel->AddNewAlbum($userId, $albumName);
 
         if ($newAlbumId !== false) {
@@ -125,7 +157,7 @@ class View extends ComponentBase
         $albumId        = $params['albumId'];
         $pictureIdArray = $params['pictureIds'];
 
-        $albumModel     = $this->GetDependencyContainer()->GetInstance('AlbumModel');
+        $albumModel     = $this->GetAlbumModel();
         
         $albumModel->AddContentToAlbum($albumId, $pictureIdArray, $userId);
     }
@@ -136,7 +168,7 @@ class View extends ComponentBase
         $userId     = $_SESSION['user_id'];
         $albumId    = $params['albumId'];
 
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $imageModel = $this->GetImageModel();
 
         if ($albumId == -1) {
             $imagesInAlbum = $imageModel->GetAllImagesByUserId($userId);

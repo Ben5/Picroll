@@ -2,12 +2,39 @@
 
 namespace Site\Components;
 
-use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
+use Site\Config\SiteConfig;
+use Site\Models\FriendModel;
+use Site\Models\UserModel;
+use Site\Models\Service\UserModelAwareInterface;
+use Site\Models\Service\FriendModelAwareInterface;
 
 class Friends extends ComponentBase
+    implements UserModelAwareInterface, FriendModelAwareInterface
 {
     private $minimumSearchTermLength = 3;
+    private $friendModel;
+    private $userModel;
+
+    public function GetFriendModel()
+    {
+        return $this->friendModel;
+    }
+
+    public function SetFriendModel(FriendModel $instance)
+    {
+        $this->friendModel = $instance;
+    }
+
+    public function GetUserModel()
+    {
+        return $this->userModel;
+    }
+
+    public function SetUserModel(UserModel $instance)
+    {
+        $this->userModel = $instance;
+    }
 
     protected function
     RequiresAuthentication()
@@ -18,7 +45,7 @@ class Friends extends ComponentBase
     protected function
     Index($params)
     {
-        $friendModel = $this->GetDependencyContainer()->GetInstance('FriendModel');
+        $friendModel = $this->GetFriendModel();
         $userId      = $_SESSION['user_id'];
 
         $allFriends        = $friendModel->GetAllFriendsByUserId($userId);
@@ -37,8 +64,8 @@ class Friends extends ComponentBase
 
         $searchResult = array();
         if (strlen($searchTerm) >= $this->minimumSearchTermLength) {
-            $userModel    = $this->GetDependencyContainer()->GetInstance('UserModel');
-            $friendModel  = $this->GetDependencyContainer()->GetInstance('FriendModel');
+            $userModel = $this->GetUserModel();
+            $friendModel = $this->GetFriendModel();
             $userId       = $_SESSION['user_id'];
 
             $searchResult    = $userModel->SearchUsersByNameOrEmail($params['searchTerm']);
@@ -72,7 +99,7 @@ class Friends extends ComponentBase
         $userId   = $_SESSION['user_id'];
         $friendId = $params['friendId'];
 
-        $friendModel = $this->GetDependencyContainer()->GetInstance('FriendModel');
+        $friendModel = $this->GetFriendModel();
         $success = $friendModel->AddNewFriend($userId, $friendId);
 
         if ($success !== false) {

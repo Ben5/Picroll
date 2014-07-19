@@ -24,17 +24,27 @@ class SiteConfig
             // Libs
             'MemcachedManager'      => 'Reverb\Lib\MemcachedManager',
             'DbConnection'          => 'Reverb\Lib\DbConnection',
+            // Components
+            'Friends'               => 'Site\Components\Friends',
+            'Login'                 => 'Site\Components\Login',
+            'Slideshow'             => 'Site\Components\Slideshow',
+            'Upload'                => 'Site\Components\Upload',
+            'View'                  => 'Site\Components\View',
             // Models
             'AlbumModel'            => 'Site\Models\AlbumModel',
             'FriendModel'           => 'Site\Models\FriendModel',
             'FriendRequestModel'    => 'Site\Models\FriendRequestModel',
             'ImageModel'            => 'Site\Models\ImageModel',
-            'UserModel'             => 'Site\Models\User',
+            'UserModel'             => 'Site\Models\UserModel',
         );
 
         $this->initializers = array(
             'MemcachedManagerAwareInitializer'  => 'Reverb\Lib\MemcachedManagerAwareInitializer',
             'DbConnectionAwareInitializer'      => 'Reverb\Lib\DbConnectionAwareInitializer',
+            'AlbumModelAwareInitializer'        => 'Site\Models\Service\AlbumModelAwareInitializer',
+            'ImageModelAwareInitializer'        => 'Site\Models\Service\ImageModelAwareInitializer',
+            'UserModelAwareInitializer'         => 'Site\Models\Service\UserModelAwareInitializer',
+            'FriendModelAwareInitializer'       => 'Site\Models\Service\FriendModelAwareInitializer',
         );
     }
 

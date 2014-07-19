@@ -5,7 +5,7 @@ namespace Site\Models;
 use Site\Config\SiteConfig;
 use Reverb\System\ModelBase;
 
-class User 
+class UserModel 
     extends ModelBase
 {
     public function

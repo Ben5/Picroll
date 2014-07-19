@@ -27,7 +27,7 @@ function autoload($class)
         } else {
             //trigger_error('cannot autoload'); 
             var_dump($class, $fullPath); 
-            die('not readable');
+            trigger_error('not readable');
         }
     }
 }
@@ -90,24 +90,13 @@ class GatewayBase
             trigger_error("no component specified");
         }
 
-
-        if( !is_readable($this->siteRoot."/components/$this->componentName.php") )
-        {
-            trigger_error('cannot find specified component: '.$this->componentName.' with site root: '.$this->siteRoot);
-        }
-
-
         $this->fullyQualifiedComponentName = "Site\Components\\" . $this->componentName;
-
-        if( !class_exists($this->fullyQualifiedComponentName) )
-        {
-            trigger_error("cannot find specified class: $this->fullyQualifiedComponentName");
-        }
 
         $siteConfig = new SiteConfig();
         require_once SiteConfig::REVERB_ROOT."/system/dependencycontainer.php";
         $dependencyContainer = new DependencyContainer($siteConfig);
-        $this->componentInstance = new $this->fullyQualifiedComponentName($dependencyContainer);
+
+        $this->componentInstance = $dependencyContainer->GetInstance(ucfirst($this->componentName));
 
         $this->componentInstance->Prepare($action, $params);
     }

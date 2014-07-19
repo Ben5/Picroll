@@ -3,6 +3,7 @@
         <div class="section well">
             <h3>Sign In</h3>
 
+<?php if (isset($errorMessage)) echo $errorMessage; ?>
             <form name="SignInForm" action="LogInToAccount" method="POST" role="form">
                 <div class="form-group">
                     <label for="username"> Username </label>

@@ -2,11 +2,26 @@
 
 namespace Site\Components;
 
-use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
+use Site\Config\SiteConfig;
+use Site\Models\ImageModel;
+use Site\Models\Service\ImageModelAwareInterface;
 
 class Slideshow extends ComponentBase
+    implements ImageModelAwareInterface
 {
+    private $imageModel;
+
+    public function GetImageModel()
+    {
+        return $this->imageModel;
+    }
+
+    public function SetImageModel(ImageModel $instance)
+    {
+        $this->imageModel = $instance;
+    }
+
     protected function
     RequiresAuthentication()
     {
@@ -19,7 +34,7 @@ class Slideshow extends ComponentBase
         $userId = $_SESSION['user_id'];
         $albumId = isset($params['albumId']) ? $params['albumId'] : null;
 
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $imageModel = $this->GetImageModel();
         if (is_null($albumId)) {
             $allImages = $imageModel->GetAllImagesByUserId($userId);
         } else {

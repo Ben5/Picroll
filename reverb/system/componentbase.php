@@ -3,7 +3,6 @@
 namespace Reverb\System;
 
 use Site\Config\SiteConfig;
-use Reverb\System\DependencyContainer;
 
 class ComponentBase
 {
@@ -12,26 +11,9 @@ class ComponentBase
     private $viewName     = null;
     private $onlyTemplate = false;
 
-    private $memcachedManager    = null;
-    private $dependencyContainer = null;
-
     public function
-    __construct(DependencyContainer $dependencyContainer)
+    __construct()
     {
-        $this->dependencyContainer = $dependencyContainer;
-        $this->memcachedManager    = $dependencyContainer->GetInstance('MemcachedManager');
-    }
-
-    protected function
-    GetDependencyContainer()
-    {
-        return $this->dependencyContainer;
-    }
-
-    protected function
-    GetMemcachedManager()
-    {
-        return $this->memcachedManager;
     }
 
     public function

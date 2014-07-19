@@ -2,11 +2,26 @@
 
 namespace Site\Components;
 
-use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
+use Site\Config\SiteConfig;
+use Site\Models\UserModel;
+use Site\Models\Service\UserModelAwareInterface;
 
 class Login extends ComponentBase
+    implements UserModelAwareInterface
 {
+    private $userModel = null;
+
+    public function SetUserModel(UserModel $instance)
+    {
+        $this->userModel = $instance;
+    }
+
+    public function GetUserModel()
+    {
+        return $this->userModel;
+    }
+
     /* Login::Index()
      * Default action, will show the Log In and Create Account forms
      */
@@ -41,7 +56,7 @@ class Login extends ComponentBase
         }
 
         // get a user model
-        $userModel = $this->GetDependencyContainer()->GetInstance('UserModel');
+        $userModel = $this->GetUserModel();
 
         // get the salt and salted hashed password for the requested user
         $user = $userModel->TryGetUserByName($username);
@@ -101,7 +116,7 @@ class Login extends ComponentBase
         }
 
         // check the username isn't already taken
-        $userModel = $this->GetDependencyContainer()->GetInstance('UserModel');
+        $userModel = $this->GetUserModel();
         $user = $userModel->TryGetUserByName($username);
 
         if ($user != false) {
