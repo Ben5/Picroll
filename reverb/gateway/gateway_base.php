@@ -8,6 +8,8 @@ use Reverb\System\DependencyContainer;
 use Reverb\System\Error;
 use Site\Components;
 
+require_once SiteConfig::VENDOR_ROOT . "/autoload.php";
+
 // Autoloader
 function autoload($class)
 {
@@ -25,9 +27,8 @@ function autoload($class)
         if (is_readable($fullPath)) {
             require_once $fullPath;
         } else {
-            //trigger_error('cannot autoload'); 
-            var_dump($class, $fullPath); 
-            trigger_error('not readable');
+            //var_dump($class, $fullPath); 
+            //trigger_error('not readable');
         }
     }
 }
@@ -38,7 +39,7 @@ spl_autoload_register('Reverb\Gateway\autoload');
 // Error Handling
 set_error_handler("Reverb\System\Error::ErrorHandler");
 
-class GatewayBase 
+class GatewayBase
 {
     protected $siteRoot;
     protected $projectName;

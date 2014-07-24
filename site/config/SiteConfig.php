@@ -3,9 +3,11 @@ namespace Site\Config;
 
 class SiteConfig
 {
-    const WEB_ROOT   = "/opt/git/Picroll";
+    const WEB_ROOT    = "/opt/git/Picroll";
     const SITE_ROOT   = "/opt/git/Picroll/site";
     const REVERB_ROOT = "/opt/git/Picroll/reverb";
+    const VENDOR_ROOT = "/opt/git/Picroll/vendor";
+
     const DEFAULT_HEAD_TITLE = "PicRoll";
 
     const DB_HOST = 'localhost';
