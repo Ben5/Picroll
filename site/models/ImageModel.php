@@ -42,12 +42,8 @@ class ImageModel extends ModelBase
 
         if ($allImages === false) {
 
-            $sql = new Sql($this->getDbAdapter());
-
+            $sql = new Sql($this->getDbAdapter(), 'image');
             $select = $sql->select()
-                ->from(
-                        'image'
-                      )
                 ->columns(array(
                             'id'   => 'id',
                             'filename' => 'filename',
@@ -80,16 +76,30 @@ class ImageModel extends ModelBase
         $allImages = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
 
         if ($allImages === false) {
-            $sql = 'SELECT image.id, filename
-                    FROM   image
-                    JOIN   album_content ON album_content.image_id = image.id
-                    WHERE  album_content.album_id = ?';
+            $sql = new Sql($this->getDbAdapter(), 'image');
+            $select = $sql->select()
+                ->columns(
+                    array(
+                        'id', 'filename',
+                    )
+                )
+                ->join(
+                    'album_content',
+                    'album_content.image_id = image.id'
+                )
+                ->where(
+                    array(
+                        'album_content.album_id' => $albumId,
+                    )
+                );
 
-            $query = $this->GetDbConnection()->NewQuery($sql);
+            $statement = $sql->prepareStatementForSqlObject($select);
+            $resultSet = $statement->execute();
 
-            $query->AddIntegerParam($albumId);
-
-            $allImages = $query->TryReadDictionary();
+            $allImages = array();
+            foreach ($resultSet as $row) {
+                $allImages[$row['id']] = $row['filename'];
+            }
 
             // update caches
             $memcached->Set(MKEY_IMAGES_BY_ALBUM_ID.$albumId, $allImages, CACHE_TIME_DAY);
@@ -109,14 +119,23 @@ class ImageModel extends ModelBase
        $userId, 
        $filename)
     {
-        $sql = "INSERT INTO image (user_id, filename)
-                VALUES (?, ?)";
+        $sql = new Sql($this->getDbAdapter(), 'image');
+        $insert = $sql->insert()
+            ->columns(
+                array(
+                    'user_id',
+                    'filename',
+                )
+            )
+            ->values(
+                array(
+                    'user_id' => $userId,
+                    'filename' => $filename,
+                )
+            );
 
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddStringParam($userId);
-        $query->AddStringParam($filename);
-
-        $newId = $query->TryExecuteInsert();
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $newId = $statement->execute()->getGeneratedValue();
 
         if ($newId !== false) {
             // new image added, clear caches
@@ -136,21 +155,30 @@ class ImageModel extends ModelBase
         $imageId)
     {
         // First remove the image from all albums
-        $sql = 'DELETE FROM album_content
-                WHERE image_id = ?';
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddIntegerParam($imageId);
-        $query->ExecuteDelete('Unable to remove image from albums');
+        $sql = new Sql($this->getDbAdapter()); 
+        $delete = $sql->delete()
+            ->from('album_content')
+            ->where(
+                array(
+                    'image_id' => $imageId,
+                )
+            );
+        
+        $statement = $sql->prepareStatementForSqlObject($delete);
+        $statement->execute();
 
         // Now delete the image
-        $sql = 'DELETE FROM image 
-                WHERE user_id = ?
-                AND   id = ?';
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddIntegerParam($userId);
-        $query->AddIntegerParam($imageId);
+        $delete = $sql->delete()
+            ->from('image')
+            ->where(
+                array (
+                    'user_id' => $userId,
+                    'id'      => $imageId,
+                )
+            );
 
-        $query->ExecuteDelete('Unable to delete image');
+        $statement = $sql->prepareStatementForSqlObject($delete);
+        $statement->execute();
 
         // image deleted, clear caches
         $memcached = $this->GetMemcachedManager();
