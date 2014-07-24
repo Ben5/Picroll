@@ -6,6 +6,7 @@ use Site\Config\SiteConfig;
 use Reverb\System\ModelBase;
 use Reverb\Lib\MemcachedManager;
 use Reverb\Lib\MemcachedManagerAwareInterface;
+use \Zend\Db\Sql\Sql;
 
 // Memcached Keys
 define('MKEY_IMAGES_BY_USER_ID', 'GetAllImagesByUserId_');
@@ -40,15 +41,29 @@ class ImageModel extends ModelBase
         $allImages = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
 
         if ($allImages === false) {
-            $sql = 'SELECT id, filename
-                    FROM   image
-                    WHERE  user_id = ?';
 
-            $query = $this->GetDbConnection()->NewQuery($sql);
+            $sql = new Sql($this->getDbAdapter());
 
-            $query->AddStringParam($userId);
+            $select = $sql->select()
+                ->from(
+                        'image'
+                      )
+                ->columns(array(
+                            'id'   => 'id',
+                            'filename' => 'filename',
+                            ))
+                ->where(array(
+                            'user_id' => $userId,
+                            ));
 
-            $allImages = $query->TryReadDictionary();
+            $statement = $sql->prepareStatementForSqlObject($select);
+            $resultSet = $statement->execute();
+
+            $allImages = array();
+            foreach ($resultSet as $row) {
+                $allImages[$row['id']] = $row['filename'];
+            }
+
             $memcached->Set(MKEY_IMAGES_BY_USER_ID.$userId, $allImages, CACHE_TIME_DAY);
         }
 
