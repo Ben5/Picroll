@@ -2,12 +2,26 @@
 
 namespace Site\Components;
 
-use Site\Config\SiteConfig;
 use Reverb\System\ComponentBase;
-use Site\Models\Image;
+use Site\Config\SiteConfig;
+use Site\Models\ImageModel;
+use Site\Models\Service\ImageModelAwareInterface;
 
 class Upload extends ComponentBase
+    implements ImageModelAwareInterface
 {
+    private $imageModel = null;
+
+    public function SetImageModel(ImageModel $instance)
+    {
+        $this->imageModel = $instance;
+    }
+
+    public function GetImageModel()
+    {
+        return $this->imageModel;
+    }
+
     protected function
     RequiresAuthentication()
     {
@@ -43,7 +57,7 @@ class Upload extends ComponentBase
         fclose($file);
 
         // Create a thumbnail version
-        $thumbnail = new Imagick($path.$filename.'.jpeg');
+        $thumbnail = new \Imagick($path.$filename.'.jpeg');
         $thumbnail->thumbnailImage(160, 0);
 
         $file = fopen($path.$filename.'-thumb.jpeg', 'w');
@@ -51,7 +65,7 @@ class Upload extends ComponentBase
         fclose($file);
 
         // Add the new files to the db
-        $imageModel = $this->GetDependencyContainer()->GetInstance('ImageModel');
+        $imageModel = $this->GetImageModel();
         $imageModel->AddNewImage($userId, $filename);
 
         // $this->ExposeVariable('data', $params['name']);
