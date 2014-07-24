@@ -1,4 +1,7 @@
 <?php
+
+namespace Reverb\Gateway;
+
 require_once(__DIR__."/gateway_base.php");
 
 class GatewayHtml extends GatewayBase
