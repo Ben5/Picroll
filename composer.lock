@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e5b6456d91f738b3e791d64ab6d8af83",
+    "hash": "d4a89575b9e0dbe2d9a8223dbdfcc7a4",
     "packages": [
         {
             "name": "zendframework/zend-db",
@@ -58,6 +58,59 @@
                 "source": "https://github.com/zendframework/Component_ZendDb/tree/release-2.3.1"
             },
             "time": "2014-04-15 15:29:07"
+        },
+        {
+            "name": "zendframework/zend-stdlib",
+            "version": "2.3.1",
+            "target-dir": "Zend/Stdlib",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/Component_ZendStdlib.git",
+                "reference": "c1f4830018b5d4f034d32fa01a9e17ea176f56f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.zendframework.com/composer/zendframework-zend-stdlib-c1f4830018b5d4f034d32fa01a9e17ea176f56f6-zip-b43c6b.zip",
+                "reference": "2.3.1",
+                "shasum": "7a094f270de9a54e1bfb2f0772e5f5cba2593475"
+            },
+            "require": {
+                "php": ">=5.3.23"
+            },
+            "require-dev": {
+                "zendframework/zend-eventmanager": "self.version",
+                "zendframework/zend-serializer": "self.version",
+                "zendframework/zend-servicemanager": "self.version"
+            },
+            "suggest": {
+                "zendframework/zend-eventmanager": "To support aggregate hydrator usage",
+                "zendframework/zend-serializer": "Zend\\Serializer component",
+                "zendframework/zend-servicemanager": "To support hydrator plugin manager usage"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev",
+                    "dev-develop": "2.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Zend\\Stdlib\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": " ",
+            "keywords": [
+                "stdlib",
+                "zf2"
+            ],
+            "support": {
+                "source": "https://github.com/zendframework/Component_ZendStdlib/tree/release-2.3.1"
+            },
+            "time": "2014-04-15 15:28:48"
         }
     ],
     "packages-dev": [

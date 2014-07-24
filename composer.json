@@ -7,6 +7,7 @@
     ],
 
     "require": {
-        "zendframework/zend-db": "2.3.*"
+        "zendframework/zend-db": "2.*",
+        "zendframework/zend-stdlib": "2.*"
     }
 }
