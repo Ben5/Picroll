@@ -2,10 +2,12 @@
 
 namespace Site\Models;
 
-use Site\Config\SiteConfig;
-use Reverb\System\ModelBase;
 use Reverb\Lib\MemcachedManager;
 use Reverb\Lib\MemcachedManagerAwareInterface;
+use Reverb\System\ModelBase;
+use Site\Config\SiteConfig;
+use \Zend\Db\Sql\Expression;
+use \Zend\Db\Sql\Sql;
 
 // Memcached Keys
 define('MKEY_ALBUMS_BY_USER_ID', 'GetAllAlbumsByUserId_');
@@ -37,17 +39,35 @@ class AlbumModel extends ModelBase
         $allAlbums = $memcached->get(MKEY_ALBUMS_BY_USER_ID.$userId);
 
         if ($allAlbums === false) {
-            $sql = 'SELECT id, name, date_created, COUNT(image_id) AS size
-                    FROM   album
-                    JOIN album_content ON album.id = album_content.album_id
-                    WHERE  user_id = ?
-                    GROUP BY album_content.album_id';
+            $sql = new Sql($this->getDbAdapter(), 'album');
+            $select = $sql->select()
+                ->columns(
+                    array(
+                        'id' => 'id',
+                        'name' => 'name',
+                        'date_created',
+                        'size' => new Expression('COUNT(image_id)'),
+                    )
+                )
+                ->join(
+                    'album_content',
+                    'album.id = album_content.album_id'
+                )
+                ->where(
+                    array(
+                        'user_id' => $userId,
+                    )
+                )
+                ->group('album_content.album_id');
 
-            $query = $this->GetDbConnection()->NewQuery($sql);
+            $statement = $sql->prepareStatementForSqlObject($select);
+            $resultSet = $statement->execute();
 
-            $query->AddStringParam($userId);
+            $allAlbums = array();
+            foreach ($resultSet as $row) {
+                $allAlbums[] = $row;
+            }
 
-            $allAlbums = $query->TryReadRowArray();
             $memcached->set(MKEY_ALBUMS_BY_USER_ID.$userId, $allAlbums, CACHE_TIME_DAY);
         }
         
@@ -58,17 +78,23 @@ class AlbumModel extends ModelBase
        $userId, 
        $name)
     {
-        $sql = "INSERT INTO album (user_id, name)
-                VALUES (?, ?)";
+        $sql = new Sql($this->getDbAdapter(), 'album');
+        $insert = $sql->insert()
+            ->columns(
+                array(
+                    'user_id',
+                    'name',
+                )
+            )
+            ->values(
+                array(
+                    'user_id' => $userId,
+                    'name'    => $name,
+                )
+            );
 
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddStringParam($userId);
-        $query->AddStringParam($name);
-
-        $newId = $query->TryExecuteInsert();
-        if ($newId === false) {
-            var_dump($query->GetLastError());exit;
-        }
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $newId = $statement->execute()->getGeneratedValue();
 
         // added a new album, clear the old cached albums list
         $this->GetMemcachedManager()->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
@@ -81,19 +107,27 @@ class AlbumModel extends ModelBase
         array $imageIdArray,
         $userId)
     {
-        $sql = 'INSERT IGNORE INTO album_content
-                (album_id, image_id)
-                VALUES ';
+        $sql = new Sql($this->getDbAdapter(), 'album_content');
+        $insert = $sql->insert()
+            ->columns(
+                array(
+                    'album_id' => 'album_id',
+                    'image_id' => 'image_id',
+                )
+            );
 
-        $sql .= rtrim(str_repeat('(?, ?),', count($imageIdArray)), ',');
-
-        $query = $this->GetDbConnection()->NewQuery($sql);
         foreach ($imageIdArray as $imageId) {
-            $query->AddIntegerParam($albumId);
-            $query->AddIntegerParam($imageId);
+            $insert->values(
+                array(
+                    'album_id' => $albumId,
+                    'image_id' => $imageId,
+                ),
+                $insert::VALUES_MERGE
+            );
         }
 
-        $newId = $query->TryExecuteInsert();
+        $statement = $sql->prepareStatementForSqlObject($insert);
+        $newId = $statement->execute()->getGeneratedValue();
 
         if ($newId !== false) {
             // altered an album, clear the old cached albums list
@@ -108,15 +142,16 @@ class AlbumModel extends ModelBase
         $imageIds,
         $userId)
     {
-        $sql = 'DELETE FROM album_content
-                WHERE album_id = ?
-                AND   image_id in ';
-        $sql .= '(' . implode(',', $imageIds) . ')';
+        $sql = new Sql($this->getDbAdapter(), 'album_content');
+        $delete = $sql->delete()
+            ->where(
+                array(
+                    'album_id' => $albumId,
+                    'image_id' => $imageIds,
+                )
+            );
 
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddIntegerParam($albumId);
-
-        $query->ExecuteDelete('Unable to remove images from album');
+        $sql->prepareStatementForSqlObject($delete)->execute();
 
         // deleted from an album, clear the old cached albums list
         $this->GetMemcachedManager()->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
@@ -127,21 +162,27 @@ class AlbumModel extends ModelBase
         $albumId)
     {
         // First delete the contents from the album
-        $sql = 'DELETE FROM album_content
-                WHERE album_id = ?';
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddIntegerParam($albumId);
-        $query->ExecuteDelete('Unable to delete contents from album');
+        $sql = new Sql($this->getDbAdapter(), 'album_content');
+        $delete = $sql->delete()
+            ->where(
+                array(
+                    'album_id' => $albumId,
+                )
+            );
 
+        $sql->prepareStatementForSqlObject($delete)->execute();
 
         // Now delete the album itself
-        $sql = 'DELETE FROM album 
-                WHERE user_id = ?
-                AND   id = ?';
-        $query = $this->GetDbConnection()->NewQuery($sql);
-        $query->AddIntegerParam($userId);
-        $query->AddIntegerParam($albumId);
-        $query->ExecuteDelete('Unable to delete album');
+        $sql = new Sql($this->getDbAdapter(), 'album');
+        $delete = $sql->delete()
+            ->where(
+                array(
+                    'id'      => $albumId,
+                    'user_id' => $userId,
+                )
+            );
+
+        $sql->prepareStatementForSqlObject($delete)->execute();
 
         // deleted from an album, clear the old cached albums list
         $this->GetMemcachedManager()->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
