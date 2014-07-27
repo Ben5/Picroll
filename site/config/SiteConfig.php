@@ -41,13 +41,14 @@ class SiteConfig
         );
 
         $this->initializers = array(
-            'MemcachedManagerAwareInitializer'  => 'Reverb\Lib\MemcachedManagerAwareInitializer',
-            'DbConnectionAwareInitializer'      => 'Reverb\Lib\DbConnectionAwareInitializer',
-            'DbAdapterAwareInitializer'         => 'Reverb\Lib\DbAdapterAwareInitializer',
-            'AlbumModelAwareInitializer'        => 'Site\Models\Service\AlbumModelAwareInitializer',
-            'ImageModelAwareInitializer'        => 'Site\Models\Service\ImageModelAwareInitializer',
-            'UserModelAwareInitializer'         => 'Site\Models\Service\UserModelAwareInitializer',
-            'FriendModelAwareInitializer'       => 'Site\Models\Service\FriendModelAwareInitializer',
+            'MemcachedManagerAwareInitializer'   => 'Reverb\Lib\MemcachedManagerAwareInitializer',
+            'DbConnectionAwareInitializer'       => 'Reverb\Lib\DbConnectionAwareInitializer',
+            'DbAdapterAwareInitializer'          => 'Reverb\Lib\DbAdapterAwareInitializer',
+            'AlbumModelAwareInitializer'         => 'Site\Models\Service\AlbumModelAwareInitializer',
+            'ImageModelAwareInitializer'         => 'Site\Models\Service\ImageModelAwareInitializer',
+            'UserModelAwareInitializer'          => 'Site\Models\Service\UserModelAwareInitializer',
+            'FriendModelAwareInitializer'        => 'Site\Models\Service\FriendModelAwareInitializer',
+            'FriendRequestModelAwareInitializer' => 'Site\Models\Service\FriendRequestModelAwareInitializer',
         );
     }
 

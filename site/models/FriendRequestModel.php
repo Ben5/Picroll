@@ -14,6 +14,38 @@ class FriendRequestModel
         $this->modelName = 'friend_request';
     }
 
+    // Get all the people who have sent friend requests to the user id provided
+    public function
+    GetAllFriendRequestsByUserId($userId)
+    {
+        $sql = 'SELECT user_id, username
+                FROM   friend_request
+                JOIN   user ON user.id = friend_request.user_id
+                WHERE  friend_user_id = ?';
+
+        $query = $this->GetDbConnection()->NewQuery($sql);
+
+        $query->AddStringParam($userId);
+
+        return $query->TryReadDictionary();
+    }
+
+    // Get all the people who have been sent friend requests by the user id provided
+    public function
+    GetAllRequestedFriendsByUserId($userId)
+    {
+        $sql = 'SELECT friend_user_id, username
+                FROM   friend_request
+                JOIN   user ON user.id = friend_request.friend_user_id
+                WHERE  friend_request.user_id = ?';
+
+        $query = $this->GetDbConnection()->NewQuery($sql);
+
+        $query->AddStringParam($userId);
+
+        return $query->TryReadDictionary();
+    }
+
     public function
     CreateNewFriendRequest($userId, $friendId)
     {

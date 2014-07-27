@@ -5,15 +5,18 @@ namespace Site\Components;
 use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
 use Site\Models\FriendModel;
+use Site\Models\FriendRequestModel;
 use Site\Models\UserModel;
 use Site\Models\Service\UserModelAwareInterface;
 use Site\Models\Service\FriendModelAwareInterface;
+use Site\Models\Service\FriendRequestModelAwareInterface;
 
 class Friends extends ComponentBase
-    implements UserModelAwareInterface, FriendModelAwareInterface
+    implements UserModelAwareInterface, FriendModelAwareInterface, FriendRequestModelAwareInterface
 {
     private $minimumSearchTermLength = 3;
     private $friendModel;
+    private $friendRequestModel;
     private $userModel;
 
     public function GetFriendModel()
@@ -24,6 +27,16 @@ class Friends extends ComponentBase
     public function SetFriendModel(FriendModel $instance)
     {
         $this->friendModel = $instance;
+    }
+
+    public function GetFriendRequestModel()
+    {
+        return $this->friendRequestModel;
+    }
+
+    public function SetFriendRequestModel(FriendRequestModel $instance)
+    {
+        $this->friendRequestModel = $instance;
     }
 
     public function GetUserModel()
@@ -45,12 +58,13 @@ class Friends extends ComponentBase
     protected function
     Index($params)
     {
-        $friendModel = $this->GetFriendModel();
-        $userId      = $_SESSION['user_id'];
+        $friendModel        = $this->GetFriendModel();
+        $friendRequestModel = $this->GetFriendRequestModel();
+        $userId             = $_SESSION['user_id'];
 
         $allFriends        = $friendModel->GetAllFriendsByUserId($userId);
-        $allFriendRequests = $friendModel->GetAllFriendRequestsByUserId($userId);
-        $allPendingFriends = $friendModel->GetAllRequestedFriendsByUserId($userId);
+        $allFriendRequests = $friendRequestModel->GetAllFriendRequestsByUserId($userId);
+        $allPendingFriends = $friendRequestModel->GetAllRequestedFriendsByUserId($userId);
 
         $this->ExposeVariable('friends',  $allFriends); 
         $this->ExposeVariable('requests', $allFriendRequests); 

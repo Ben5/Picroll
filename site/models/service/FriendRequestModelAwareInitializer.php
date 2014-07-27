@@ -5,12 +5,12 @@ namespace Site\Models\Service;
 use Reverb\Lib\InitializerInterface;
 use Reverb\System\DependencyContainer;
 
-class AlbumModelAwareInitializer implements InitializerInterface
+class FriendRequestModelAwareInitializer implements InitializerInterface
 {
     public function Initialize($instance, DependencyContainer $dependencyContainer)
     {
-        if ($instance instanceof AlbumModelAwareInterface) {
-            $instance->SetAlbumModel($dependencyContainer->GetInstance('AlbumModel'));
+        if ($instance instanceof FriendRequestModelAwareInterface) {
+            $instance->SetFriendRequestModel($dependencyContainer->GetInstance('FriendRequestModel'));
         }
     }
 }
