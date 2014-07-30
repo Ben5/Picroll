@@ -17,10 +17,10 @@ class FriendModel
     public function
     GetAllFriendsByUserId($userId)
     {
-        $sql = 'SELECT friend_user_id, username
-                FROM   friendship
-                JOIN user ON user.id = friend_user_id
-                WHERE  user_id = ?';
+        $sql = 'SELECT f.friend_user_id, u.username
+                FROM   friendship f
+                JOIN user u ON u.id = f.friend_user_id
+                WHERE  f.user_id = ?';
 
         $query = $this->GetDbConnection()->NewQuery($sql);
 

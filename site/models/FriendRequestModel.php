@@ -18,10 +18,10 @@ class FriendRequestModel
     public function
     GetAllFriendRequestsByUserId($userId)
     {
-        $sql = 'SELECT user_id, username
-                FROM   friend_request
-                JOIN   user ON user.id = friend_request.user_id
-                WHERE  friend_user_id = ?';
+        $sql = 'SELECT fr.user_id, u.username
+                FROM   friend_request fr
+                JOIN   user u ON u.id = fr.user_id
+                WHERE  fr.friend_user_id = ?';
 
         $query = $this->GetDbConnection()->NewQuery($sql);
 
@@ -34,10 +34,10 @@ class FriendRequestModel
     public function
     GetAllRequestedFriendsByUserId($userId)
     {
-        $sql = 'SELECT friend_user_id, username
-                FROM   friend_request
-                JOIN   user ON user.id = friend_request.friend_user_id
-                WHERE  friend_request.user_id = ?';
+        $sql = 'SELECT fr.friend_user_id, u.username
+                FROM   friend_request fr
+                JOIN   user u ON u.id = fr.friend_user_id
+                WHERE  fr.user_id = ?';
 
         $query = $this->GetDbConnection()->NewQuery($sql);
 

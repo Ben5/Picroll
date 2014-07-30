@@ -6,6 +6,7 @@ use Site\Config\SiteConfig;
 use Reverb\System\ModelBase;
 use Reverb\Lib\MemcachedManager;
 use Reverb\Lib\MemcachedManagerAwareInterface;
+use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Sql;
 
 // Memcached Keys
@@ -45,7 +46,7 @@ class ImageModel extends ModelBase
             $sql = new Sql($this->getDbAdapter(), 'image');
             $select = $sql->select()
                 ->columns(array(
-                            'id'   => 'id',
+                            'id'       => 'id',
                             'filename' => 'filename',
                             ))
                 ->where(array(
@@ -76,20 +77,22 @@ class ImageModel extends ModelBase
         $allImages = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
 
         if ($allImages === false) {
-            $sql = new Sql($this->getDbAdapter(), 'image');
+            $sql = new Sql($this->getDbAdapter());
             $select = $sql->select()
-                ->columns(
+                ->from(
+                    array('i' => 'image'),
                     array(
-                        'id', 'filename',
+                        'i.id', 
+                        'i.filename',
                     )
                 )
                 ->join(
-                    'album_content',
-                    'album_content.image_id = image.id'
+                    array('ac' => 'album_content'),
+                    'ac.image_id = i.id'
                 )
                 ->where(
                     array(
-                        'album_content.album_id' => $albumId,
+                        'ac.album_id' => $albumId,
                     )
                 );
 
