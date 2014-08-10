@@ -4,8 +4,10 @@ namespace Site\Models;
 
 use Reverb\Lib\MemcachedManager;
 use Reverb\Lib\MemcachedManagerAwareInterface;
+use Reverb\Lib\Collection;
 use Reverb\System\ModelBase;
 use Site\Config\SiteConfig;
+use Site\Models\Entities\AlbumEntity;
 use \Zend\Db\Sql\Expression;
 use \Zend\Db\Sql\Sql;
 
@@ -36,9 +38,9 @@ class AlbumModel extends ModelBase
     {
         $memcached = $this->GetMemcachedManager();
 
-        $allAlbums = $memcached->get(MKEY_ALBUMS_BY_USER_ID.$userId);
+        $albumCollection = $memcached->get(MKEY_ALBUMS_BY_USER_ID.$userId);
 
-        if ($allAlbums === false) {
+        if ($albumCollection !== false) {
             $sql = new Sql($this->getDbAdapter(), 'album');
             $select = $sql->select()
                 ->columns(
@@ -53,9 +55,17 @@ class AlbumModel extends ModelBase
                     'album_content',
                     'album.id = album_content.album_id'
                 )
+                ->join(
+                    'image',
+                    'image.id = album_content.image_id',
+                    array(
+                        'cover_image_id' => 'id',
+                        'cover_image_filename' => 'filename',
+                    )
+                )
                 ->where(
                     array(
-                        'user_id' => $userId,
+                        'album.user_id' => $userId,
                     )
                 )
                 ->group('album_content.album_id');
@@ -63,15 +73,12 @@ class AlbumModel extends ModelBase
             $statement = $sql->prepareStatementForSqlObject($select);
             $resultSet = $statement->execute();
 
-            $allAlbums = array();
-            foreach ($resultSet as $row) {
-                $allAlbums[] = $row;
-            }
+            $albumCollection = new Collection(new AlbumEntity(), $resultSet);
 
-            $memcached->set(MKEY_ALBUMS_BY_USER_ID.$userId, $allAlbums, CACHE_TIME_DAY);
+            $memcached->set(MKEY_ALBUMS_BY_USER_ID.$userId, $albumCollection, CACHE_TIME_DAY);
         }
         
-        return $allAlbums;
+        return $albumCollection;
     }
 
     public function AddNewAlbum(

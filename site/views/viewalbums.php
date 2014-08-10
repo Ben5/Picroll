@@ -27,16 +27,18 @@
         $perRowMed   = 4;
         $perRowLarge = 6;
 
-        foreach ($albums as $albumId => $album) {
+        foreach ($albums as $album) {
             $count++;
-            $imageName = reset($album['images']);
-            $thumbImg = $imageBase.$imageName.'-thumb'.$imageExt;
+            $albumId   = $album->GetId();
+            $albumName = $album->GetName();
+            $imageName = $album->GetCoverImageFilename();
+            $thumbImg  = $imageBase.$imageName.'-thumb'.$imageExt;
 
     ?>
             <div class="thumbnailContainer col-xs-12 col-sm-6 col-md-3 col-lg-2">
-                <img src="<?php echo $thumbImg;?>" class="thumbnail img-thumbnail" data-albumid="<?php echo $album['id'];?>"/>
-                <span class="label <?php echo $album['id'] > 0 ? 'label-info' : 'label-primary';?> albumTitle">
-                    <?php echo $album['name'];?>
+                <img src="<?php echo $thumbImg;?>" class="thumbnail img-thumbnail" data-albumid="<?php echo $albumId;?>"/>
+                <span class="label <?php echo $albumId > 0 ? 'label-info' : 'label-primary';?> albumTitle">
+                    <?php echo $albumName;?>
                 </span>
                 <div class="overlay">
                     <span class="glyphicon glyphicon-check" style="display:none"></span>
@@ -76,14 +78,24 @@
                     Add To Another Album <span class="glyphicon glyphicon-book"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <?php foreach ($albums as $album): ?>
-                    <?php if ($album['id'] == -1) { continue; } ?>
-                        <li>
-                            <a href='#' class="existingAlbum" data-albumid="<?php echo $album['id']; ?>">
-                                <?php echo $album['name']; ?> (<?php echo $album['size'];?>)
-                            </a>
-                        </li>
-                    <?php endforeach; ?>
+                    <?php 
+                        foreach ($albums as $album) {
+                            $albumId   = $album->GetId();
+                            $albumName = $album->GetName();
+                            $albumSize = $album->GetSize();
+
+                            if ($albumId == -1) { 
+                                continue; 
+                            } 
+                    ?>
+                            <li>
+                                <a href='#' class="existingAlbum" data-albumid="<?php echo $albumId; ?>">
+                                    <?php echo $albumName; ?> (<?php echo $albumSize;?>)
+                                </a>
+                            </li>
+                    <?php 
+                        } 
+                    ?>
                     <li class="divider"></li>
                     <li><a href='#' id="createNewAlbum">Create New Album</a></li>
                 </ul>

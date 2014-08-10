@@ -335,9 +335,9 @@ console.log(dataObj);
             //$thumbImg = $imageBase.$imageName.'-thumb'.$imageExt;
 
         $.each(images, function(key, value) {
-            var imageId         = key;
-            var imageFullImgSrc = '/picroll/images/uploads/' + value + '.jpeg'            
-            var imageSrc        = '/picroll/images/uploads/' + value + '-thumb.jpeg';
+            var imageId         = value.id;
+            var imageFullImgSrc = '/picroll/images/uploads/' + value.filename + '.jpeg'            
+            var imageSrc        = '/picroll/images/uploads/' + value.filename + '-thumb.jpeg';
 
             var newThumbnail = $('#thumbnailTemplate').find('div.thumbnailContainer').clone();
 

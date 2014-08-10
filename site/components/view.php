@@ -6,6 +6,7 @@ use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
 use Site\Models\AlbumModel;
 use Site\Models\ImageModel;
+use Site\Models\Entities\AlbumEntity;
 use Site\Models\Service\AlbumModelAwareInterface;
 use Site\Models\Service\ImageModelAwareInterface;
 
@@ -55,44 +56,24 @@ class View extends ComponentBase
 
         $userAlbums = $albumModel->GetAllAlbumsByUserId($userId);
 
-        if ($userAlbums !== false) {
-            foreach ($userAlbums as &$album) {
-                $album['images'] = $imageModel->GetAllImagesByAlbumId($album['id'], $userId);
-            }
-        }
 
         // Add a pseudo-album for 'All Images'
-        $allImages = $imageModel->GetAllImagesByUserId($userId);
-        $userAlbums[] = array(
+        $allImages = $imageModel->GetAllImagesByUserId($userId)->GetItems();
+        // TODO: move the creation of All Pictures pseudo-array in to Album Model...
+        $userAlbums->AddItem(new AlbumEntity(array(
             'id' => -1,
             'name' => 'All Pictures',
             'date_created' => -1, // TODO: figure this out if needed...
             'size' => count($allImages),
-            'images' => $allImages,
-        );
+            'cover_image_id' => $allImages[0]->GetId(),
+            'cover_image_filename' => $allImages[0]->GetFilename(),
+        )));
 
         $this->SetViewName('viewalbums');
 
         $this->ExposeVariable('imageBase', '/picroll/images/uploads/');
         $this->ExposeVariable('imageExt', '.jpeg');
-        $this->ExposeVariable('albums', $userAlbums);
-    }
-
-    protected function
-    ViewAllImages($params)
-    {
-        $userId     = $_SESSION['user_id'];
-
-        $imageModel = $this->GetImageModel();
-        $userImages = $imageModel->GetAllImagesByUserId($userId);
-
-        $albumModel = $this->GetAlbumModel();
-        $userAlbums = $albumModel->GetAllAlbumsByUserId($userId);
-
-        $this->ExposeVariable('imageBase', '/picroll/images/uploads/');
-        $this->ExposeVariable('imageExt', '.jpeg');
-        $this->ExposeVariable('albums', $userAlbums);
-        $this->ExposeVariable('images', $userImages);
+        $this->ExposeVariable('albums', $userAlbums->GetItems());
     }
 
     protected function
@@ -176,6 +157,6 @@ class View extends ComponentBase
             $imagesInAlbum = $imageModel->GetAllImagesByAlbumId($albumId, $userId);
         }
 
-        $this->ExposeVariable('images', $imagesInAlbum);
+        $this->ExposeVariable('images', $imagesInAlbum->ToArray());
     }
 }

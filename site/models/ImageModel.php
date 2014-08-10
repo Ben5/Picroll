@@ -3,7 +3,9 @@
 namespace Site\Models;
 
 use Site\Config\SiteConfig;
+use Site\Models\Entities\ImageEntity;
 use Reverb\System\ModelBase;
+use Reverb\Lib\Collection;
 use Reverb\Lib\MemcachedManager;
 use Reverb\Lib\MemcachedManagerAwareInterface;
 use \Zend\Db\Sql\Expression;
@@ -12,7 +14,7 @@ use \Zend\Db\Sql\Sql;
 // Memcached Keys
 define('MKEY_IMAGES_BY_USER_ID', 'GetAllImagesByUserId_');
 define('MKEY_IMAGES_BY_ALBUM_ID', 'GetAllImagesByAlbumId_');
-define('MKEY_ALBUM_CACHE_KEYS_BY_USER', 'CacheKEysForAlbumsByUserId_');
+define('MKEY_ALBUM_CACHE_KEYS_BY_USER', 'CacheKeysForAlbumsByUserId_');
 
 class ImageModel extends ModelBase
     implements MemcachedManagerAwareInterface
@@ -39,9 +41,9 @@ class ImageModel extends ModelBase
     GetAllImagesByUserId($userId)
     {
         $memcached = $this->GetMemcachedManager();
-        $allImages = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
+        $imageCollection = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
 
-        if ($allImages === false) {
+        if ($imageCollection === false) {
 
             $sql = new Sql($this->getDbAdapter(), 'image');
             $select = $sql->select()
@@ -56,15 +58,12 @@ class ImageModel extends ModelBase
             $statement = $sql->prepareStatementForSqlObject($select);
             $resultSet = $statement->execute();
 
-            $allImages = array();
-            foreach ($resultSet as $row) {
-                $allImages[$row['id']] = $row['filename'];
-            }
+            $imageCollection = new Collection(new ImageEntity(), $resultSet);
 
-            $memcached->Set(MKEY_IMAGES_BY_USER_ID.$userId, $allImages, CACHE_TIME_DAY);
+            $memcached->Set(MKEY_IMAGES_BY_USER_ID.$userId, $imageCollection, CACHE_TIME_DAY);
         }
 
-        return $allImages;
+        return $imageCollection;
     }
 
     public function 
@@ -74,9 +73,9 @@ class ImageModel extends ModelBase
     {
         $memcached = $this->GetMemcachedManager();
 
-        $allImages = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
+        $imageCollection = $memcached->Get(MKEY_IMAGES_BY_ALBUM_ID.$albumId);
 
-        if ($allImages === false) {
+        if ($imageCollection === false) {
             $sql = new Sql($this->getDbAdapter());
             $select = $sql->select()
                 ->from(
@@ -99,13 +98,10 @@ class ImageModel extends ModelBase
             $statement = $sql->prepareStatementForSqlObject($select);
             $resultSet = $statement->execute();
 
-            $allImages = array();
-            foreach ($resultSet as $row) {
-                $allImages[$row['id']] = $row['filename'];
-            }
+            $imageCollection = new Collection(new ImageEntity(), $resultSet);
 
             // update caches
-            $memcached->Set(MKEY_IMAGES_BY_ALBUM_ID.$albumId, $allImages, CACHE_TIME_DAY);
+            $memcached->Set(MKEY_IMAGES_BY_ALBUM_ID.$albumId, $imageCollection, CACHE_TIME_DAY);
             $cachedAlbumKeys = $memcached->Get(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId);
             if ($cachedAlbumKeys === false) {
                 $cachedAlbumKeys = array();
@@ -114,7 +110,7 @@ class ImageModel extends ModelBase
             $memcached->Set(MKEY_ALBUM_CACHE_KEYS_BY_USER.$userId, $cachedAlbumKeys, CACHE_TIME_DAY);
         }
 
-        return $allImages;
+        return $imageCollection;
     }
 
     public function 
