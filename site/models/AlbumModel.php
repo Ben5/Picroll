@@ -40,7 +40,7 @@ class AlbumModel extends ModelBase
 
         $albumCollection = $memcached->get(MKEY_ALBUMS_BY_USER_ID.$userId);
 
-        if ($albumCollection !== false) {
+        if ($albumCollection === false) {
             $sql = new Sql($this->getDbAdapter(), 'album');
             $select = $sql->select()
                 ->columns(
