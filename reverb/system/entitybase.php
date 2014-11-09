@@ -2,7 +2,7 @@
 
 namespace Reverb\System;
 
-abstract class EntityBase
+abstract class EntityBase implements EntityInterface
 {
     public function __construct($row = null)
     {
@@ -10,8 +10,4 @@ abstract class EntityBase
             $this->SetFromRow($row);
         }
     }
-
-    abstract public function SetFromRow(array $row);
-
-    abstract public function ToArray();
 }
