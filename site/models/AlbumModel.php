@@ -114,26 +114,15 @@ class AlbumModel extends ModelBase
         array $imageIdArray,
         $userId)
     {
-        $sql = new Sql($this->getDbAdapter(), 'album_content');
-        $insert = $sql->insert()
-            ->columns(
-                array(
-                    'album_id' => 'album_id',
-                    'image_id' => 'image_id',
-                )
-            );
+        $query = 'INSERT IGNORE INTO album_content (album_id, image_id) VALUES ';
 
+        $queryVals = array();
         foreach ($imageIdArray as $imageId) {
-            $insert->values(
-                array(
-                    'album_id' => $albumId,
-                    'image_id' => $imageId,
-                ),
-                $insert::VALUES_MERGE
-            );
+            $queryVals[] = "($albumId, $imageId)";
         }
 
-        $statement = $sql->prepareStatementForSqlObject($insert);
+        $statement = $this->getDbAdapter()->query($query . implode(',', $queryVals));
+
         $newId = $statement->execute()->getGeneratedValue();
 
         if ($newId !== false) {
