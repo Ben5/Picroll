@@ -42,7 +42,7 @@ class ImageEntity extends EntityBase
     public function ToArray()
     {
         return array(
-            'id' => $this->id,
+            'id'       => $this->id,
             'filename' => $this->filename,
         );
     }
