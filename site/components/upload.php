@@ -5,6 +5,7 @@ namespace Site\Components;
 use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
 use Site\Models\ImageModel;
+use Site\Models\Files\FileWriter;
 use Site\Models\Service\ImageModelAwareInterface;
 
 class Upload extends ComponentBase
@@ -46,23 +47,16 @@ class Upload extends ComponentBase
         $image = $this->ConvertDataUrl($uploadedImageData);
 
         $path = '/opt/git/Picroll/site/images/uploads/';
-    
-        if (!is_dir($path)) {
-            mkdir($path);
-        }
         $filename = md5($userId.time());
 
-        $file = fopen($path.$filename.'.jpeg', 'w');
-        fwrite($file, $image);
-        fclose($file);
+        // todo: inject this dependency!
+        $fileWriter = new FileWriter();
+        $fileWriter->WriteFileToDisk($image, $path, $filename);
 
         // Create a thumbnail version
         $thumbnail = new \Imagick($path.$filename.'.jpeg');
         $thumbnail->thumbnailImage(160, 0);
-
-        $file = fopen($path.$filename.'-thumb.jpeg', 'w');
-        fwrite($file, $thumbnail);
-        fclose($file);
+        $fileWriter->WriteFileToDisk($thumbnail, $path, $filename, 'w', '-thumb.jpeg');
 
         // Add the new files to the db
         $imageModel = $this->GetImageModel();

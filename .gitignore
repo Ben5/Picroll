@@ -1,3 +1,5 @@
 *.swp
 vendor/*
 composer.phar
+site/images/uploads/*
+!.gitignore
