@@ -57,8 +57,7 @@ class Upload extends ComponentBase
         $fileWriter->WriteFileToDisk($image, $path, $filename);
 
         // Create a thumbnail version
-        $thumbnail = new \Imagick($path.$filename.'.jpeg');
-        $thumbnail->thumbnailImage(160, 0);
+        $thumbnail = $imageHandler->GenerateThumbnailFromFile($path.$filename.'.jpeg');
         $fileWriter->WriteFileToDisk($thumbnail, $path, $filename, 'w', '-thumb.jpeg');
 
         // Add the new files to the db
