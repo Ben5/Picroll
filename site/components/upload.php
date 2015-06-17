@@ -13,6 +13,7 @@ class Upload extends ComponentBase
     implements ImageModelAwareInterface
 {
     private $imageModel = null;
+    const UPLOADED_IMAGE_DIR = '/opt/git/Picroll/site/images/uploads/';
 
     public function SetImageModel(ImageModel $instance)
     {
@@ -49,7 +50,7 @@ class Upload extends ComponentBase
         $imageHandler = new ImageFileHandler();
         $image = $imageHandler->ConvertDataUrl($uploadedImageData);
 
-        $path = '/opt/git/Picroll/site/images/uploads/';
+        $path = self::UPLOADED_IMAGE_DIR;
         $filename = md5($userId.time());
 
         // todo: inject this dependency!
