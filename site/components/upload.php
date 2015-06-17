@@ -4,6 +4,7 @@ namespace Site\Components;
 
 use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
+use Site\Models\Files\ImageFileHandler;
 use Site\Models\ImageModel;
 use Site\Models\Files\FileWriter;
 use Site\Models\Service\ImageModelAwareInterface;
@@ -44,7 +45,9 @@ class Upload extends ComponentBase
 
         // Write the file out to disk
         $uploadedImageData = $_POST['uploadImage'];
-        $image = $this->ConvertDataUrl($uploadedImageData);
+        // todo: inject this dependency!
+        $imageHandler = new ImageFileHandler();
+        $image = $imageHandler->ConvertDataUrl($uploadedImageData);
 
         $path = '/opt/git/Picroll/site/images/uploads/';
         $filename = md5($userId.time());
@@ -64,13 +67,5 @@ class Upload extends ComponentBase
 
         // $this->ExposeVariable('data', $params['name']);
         $this->ExposeVariable('uploaded', true);
-    }
-
-    private function
-    ConvertDataUrl($dataUrl)
-    {
-        // Assumes the data URL represents a jpeg image
-        $image = base64_decode(str_replace('data:image/jpeg;base64,', '', $dataUrl));
-        return $image;
     }
 }
