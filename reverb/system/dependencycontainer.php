@@ -8,7 +8,7 @@ use Reverb\Lib\InitializerInterface;
 class DependencyContainer
 {
     private $instances = array();
-    private $siteconfig;
+    private $siteConfig;
 
     public function __construct(SiteConfig $siteConfig)
     {
