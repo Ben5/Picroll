@@ -63,7 +63,6 @@ class Upload extends ComponentBase
         $imageModel = $this->GetImageModel();
         $imageModel->AddNewImage($userId, $filename);
 
-        // $this->ExposeVariable('data', $params['name']);
         $this->ExposeVariable('uploaded', true);
     }
 }
