@@ -13,20 +13,17 @@ class GatewayHtml extends GatewayBase
     private $scripts = array();
     private $stylesheets = array();
 
-    private function
-    AddScript($scriptname) 
+    private function AddScript($scriptname)
     {
         $this->scripts[] = $scriptname;
     }
 
-    private function
-    AddStylesheet($cssname) 
+    private function AddStylesheet($cssname)
     {
         $this->stylesheets[] = $cssname;
     }
 
-    public function
-    ConstructOutput()
+    public function ConstructOutput()
     {      
         $viewName = $this->componentInstance->GetViewName();
         if (is_null($viewName))

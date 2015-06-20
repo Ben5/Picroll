@@ -10,14 +10,12 @@ class DependencyContainer
     private $instances = array();
     private $siteconfig;
 
-    public function
-    __construct(SiteConfig $siteConfig)
+    public function __construct(SiteConfig $siteConfig)
     {
         $this->siteConfig = $siteConfig;
     }
 
-    public function
-    GetInstance($instanceName)
+    public function GetInstance($instanceName)
     {
         if (false === $this->siteConfig->GetClass($instanceName)) {
             die('unknown class ' . $instanceName);
@@ -25,6 +23,10 @@ class DependencyContainer
 
         if (empty($this->instances[$instanceName])) {
             $dependency = $this->siteConfig->GetClass($instanceName);
+
+            // todo: don't blindly call "new" to instantiate - see if there's a factory first!
+            // (this will require factory support adding into SiteConfig, and looking here to see which to use
+            // ...
 
             $instance = new $dependency;
             

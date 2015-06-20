@@ -4,8 +4,7 @@ namespace Reverb\System;
 
 class Error
 {
-    public static function 
-    ErrorHandler(
+    public static function ErrorHandler(
         $errNo,
         $errStr,
         $errFile,
@@ -45,8 +44,7 @@ class Error
         die();
     }
 
-    private static function
-    PrettyPrintVars(
+    private static function PrettyPrintVars(
         $varName,
         $value,
         $indentLevel = 0)
@@ -85,6 +83,4 @@ class Error
             echo $indentString."$".$varName." = ".$value."<br>";
         }
     }
-
-
 }

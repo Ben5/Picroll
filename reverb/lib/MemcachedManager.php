@@ -9,8 +9,7 @@ class MemcachedManager
 {
     private $memcached = null;
 
-    public function
-    __construct() 
+    public function __construct()
     {
         $instance = new \Memcached();
 
@@ -21,20 +20,17 @@ class MemcachedManager
         $this->memcached = $instance;
     }
 
-    public function 
-    Get($key)
+    public function Get($key)
     {
         return $this->memcached->get($key);
     }
 
-    public function
-    Set($key, $value, $expiration)
+    public function Set($key, $value, $expiration)
     {
         return $this->memcached->set($key, $value, $expiration);
     }
 
-    public function
-    Delete($key, $time = 0)
+    public function Delete($key, $time = 0)
     {
         if (is_array($key)) {
             return $this->memcached->deleteMulti($key, $time);
@@ -44,8 +40,7 @@ class MemcachedManager
     }
 
     // Warning, this function blindly deletes all cached data!
-    public function
-    Flush()
+    public function Flush()
     {
         $this->memcached->flush();
     }

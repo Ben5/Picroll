@@ -11,13 +11,11 @@ class ComponentBase
     private $viewName     = null;
     private $onlyTemplate = false;
 
-    public function
-    __construct()
+    public function __construct()
     {
     }
 
-    public function
-    Prepare($action, $params)
+    public function Prepare($action, $params)
     {
         if (!session_id()) {
             session_start();
@@ -43,8 +41,7 @@ class ComponentBase
         $this->$action($params);
     }
 
-    protected function 
-    ExposeVariable(
+    protected function ExposeVariable(
         $name,
         $value,
         $isHeadVar = false )
@@ -70,14 +67,12 @@ class ComponentBase
 
     }
 
-    public function
-    SetPageTitle($title)
+    public function SetPageTitle($title)
     {
         $this->headVars['title'] = $title;
     }
 
-    public function
-    GetPageTitle()
+    public function GetPageTitle()
     {
         if (!isset($this->headVars['title']))
         {
@@ -86,8 +81,7 @@ class ComponentBase
         return $this->headVars['title'];
     }
 
-    public function
-    GetHeadVariables()
+    public function GetHeadVariables()
     {
         $headVarString = '';
 
@@ -104,40 +98,32 @@ class ComponentBase
         return $headVarString;
     }
 
-    public function
-    GetExposedVariables()
+    public function GetExposedVariables()
     {
         return $this->outputVars;
     }
 
-    public function
-    SetViewName($viewName)
+    public function SetViewName($viewName)
     {
         $this->viewName = $viewName;
     }
 
-    public function
-    GetViewName()
+    public function GetViewName()
     {
         return $this->viewName;
     }
 
-    public function
-    SetOnlyTemplate($onlyTemplate)
+    public function SetOnlyTemplate($onlyTemplate)
     {
         $this->onlyTemplate = $onlyTemplate;
     }
 
-    public function
-    GetOnlyTemplate()
+    public function GetOnlyTemplate()
     {
         return $this->onlyTemplate;
     }
 
-    protected function
-    ValidateParams(
-        $params,
-        array $expectedKeys)
+    protected function ValidateParams($params, array $expectedKeys)
     {
         foreach($expectedKeys as $key => $type)
         {

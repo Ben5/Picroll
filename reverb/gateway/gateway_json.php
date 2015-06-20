@@ -4,11 +4,10 @@ namespace Reverb\Gateway;
 
 require_once(__DIR__."/gateway_base.php");
 
-class GatewayHtml extends GatewayBase
+class GatewayJson extends GatewayBase
 {
 
-    public function
-    ConstructOutput()
+    public function ConstructOutput()
     {      
         $outputVars = $this->componentInstance->GetExposedVariables();
 
@@ -18,6 +17,6 @@ class GatewayHtml extends GatewayBase
 }
 
 
-$gateway = new GatewayHtml;
+$gateway = new GatewayJson;
 $gateway->Prepare();
 $gateway->ConstructOutput();

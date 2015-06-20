@@ -8,8 +8,7 @@ class DbConnection
 {
     private $connection;
 
-    public function
-    Connect()
+    public function Connect()
     {
         $conn = new \mysqli( SiteConfig::DB_HOST, SiteConfig::DB_USER, SiteConfig::DB_PASS, SiteConfig::DB_DB);
     
@@ -21,8 +20,7 @@ class DbConnection
     }
    
 
-    public function
-    NewQuery($sql)
+    public function NewQuery($sql)
     {
         if (!$this->connection) {
            $this->connection = $this->Connect();
@@ -38,8 +36,7 @@ class Query
     private $result;
     private $params = array();
 
-    public function
-    __construct($sql, $conn)
+    public function __construct($sql, $conn)
     {
         $this->stmt = $conn->Prepare($sql); 
         if ($this->stmt === false) {
@@ -47,8 +44,7 @@ class Query
         }
     }
 
-    private function
-    GetParamTypes()
+    private function GetParamTypes()
     {
         $typeString = "";
 
@@ -59,32 +55,27 @@ class Query
         return $typeString;
     }
 
-    public function
-    AddIntegerParam($param)
+    public function AddIntegerParam($param)
     {
         $this->params[] = array("type" => "i", "value" => $param);
     }
     
-    public function
-    AddStringParam($param)
+    public function AddStringParam($param)
     {
         $this->params[] = array("type" => "s", "value" => $param);
     }
 
-    public function
-    AddDecimalParam($param)
+    public function AddDecimalParam($param)
     {
         $this->params[] = array("type" => "d", "value" => $param);
     }
 
-    public function
-    GetLastError()
+    public function GetLastError()
     {
         return $this->stmt->error;
     }
 
-    private function
-    TryQuery()
+    private function TryQuery()
     {
         // bind all params
         $paramsArray = array();
@@ -107,16 +98,14 @@ class Query
         return $success;
     }
 
-    public function
-    ExecuteInsert($errorMsg)
+    public function ExecuteInsert($errorMsg)
     {
         if ($this->TryExecuteInsert() === false) {
             trigger_error($errorMsg . " - mysql error: " .$this->GetLastError());
         }
     }
 
-    public function
-    TryExecuteInsert()
+    public function TryExecuteInsert()
     {
         if ($this->TryQuery()) {
             return $this->stmt->insert_id;
@@ -124,22 +113,19 @@ class Query
         return false;
     }
 
-    public function
-    ExecuteDelete($errorMsg)
+    public function ExecuteDelete($errorMsg)
     {
         if (!$this->TryExecuteDelete()) {
             trigger_error($errorMsg . " - mysql error: " .$this->GetLastError());
         }
     }
 
-    public function
-    TryExecuteDelete()
+    public function TryExecuteDelete()
     {
         return $this->TryQuery();
     }
 
-    public function
-    TryReadSingleValue()
+    public function TryReadSingleValue()
     {
         if ($this->TryQuery()) {
             $this->result = $this->stmt->get_result();
@@ -151,8 +137,7 @@ class Query
         return false;
     } 
 
-    public function
-    TryReadSingleRow()
+    public function TryReadSingleRow()
     {
         if ($this->TryQuery()) {
             $this->result = $this->stmt->get_result();
@@ -164,8 +149,7 @@ class Query
         return false;
     } 
 
-    public function
-    TryReadSingleColumn()
+    public function TryReadSingleColumn()
     {
         if ($this->TryQuery()) {
             $this->result = $this->stmt->get_result();
@@ -181,8 +165,7 @@ class Query
         return false;
     } 
 
-    public function
-    TryReadDictionary()
+    public function TryReadDictionary()
     {
         if ($this->TryQuery()) {
             $this->result = $this->stmt->get_result();
@@ -203,8 +186,7 @@ class Query
         return false;
     } 
 
-    public function
-    TryReadRowArray()
+    public function TryReadRowArray()
     {
         if ($this->TryQuery()) {
             $this->result = $this->stmt->get_result();
