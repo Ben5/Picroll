@@ -600,7 +600,6 @@ Components : {
  };
 
  EXIF.readFromBinaryFile = function(oFile) {
-     console.log(oFile);
      return findEXIFinJPEG(oFile);
  };
 
