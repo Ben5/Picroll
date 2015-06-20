@@ -40,14 +40,12 @@ class View extends ComponentBase
     {
     }
 
-    protected function
-    RequiresAuthentication()
+    protected function RequiresAuthentication()
     {
         return true;
     }
 
-    protected function 
-    Index($params)
+    protected function Index($params)
     {
         $userId     = $_SESSION['user_id'];
 
@@ -76,8 +74,7 @@ class View extends ComponentBase
         $this->ExposeVariable('albums', $userAlbums->GetItems());
     }
 
-    protected function
-    DeleteImages($params)
+    protected function DeleteImages($params)
     {
         $userId     = $_SESSION['user_id'];
         $imageIds   = $params['imageIds'];
@@ -89,8 +86,7 @@ class View extends ComponentBase
         }
     }
 
-    protected function
-    RemoveImagesFromAlbum($params)
+    protected function RemoveImagesFromAlbum($params)
     {
         $userId     = $_SESSION['user_id'];
         $imageIds   = $params['imageIds'];
@@ -101,8 +97,7 @@ class View extends ComponentBase
         $albumModel->RemoveImages($albumId, $imageIds, $userId);
     }
 
-    protected function
-    DeleteAlbums($params)
+    protected function DeleteAlbums($params)
     {
         $userId     = $_SESSION['user_id'];
         $albumIds   = $params['albumIds'];
@@ -114,8 +109,7 @@ class View extends ComponentBase
         }
     }
 
-    protected function
-    NewAlbum($params)
+    protected function NewAlbum($params)
     {
         $userId         = $_SESSION['user_id'];
         $albumName      = $params['albumName'];
@@ -131,8 +125,7 @@ class View extends ComponentBase
         $this->ExposeVariable('newAlbumId', $newAlbumId);
     }
 
-    protected function
-    AddToAlbum($params)
+    protected function AddToAlbum($params)
     {
         $userId         = $_SESSION['user_id'];
         $albumId        = $params['albumId'];
@@ -143,8 +136,7 @@ class View extends ComponentBase
         $albumModel->AddContentToAlbum($albumId, $pictureIdArray, $userId);
     }
 
-    protected function
-    GetAlbumContents($params) 
+    protected function GetAlbumContents($params)
     {
         $userId     = $_SESSION['user_id'];
         $albumId    = $params['albumId'];

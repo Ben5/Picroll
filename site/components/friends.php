@@ -49,14 +49,12 @@ class Friends extends ComponentBase
         $this->userModel = $instance;
     }
 
-    protected function
-    RequiresAuthentication()
+    protected function RequiresAuthentication()
     {
         return true;
     }
 
-    protected function
-    Index($params)
+    protected function Index($params)
     {
         $friendModel        = $this->GetFriendModel();
         $friendRequestModel = $this->GetFriendRequestModel();
@@ -71,8 +69,7 @@ class Friends extends ComponentBase
         $this->ExposeVariable('pending',  $allPendingFriends); 
     }
 
-    protected function
-    SearchForFriend($params)
+    protected function SearchForFriend($params)
     {
         $searchTerm = $params['searchTerm'];
 
@@ -96,8 +93,7 @@ class Friends extends ComponentBase
         $this->ExposeVariable('result', $searchResult);
     }
 
-    protected function
-    SendFriendRequest($params)
+    protected function SendFriendRequest($params)
     {
         $userId = $_SESSION['user_id'];
 
@@ -107,8 +103,7 @@ class Friends extends ComponentBase
         $this->ExposeVariable('result', $success);
     }
     
-    protected function
-    AcceptFriendRequest($params)
+    protected function AcceptFriendRequest($params)
     {
         $userId   = $_SESSION['user_id'];
         $friendId = $params['friendId'];

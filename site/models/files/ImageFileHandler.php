@@ -26,7 +26,10 @@ class ImageFileHandler
         return $image;
     }
 
-    public function GenerateThumbnailFromFile($filePath, $width = self::DEFAULT_THUMB_WIDTH, $height = self::DEFAULT_THUMB_HEIGHT)
+    public function GenerateThumbnailFromFile(
+        $filePath,
+        $width = self::DEFAULT_THUMB_WIDTH,
+        $height = self::DEFAULT_THUMB_HEIGHT)
     {
         $thumbnail = new \Imagick($filePath);
         $thumbnail->thumbnailImage($width, $height);

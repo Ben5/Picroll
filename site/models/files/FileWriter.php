@@ -10,7 +10,12 @@ namespace Site\Models\Files;
 
 class FileWriter {
 
-    public function WriteFileToDisk($contents, $targetDir, $filename, $readWriteOption = 'w', $fileExt = '.jpeg')
+    public function WriteFileToDisk(
+        $contents,
+        $targetDir,
+        $filename,
+        $readWriteOption = 'w',
+        $fileExt = '.jpeg')
     {
         $filename .= $fileExt;
 

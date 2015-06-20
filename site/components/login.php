@@ -25,8 +25,7 @@ class Login extends ComponentBase
     /* Login::Index()
      * Default action, will show the Log In and Create Account forms
      */
-    protected function
-    Index($params)
+    protected function Index($params)
     {
     }
 
@@ -34,8 +33,7 @@ class Login extends ComponentBase
      * Called by submitting the Log In form. Verifies the credentials and redirects to home page, 
      * or shows unsuccessful message on failure.
      */
-    protected function
-    LogInToAccount($params)
+    protected function LogInToAccount($params)
     {
         // validate the inputs (username, password)
         $expectedKeys = array('username'    => 'string',
@@ -85,8 +83,7 @@ class Login extends ComponentBase
      * Called by submitting the Create Account form. Verifies that password fields match, then creates an account.
      * Redirects to home page on success, or shows message on failure
      */
-    protected function
-    CreateAccount($params)
+    protected function CreateAccount($params)
     {
         // validate the inputs (username, email, password, repassword)
         $expectedKeys = array('username'    => 'string',
@@ -149,8 +146,7 @@ class Login extends ComponentBase
         header('Location: /picroll/html/upload/index');
     }
 
-    protected function
-    LogOut($params)
+    protected function LogOut($params)
     {
         session_destroy();
         header('/picroll/html/login/createaccount');

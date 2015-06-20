@@ -8,14 +8,12 @@ use Reverb\System\ModelBase;
 class FriendModel 
     extends ModelBase
 {
-    public function
-    __construct()
+    public function __construct()
     {
         $this->modelName = "friendship";
     }
 
-    public function
-    GetAllFriendsByUserId($userId)
+    public function GetAllFriendsByUserId($userId)
     {
         $sql = 'SELECT f.friend_user_id, u.username
                 FROM   friendship f
@@ -29,10 +27,7 @@ class FriendModel
         return $query->TryReadDictionary();
     }
 
-    public function
-    AddNewFriend(
-        $userId, 
-        $friendUserId) 
+    public function AddNewFriend($userId, $friendUserId)
     {
         // we add 2 friendships, so that we can simplfy searching for a user's friends.
         $sql = "INSERT INTO friendship (user_id, friend_user_id)

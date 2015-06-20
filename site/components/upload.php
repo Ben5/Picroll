@@ -13,6 +13,7 @@ class Upload extends ComponentBase
     implements ImageModelAwareInterface
 {
     private $imageModel = null;
+
     const UPLOADED_IMAGE_DIR = '/opt/git/Picroll/site/images/uploads/';
 
     public function SetImageModel(ImageModel $instance)
@@ -25,19 +26,17 @@ class Upload extends ComponentBase
         return $this->imageModel;
     }
 
-    protected function
-    RequiresAuthentication()
+    protected function RequiresAuthentication()
     {
         return true;
     }
 
-    protected function
-    Index($params)
+    protected function Index($params)
     {
+        // default page, do nothing.
     }
 
-    protected function
-    UploadFile($params)
+    protected function UploadFile($params)
     {
         $userId = $_SESSION['user_id'];
 

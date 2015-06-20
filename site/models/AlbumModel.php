@@ -81,9 +81,7 @@ class AlbumModel extends ModelBase
         return $albumCollection;
     }
 
-    public function AddNewAlbum(
-       $userId, 
-       $name)
+    public function AddNewAlbum($userId, $name)
     {
         $sql = new Sql($this->getDbAdapter(), 'album');
         $insert = $sql->insert()
@@ -153,9 +151,7 @@ class AlbumModel extends ModelBase
         $this->GetMemcachedManager()->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
 }
 
-    public function DeleteAlbum(
-        $userId, 
-        $albumId)
+    public function DeleteAlbum($userId, $albumId)
     {
         // First delete the contents from the album
         $sql = new Sql($this->getDbAdapter(), 'album_content');

@@ -22,14 +22,12 @@ class Slideshow extends ComponentBase
         $this->imageModel = $instance;
     }
 
-    protected function
-    RequiresAuthentication()
+    protected function RequiresAuthentication()
     {
         return true;
     }
 
-    protected function
-    Index($params)
+    protected function Index($params)
     {
         $userId = $_SESSION['user_id'];
         $albumId = isset($params['albumId']) ? $params['albumId'] : null;

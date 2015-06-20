@@ -8,14 +8,12 @@ use Reverb\System\ModelBase;
 class UserModel 
     extends ModelBase
 {
-    public function
-    __construct()
+    public function __construct()
     {
         $this->modelName = "user";
     }
 
-    public function
-    TryGetUserByName($username)
+    public function TryGetUserByName($username)
     {
         $sql = 'SELECT id, username, email, generated_salt, password_hash
                 FROM user
@@ -28,8 +26,7 @@ class UserModel
         return $query->TryReadSingleRow();
     }
 
-    public function
-    SearchUsersByNameOrEmail($name)
+    public function SearchUsersByNameOrEmail($name)
     {
         $localUserId = $_SESSION['user_id'];
 
@@ -49,8 +46,7 @@ class UserModel
         return $query->TryReadDictionary();
     }
 
-    public function
-    AddNewUser(
+    public function AddNewUser(
         $username, 
         $salt,
         $hashedPassword, 

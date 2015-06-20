@@ -21,8 +21,7 @@ class ImageModel extends ModelBase
 {
     private $memcachedManager;
 
-    public function
-    __construct()
+    public function __construct()
     {
         $this->modelName = "image";
     }
@@ -37,8 +36,7 @@ class ImageModel extends ModelBase
         $this->memcachedManager = $instance;
     }
 
-    public function 
-    GetAllImagesByUserId($userId)
+    public function GetAllImagesByUserId($userId)
     {
         $memcached = $this->GetMemcachedManager();
         $imageCollection = $memcached->Get(MKEY_IMAGES_BY_USER_ID.$userId);
@@ -66,10 +64,7 @@ class ImageModel extends ModelBase
         return $imageCollection;
     }
 
-    public function 
-    GetAllImagesByAlbumId(
-        $albumId,  
-        $userId)
+    public function GetAllImagesByAlbumId($albumId, $userId)
     {
         $memcached = $this->GetMemcachedManager();
 
@@ -113,10 +108,7 @@ class ImageModel extends ModelBase
         return $imageCollection;
     }
 
-    public function 
-    AddNewImage(
-       $userId, 
-       $filename)
+    public function AddNewImage($userId, $filename)
     {
         $sql = new Sql($this->getDbAdapter(), 'image');
         $insert = $sql->insert()
@@ -148,10 +140,7 @@ class ImageModel extends ModelBase
         return $newId;
     }
 
-    public function 
-    DeleteImage(
-        $userId, 
-        $imageId)
+    public function DeleteImage($userId, $imageId)
     {
         // First remove the image from all albums
         $sql = new Sql($this->getDbAdapter()); 
@@ -188,5 +177,4 @@ class ImageModel extends ModelBase
 
         $memcached->Delete(MKEY_ALBUMS_BY_USER_ID.$userId);
     }
-    
 }
