@@ -495,3 +495,134 @@ Components : {
 
      if (oTags.ExifIFDPointer) {
          var oEXIFTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.ExifIFDPointer, EXIF.Tags, bBigEnd);
+         for (var strTag in oEXIFTags) {
+             switch (strTag) {
+                 case "LightSource" :
+                     case "Flash" :
+                     case "MeteringMode" :
+                     case "ExposureProgram" :
+                     case "SensingMethod" :
+                     case "SceneCaptureType" :
+                     case "SceneType" :
+                     case "CustomRendered" :
+                     case "WhiteBalance" :
+                     case "GainControl" :
+                     case "Contrast" :
+                     case "Saturation" :
+                     case "Sharpness" :
+                     case "SubjectDistanceRange" :
+                     case "FileSource" :
+                     oEXIFTags[strTag] = EXIF.StringValues[strTag][oEXIFTags[strTag]];
+                 break;
+
+                 case "ExifVersion" :
+                     case "FlashpixVersion" :
+                     oEXIFTags[strTag] = String.fromCharCode(oEXIFTags[strTag][0], oEXIFTags[strTag][1], oEXIFTags[strTag][2], oEXIFTags[strTag][3]);
+                 break;
+
+                 case "ComponentsConfiguration" :
+                     oEXIFTags[strTag] =
+                     EXIF.StringValues.Components[oEXIFTags[strTag][0]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][1]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][2]] +
+                     EXIF.StringValues.Components[oEXIFTags[strTag][3]];
+                 break;
+             }
+             oTags[strTag] = oEXIFTags[strTag];
+         }
+     }
+
+     if (oTags.GPSInfoIFDPointer) {
+         var oGPSTags = readTags(oFile, iTIFFOffset, iTIFFOffset + oTags.GPSInfoIFDPointer, EXIF.GPSTags, bBigEnd);
+         for (var strTag in oGPSTags) {
+             switch (strTag) {
+                 case "GPSVersionID" :
+                     oGPSTags[strTag] = oGPSTags[strTag][0]  +
+                     "." + oGPSTags[strTag][1] +
+                     "." + oGPSTags[strTag][2] +
+                     "." + oGPSTags[strTag][3];
+                 break;
+             }
+             oTags[strTag] = oGPSTags[strTag];
+         }
+     }
+
+     return oTags;
+ }
+
+
+ EXIF.getData = function(oImg, fncCallback)
+ {
+     if (!oImg.complete) return false;
+     if (!imageHasData(oImg)) {
+         getImageData(oImg, fncCallback);
+     } else {
+         if (fncCallback) fncCallback();
+     }
+     return true;
+ };
+
+ EXIF.getTag = function(oImg, strTag)
+ {
+     if (!imageHasData(oImg)) return;
+     return oImg.exifdata[strTag];
+ };
+
+ EXIF.getAllTags = function(oImg)
+ {
+     if (!imageHasData(oImg)) return {};
+     var oData = oImg.exifdata;
+     var oAllTags = {};
+     for (var a in oData) {
+         if (oData.hasOwnProperty(a)) {
+             oAllTags[a] = oData[a];
+         }
+     }
+     return oAllTags;
+ };
+
+
+ EXIF.pretty = function(oImg)
+ {
+     if (!imageHasData(oImg)) return "";
+     var oData = oImg.exifdata;
+     var strPretty = "";
+     for (var a in oData) {
+         if (oData.hasOwnProperty(a)) {
+             if (typeof oData[a] == "object") {
+                 strPretty += a + " : [" + oData[a].length + " values]\r\n";
+             } else {
+                 strPretty += a + " : " + oData[a] + "\r\n";
+             }
+         }
+     }
+     return strPretty;
+ };
+
+ EXIF.readFromBinaryFile = function(oFile) {
+     console.log(oFile);
+     return findEXIFinJPEG(oFile);
+ };
+
+ function loadAllImages()
+ {
+     var aImages = document.getElementsByTagName("img");
+     for (var i=0;i<aImages.length;i++) {
+         if (aImages[i].getAttribute("exif") == "true") {
+             if (!aImages[i].complete) {
+                 addEvent(aImages[i], "load",
+                         function() {
+                         EXIF.getData(this);
+                         }
+                         );
+             } else {
+                 EXIF.getData(aImages[i]);
+             }
+         }
+     }
+ }
+
+ addEvent(window, "load", loadAllImages);
+
+})();
+
