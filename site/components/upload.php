@@ -3,7 +3,6 @@
 namespace Site\Components;
 
 use Reverb\System\ComponentBase;
-use Site\Config\SiteConfig;
 use Site\Models\Files\ImageFileHandler;
 use Site\Models\ImageModel;
 use Site\Models\Files\FileWriter;
