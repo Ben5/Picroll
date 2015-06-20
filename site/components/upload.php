@@ -57,7 +57,7 @@ class Upload extends ComponentBase
 
         // Create a thumbnail version
         $thumbnail = $imageHandler->GenerateThumbnailFromFile($path.$filename.'.jpeg');
-        $fileWriter->WriteFileToDisk($thumbnail, $path, $filename, 'w', '-thumb.jpeg');
+        $fileWriter->WriteFileToDisk($thumbnail, $path, $filename.'-thumb', 'w', '.jpeg');
 
         // Add the new files to the db
         $imageModel = $this->GetImageModel();
