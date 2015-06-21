@@ -1,10 +1,9 @@
-<?php
-
 namespace Site\Components;
 
 use Reverb\System\ComponentBase;
 use Site\Models\Files\ImageFileHandler;
 use Site\Models\ImageModel;
+use Site\Models\ExifHandler;
 use Site\Models\Files\FileWriter;
 use Site\Models\Service\ImageModelAwareInterface;
 
@@ -41,6 +40,9 @@ class Upload extends ComponentBase
 
         // TODO: process exif data and get name and stuff
         $uploadedEXIF = $_POST['exif'];
+        // todo: inject this dependency!
+        $exifHandler = new ExifHandler();
+        $exifHandler->SetFromJsonString($uploadedEXIF);
 
         // Write the file out to disk
         $uploadedImageData = $_POST['uploadImage'];

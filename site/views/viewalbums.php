@@ -116,8 +116,12 @@
 </div>
 
 <div id="fullscreenImageWrapper">
+
     <div id="fullscreenImage">
     </div>
+    <div id="fullscreenExifData">
+    </div>
+
 </div>
 
 <div class="modal-backdrop">

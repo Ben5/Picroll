@@ -43,8 +43,8 @@ $(document).ready(function() {
     $('div.overlay').on('click', function() {ToggleSelectState($(this).siblings('img'));});
 
     // Click on the full size image overlay backdrop
-    $('#fullscreenImage').on('click', HideFullscreenImage);
-    $('#fullscreenImage').on('click', 'img',  function(event) {event.stopPropagation();}); // we dont want to call HideFullscreenImage if we click the image itself
+    $('div.modal-backdrop').on('click', HideFullscreenImage);
+    $('div.modal-backdrop').on('click', 'img',  function(event) {event.stopPropagation();}); // we dont want to call HideFullscreenImage if we click the image itself
 
 
     //
@@ -233,7 +233,6 @@ console.log(dataObj);
 
     // Handle clicks on thumbnails
     function ImageClickHandler() {
-        console.log('click');
         if ($(this).siblings('div.overlay').is(':visible')) {
             ToggleSelectState($(this));
         } else {
@@ -242,7 +241,10 @@ console.log(dataObj);
             var fullImage = new Image();
             fullImage.src = fullImageSrc;
             $('#fullscreenImageWrapper').fadeIn(400);
-            $('#fullscreenImage').empty().append(fullImage);
+            $('#fullscreenImage').empty().append('<span class="helper"></span>').append(fullImage);
+
+            $('#fullscreenExifData').empty().append('<h3>Tech Specs</h3>');
+
 
             // add a faded background
             $('div.modal-backdrop').fadeIn(400);
