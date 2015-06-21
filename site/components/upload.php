@@ -45,7 +45,6 @@ class Upload extends ComponentBase
         // todo: inject this dependency!
         $exifHandler = new ExifHandler();
         $exifHandler->SetFromJsonString($uploadedEXIF);
-        die('ded');
 
         // Write the file out to disk
         $uploadedImageData = $_POST['uploadImage'];
