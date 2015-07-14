@@ -11,10 +11,6 @@ class ComponentBase
     private $viewName     = null;
     private $onlyTemplate = false;
 
-    public function __construct()
-    {
-    }
-
     public function Prepare($action, $params)
     {
         if (!session_id()) {

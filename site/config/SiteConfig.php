@@ -21,7 +21,7 @@ class SiteConfig
     private $initializers = array();
 
     public function __construct() 
-   {
+    {
         $this->classes = array(
             // Libs
             'MemcachedManager'      => 'Reverb\Lib\MemcachedManager',
@@ -38,6 +38,10 @@ class SiteConfig
             'FriendRequestModel'    => 'Site\Models\FriendRequestModel',
             'ImageModel'            => 'Site\Models\ImageModel',
             'UserModel'             => 'Site\Models\UserModel',
+        );
+
+        $this->factories = array(
+            'Site\Components\Login' => 'Site\Components\Service\LoginFactory'
         );
 
         $this->initializers = array(

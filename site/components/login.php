@@ -8,11 +8,10 @@ use Site\Models\UserModel;
 use Site\Models\Service\UserModelAwareInterface;
 
 class Login extends ComponentBase
-    implements UserModelAwareInterface
 {
     private $userModel = null;
 
-    public function SetUserModel(UserModel $instance)
+    public function __construct(UserModel $instance)
     {
         $this->userModel = $instance;
     }

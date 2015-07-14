@@ -28,8 +28,14 @@ class DependencyContainer
             // (this will require factory support adding into SiteConfig, and looking here to see which to use
             // ...
 
-            $instance = new $dependency;
-            
+            if(isset($this->siteConfig->factories[$dependency])) {
+                $factory = new $this->siteConfig->factories[$dependency];
+                $instance = $factory->CreateInstance($this);
+            } else {
+                $instance = new $dependency;
+            }
+
+
             // foreach initializer, call initialize
             // this will look to see if $instance implements an AwareInterface and either inject something or ignore it
             $initializers = $this->siteConfig->GetInitializers();
