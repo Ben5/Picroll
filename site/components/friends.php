@@ -7,17 +7,21 @@ use Site\Config\SiteConfig;
 use Site\Models\FriendModel;
 use Site\Models\FriendRequestModel;
 use Site\Models\UserModel;
-use Site\Models\Service\UserModelAwareInterface;
 use Site\Models\Service\FriendModelAwareInterface;
 use Site\Models\Service\FriendRequestModelAwareInterface;
 
 class Friends extends ComponentBase
-    implements UserModelAwareInterface, FriendModelAwareInterface, FriendRequestModelAwareInterface
+    implements FriendModelAwareInterface, FriendRequestModelAwareInterface
 {
     private $minimumSearchTermLength = 3;
     private $friendModel;
     private $friendRequestModel;
     private $userModel;
+
+    public function __construct(UserModel $userModel)
+    {
+        $this->userModel = $userModel;
+    }
 
     public function GetFriendModel()
     {
@@ -42,11 +46,6 @@ class Friends extends ComponentBase
     public function GetUserModel()
     {
         return $this->userModel;
-    }
-
-    public function SetUserModel(UserModel $instance)
-    {
-        $this->userModel = $instance;
     }
 
     protected function RequiresAuthentication()

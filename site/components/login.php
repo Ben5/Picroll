@@ -5,7 +5,6 @@ namespace Site\Components;
 use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
 use Site\Models\UserModel;
-use Site\Models\Service\UserModelAwareInterface;
 
 class Login extends ComponentBase
 {

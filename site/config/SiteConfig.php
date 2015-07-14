@@ -41,7 +41,8 @@ class SiteConfig
         );
 
         $this->factories = array(
-            'Site\Components\Login' => 'Site\Components\Service\LoginFactory'
+            'Site\Components\Login' => 'Site\Components\Service\LoginFactory',
+            'Site\Components\Friends' => 'Site\Components\Service\FriendsFactory',
         );
 
         $this->initializers = array(
@@ -50,7 +51,6 @@ class SiteConfig
             'DbAdapterAwareInitializer'          => 'Reverb\Lib\DbAdapterAwareInitializer',
             'AlbumModelAwareInitializer'         => 'Site\Models\Service\AlbumModelAwareInitializer',
             'ImageModelAwareInitializer'         => 'Site\Models\Service\ImageModelAwareInitializer',
-            'UserModelAwareInitializer'          => 'Site\Models\Service\UserModelAwareInitializer',
             'FriendModelAwareInitializer'        => 'Site\Models\Service\FriendModelAwareInitializer',
             'FriendRequestModelAwareInitializer' => 'Site\Models\Service\FriendRequestModelAwareInitializer',
         );
