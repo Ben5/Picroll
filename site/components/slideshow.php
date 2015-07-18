@@ -5,21 +5,19 @@ namespace Site\Components;
 use Reverb\System\ComponentBase;
 use Site\Config\SiteConfig;
 use Site\Models\ImageModel;
-use Site\Models\Service\ImageModelAwareInterface;
 
 class Slideshow extends ComponentBase
-    implements ImageModelAwareInterface
 {
     private $imageModel;
+
+    public function __construct(ImageModel $instance)
+    {
+        $this->imageModel = $instance;
+    }
 
     public function GetImageModel()
     {
         return $this->imageModel;
-    }
-
-    public function SetImageModel(ImageModel $instance)
-    {
-        $this->imageModel = $instance;
     }
 
     protected function RequiresAuthentication()

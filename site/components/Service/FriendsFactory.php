@@ -15,8 +15,10 @@ class FriendsFactory
 {
     public function CreateInstance(DependencyContainer $dependencyContainer)
     {
-        $userModel = $dependencyContainer->GetInstance('UserModel');
+        $friendModel        = $dependencyContainer->GetInstance('FriendModel');
+        $friendRequestModel = $dependencyContainer->GetInstance('FriendRequestModel');
+        $userModel          = $dependencyContainer->GetInstance('UserModel');
 
-        return new Friends($userModel);
+        return new Friends($friendModel, $friendRequestModel, $userModel);
     }
 }

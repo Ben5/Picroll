@@ -41,18 +41,17 @@ class SiteConfig
         );
 
         $this->factories = array(
-            'Site\Components\Login' => 'Site\Components\Service\LoginFactory',
-            'Site\Components\Friends' => 'Site\Components\Service\FriendsFactory',
+            'Site\Components\Friends'   => 'Site\Components\Service\FriendsFactory',
+            'Site\Components\Login'     => 'Site\Components\Service\LoginFactory',
+            'Site\Components\Slideshow' => 'Site\Components\Service\SlideshowFactory',
+            'Site\Components\Upload'    => 'Site\Components\Service\UploadFactory',
+            'Site\Components\View'      => 'Site\Components\Service\ViewFactory',
         );
 
         $this->initializers = array(
             'MemcachedManagerAwareInitializer'   => 'Reverb\Lib\MemcachedManagerAwareInitializer',
             'DbConnectionAwareInitializer'       => 'Reverb\Lib\DbConnectionAwareInitializer',
             'DbAdapterAwareInitializer'          => 'Reverb\Lib\DbAdapterAwareInitializer',
-            'AlbumModelAwareInitializer'         => 'Site\Models\Service\AlbumModelAwareInitializer',
-            'ImageModelAwareInitializer'         => 'Site\Models\Service\ImageModelAwareInitializer',
-            'FriendModelAwareInitializer'        => 'Site\Models\Service\FriendModelAwareInitializer',
-            'FriendRequestModelAwareInitializer' => 'Site\Models\Service\FriendRequestModelAwareInitializer',
         );
     }
 

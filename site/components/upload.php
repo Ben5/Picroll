@@ -7,16 +7,14 @@ use Site\Models\Files\ImageFileHandler;
 use Site\Models\ImageModel;
 use Site\Models\ExifHandler;
 use Site\Models\Files\FileWriter;
-use Site\Models\Service\ImageModelAwareInterface;
 
 class Upload extends ComponentBase
-    implements ImageModelAwareInterface
 {
     private $imageModel = null;
 
     const UPLOADED_IMAGE_DIR = '/opt/git/Picroll/site/images/uploads/';
 
-    public function SetImageModel(ImageModel $instance)
+    public function __construct(ImageModel $instance)
     {
         $this->imageModel = $instance;
     }

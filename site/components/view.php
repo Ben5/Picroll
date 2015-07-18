@@ -7,37 +7,26 @@ use Site\Config\SiteConfig;
 use Site\Models\AlbumModel;
 use Site\Models\ImageModel;
 use Site\Models\Entities\AlbumEntity;
-use Site\Models\Service\AlbumModelAwareInterface;
-use Site\Models\Service\ImageModelAwareInterface;
 
 class View extends ComponentBase
-    implements AlbumModelAwareInterface, ImageModelAwareInterface
 {
     private $albumModel;
     private $imageModel;
+
+    public function __construct(AlbumModel $albumModel, ImageModel $imageModel)
+    {
+        $this->albumModel = $albumModel;
+        $this->imageModel = $imageModel;
+    }
 
     public function GetAlbumModel() 
     {
         return $this->albumModel;
     }
 
-    public function SetAlbumModel(AlbumModel $instance)
-    {
-        $this->albumModel = $instance;
-    }
-
     public function GetImageModel() 
     {
         return $this->imageModel;
-    }
-
-    public function SetImageModel(ImageModel $instance)
-    {
-        $this->imageModel = $instance;
-    }
-
-    public function __construct()
-    {
     }
 
     protected function RequiresAuthentication()
